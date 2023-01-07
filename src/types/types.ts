@@ -24,6 +24,14 @@ export enum Resolutions {
     P2160="P2160"
 }
 
+export enum Statuses {
+    OK = 200,
+    CREATED = 201,
+    NO_CONTENT = 204,
+    BAD_REQUEST = 400,
+    NOT_FOUND = 404,
+}
+
 export interface IVideo {
     id?: number,
     title: string,
