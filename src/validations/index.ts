@@ -33,5 +33,5 @@ export const bodyFieldValidator = (body: any): APIErrorResult | null => {
         errors.push({message: 'invalid field', field: 'publicationDate'})
     }
 
-    return errors.length ? ({errorMessages: errors}) : null
+    return errors.length ? ({errorsMessages: errors}) : null
 }
