@@ -1,20 +1,38 @@
-type IRepo = {
-    id: number,
-    title: string
-}
+import {CreateVideoInputModel, IUpdateVideoInputModel, IVideo} from "../types/types";
 
-const repo = [{id: 1, title:'1'},{id: 2, title:'2'}];
+const videos = [] as Array<IVideo>
 
-export const repoRepository = {
-    getRepo(): Array<IRepo>{
-        return repo
+export const videosRepository = {
+    getAll(): IVideo[] {
+        return videos
     },
-    createRepo(title: string): IRepo | null{
-        if(!title.trim() || !!repo.find((v)=>v.title === title)){
-            return null
-        }
-        const newRepo = {id: repo.length + 1,title};
-        repo.unshift(newRepo)
-        return newRepo
+    findById(id: number){
+        return videos.find((v: IVideo)=>v.id === id)
+    },
+    createVideo(payload: CreateVideoInputModel): IVideo {
+        const date = new Date();
+        const newVideo = {
+            id: videos.length + 1,
+            title: payload.title,
+            author: payload.author,
+            canBeDownloaded:false,
+            minAgeRestriction: null,
+            createdAt: date.toISOString(),
+            publicationDate: new Date(date.setDate(date.getDate() + 1)).toISOString(),
+            availableResolutions: payload.availableResolutions || null
+        };
+        videos.push(newVideo)
+        return newVideo
+    },
+    updateVideo(id: number,payload: IUpdateVideoInputModel){
+        const index = videos.findIndex((v: IVideo)=>v.id === id);
+        videos[index] = {...videos[index], ...payload}
+    },
+    deleteVideo(id: number){
+        const index = videos.findIndex((v: IVideo)=>v.id === id);
+        videos.splice(index,1)
+    },
+    deleteAll(){
+        videos.splice(0)
     }
 }

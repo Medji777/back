@@ -1,5 +1,5 @@
 import express,{Request,Response} from 'express';
-import {baseRouter} from "./routers/base";
+import {baseRouter,resetRouter} from "./routers";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -8,11 +8,12 @@ const parseMiddleware = express.json()
 app.use(parseMiddleware)
 
 app.get('/',(req:Request,res:Response)=>{
-    let str = '1235';
+    const str = 'This is Work!';
     res.send(str)
 })
 
-app.use('/repo',baseRouter)
+app.use('/hometask_01/api',baseRouter)
+app.use('/ht_01/api',resetRouter)
 
 app.listen(port,()=>{
     console.log("Listen " + port)
