@@ -12,8 +12,8 @@ app.get('/',(req:Request,res:Response)=>{
     res.send(str)
 })
 
-app.use('/hometask_01/api',baseRouter)
-app.use('/ht_01/api',resetRouter)
+app.use('/',baseRouter)
+app.use('/',resetRouter)
 
 app.listen(port,()=>{
     console.log("Listen " + port)
