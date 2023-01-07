@@ -2,7 +2,7 @@ import {APIErrorResult, FieldError, Resolutions} from "../types/types";
 import {equalSize} from "../utils";
 
 export const isNotValidString = (val:any,size:number=0):boolean => !val || !val.trim() || typeof val !== 'string' || (!size ? false : val.length > size);
-export const isNotValidResolution = (res:Array<Resolutions>) => !res.length || !equalSize(res) || res.every((v:Resolutions)=>!Resolutions[v]);
+export const isNotValidResolution = (res:Array<Resolutions>) => !res.length || !equalSize(res) || !res.every((v:Resolutions)=>Resolutions[v]);
 export const bodyFieldValidator = (body: any): APIErrorResult | null => {
 
     const errors: Array<FieldError> = [];
