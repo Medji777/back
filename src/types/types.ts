@@ -10,7 +10,7 @@ export type FieldError = {
 export type CreateVideoInputModel = {
     title: string,
     author: string,
-    availableResolutions?: Array<string> | null
+    availableResolutions?: Array<Resolutions> | null
 }
 
 export enum Resolutions {
@@ -40,7 +40,7 @@ export interface IVideo {
     minAgeRestriction?: number | null,
     createdAt?: string,
     publicationDate?: string,
-    availableResolutions?: Array<string> | null
+    availableResolutions?: Array<Resolutions> | null
 }
 
 export interface IUpdateVideoInputModel {
@@ -49,5 +49,5 @@ export interface IUpdateVideoInputModel {
     canBeDownloaded?: boolean,
     minAgeRestriction?: number | null,
     publicationDate?: string,
-    availableResolutions?: Array<string> | null
+    availableResolutions?: Array<Resolutions> | null
 }

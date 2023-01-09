@@ -1,7 +1,7 @@
 import express,{Request,Response} from 'express';
 import {baseRouter,resetRouter} from "./routers";
 
-const app = express();
+export const app = express();
 const port = process.env.PORT || 3000;
 
 const parseMiddleware = express.json()
