@@ -7,7 +7,6 @@ module.exports = {
     '^@src/(.*)$': ['<rootDir>/src/$1'],
     '^@repositories/(.*)$': ['<rootDir>/src/repositories/$1'],
     '^@routers/(.*)$': ['<rootDir>/src/routers/$1'],
-    '^@typesApp/(.*)$': ['<rootDir>/src/typesApp/$1'],
     '^@utils/(.*)$': ['<rootDir>/src/utils/$1'],
     '^@validations/(.*)$': ['<rootDir>/src/validations/$1'],
   },

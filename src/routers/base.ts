@@ -1,6 +1,7 @@
 import {Router,Request,Response} from 'express';
 import {videosRepository} from "../repositories/repo";
 import {bodyFieldValidator} from "../validations";
+import {pick} from "../utils";
 import {CreateVideoInputModel, IVideo, Statuses} from "../types/types";
 
 export const baseRouter = Router({});
@@ -36,13 +37,18 @@ baseRouter.put('/videos/:id',(req: Request,res: Response)=>{
     if(!video) {
         return res.sendStatus(Statuses.NOT_FOUND)
     }
-    const errors = bodyFieldValidator(req.body);
+
+    const resultBody = pick(
+        req.body,
+        ['title','author','canBeDownloaded','minAgeRestriction','publicationDate','availableResolutions']
+    )
+
+    const errors = bodyFieldValidator(resultBody);
     if(!!errors){
         return res.status(Statuses.BAD_REQUEST).send(errors)
     }
 
-    //TODO: add pick object body transformer
-    videosRepository.updateVideo(videoId,req.body)
+    videosRepository.updateVideo(videoId,resultBody)
     res.sendStatus(Statuses.NO_CONTENT)
 })
 

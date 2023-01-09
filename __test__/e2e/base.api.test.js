@@ -44,4 +44,22 @@ describe('test functional', () => {
         yield instance.get('/videos')
             .expect(types_1.Statuses.OK, [body]);
     }));
+    it('should update video with unnecessary input data and exclude them', () => __awaiter(void 0, void 0, void 0, function* () {
+        const inputData = { title: "new video 1", author: "new author 1" };
+        const unnecessaryData = { ascucduh: "cuisabci" };
+        const resCreatedVideo = yield instance.post('/videos')
+            .send(inputData)
+            .expect(types_1.Statuses.CREATED);
+        expect(resCreatedVideo.body).toEqual(expect.objectContaining(Object.assign({ id: expect.any(Number) }, inputData)));
+        const resAllVideos = yield instance.get('/videos')
+            .expect(types_1.Statuses.OK);
+        expect(resAllVideos.body).toEqual(expect.arrayContaining([resCreatedVideo.body]));
+        yield instance.put('/videos/' + resCreatedVideo.body.id)
+            .send(Object.assign(Object.assign({}, inputData), unnecessaryData))
+            .expect(types_1.Statuses.NO_CONTENT);
+        const resUpdateVideo = yield instance.get('/videos/' + resCreatedVideo.body.id)
+            .expect(types_1.Statuses.OK);
+        expect(resUpdateVideo.body)
+            .toEqual(expect.not.objectContaining(unnecessaryData));
+    }));
 });

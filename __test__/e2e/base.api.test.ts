@@ -45,4 +45,38 @@ describe('test functional',()=>{
         await instance.get('/videos')
             .expect(Statuses.OK,[body])
     })
+
+    it('should update video with unnecessary input data and exclude them',async () => {
+        const inputData = {title: "new video 1", author: "new author 1"};
+        const unnecessaryData = {ascucduh: "cuisabci"};
+        const resCreatedVideo = await instance.post('/videos')
+            .send(inputData)
+            .expect(Statuses.CREATED)
+
+        expect(resCreatedVideo.body).toEqual(
+            expect.objectContaining(
+                {
+                    id: expect.any(Number),
+                    ...inputData
+                }
+            ))
+
+        const resAllVideos = await instance.get('/videos')
+            .expect(Statuses.OK)
+
+        expect(resAllVideos.body).toEqual(expect.arrayContaining([resCreatedVideo.body]))
+
+        await instance.put('/videos/' + resCreatedVideo.body.id)
+            .send({
+                ...inputData,
+                ...unnecessaryData
+            })
+            .expect(Statuses.NO_CONTENT)
+
+        const resUpdateVideo = await instance.get('/videos/' + resCreatedVideo.body.id)
+            .expect(Statuses.OK)
+
+        expect(resUpdateVideo.body)
+            .toEqual(expect.not.objectContaining(unnecessaryData))
+    })
 })
