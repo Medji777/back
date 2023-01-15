@@ -3,11 +3,8 @@ import {ValidationChain, validationResult, ValidationError} from "express-valida
 import {APIErrorResult, FieldError} from "../types/types";
 
 export const validateMiddleware = (validations: Array<ValidationChain>) => async (req:Request,res:Response,next:NextFunction) => {
-    for (let validation of validations) {
-        const result = await validation.run(req);
-        // @ts-ignore
-        if (result.errors.length) break;
-    }
+
+    await Promise.all(validations.map(validation => validation.run(req)));
 
     const errorFormatter = ({ msg, param }: ValidationError): FieldError => {
         return ({
