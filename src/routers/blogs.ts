@@ -6,17 +6,17 @@ import {createBlog, deleteBlog, getBlogOnId, getBlogs, updateBlog} from "../cont
 const sanitizationBodyBlogs = sanitizationBody(['name','description','websiteUrl'])
 const validateBodyBlog = validateMiddleware([
     body('name')
-        .isString().withMessage('input is string')
+        //.isString().withMessage('input is string')
         .trim().escape()
         .notEmpty().withMessage('input is required')
         .isLength({max: 15}).withMessage('input is max length 15 symbol'),
     body('description')
-        .isString().withMessage('input is string')
+        //.isString().withMessage('input is string')
         .trim().escape()
         .notEmpty().withMessage('input is required')
         .isLength({max: 500}).withMessage('input is max length 500 symbol'),
     body('websiteUrl')
-        .isString().withMessage('input is string')
+        //.isString().withMessage('input is string')
         .trim()
         .notEmpty().withMessage('input is required')
         .isURL({ protocols: ['https'] }).withMessage('input is URL')

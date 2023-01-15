@@ -6,22 +6,22 @@ import {createPost, deletePost, getPostOnId, getPosts, updatePost} from "../cont
 const sanitizationBodyPosts = sanitizationBody(['title','shortDescription','content','blogId'])
 const validateBodyPost = validateMiddleware([
     body('title')
-        .isString().withMessage('input is string')
-        .trim()
+        //.isString().withMessage('input is string')
+        .trim().escape()
         .notEmpty().withMessage('input is required')
         .isLength({max: 30}).withMessage('input is max length 30 symbol'),
     body('shortDescription')
-        .isString().withMessage('input is string')
+        //.isString().withMessage('input is string')
         .trim()
         .notEmpty().withMessage('input is required')
         .isLength({max: 100}).withMessage('input is max length 100 symbol'),
     body('content')
-        .isString().withMessage('input is string')
+        //.isString().withMessage('input is string')
         .trim()
         .notEmpty().withMessage('input is required')
         .isLength({max: 1000}).withMessage('input is max length 1000 symbol'),
     body('blogId')
-        .isString().withMessage('input is string')
+        //.isString().withMessage('input is string')
         .trim()
         .notEmpty().withMessage('input is required')
 ])
