@@ -10,15 +10,14 @@ export const getBlogs = (req: Request,res: Response) => {
 
 export const getBlogOnId = (req: Request,res: Response) => {
     const blog = blogsRepository.findById(req.params.id);
-    if(blog) {
-        res.status(Statuses.OK).send(blog)
-    } else {
-        res.sendStatus(Statuses.NOT_FOUND)
+    if(!blog) {
+        return res.sendStatus(Statuses.NOT_FOUND)
     }
+    res.status(Statuses.OK).send(blog)
 }
 
 export const createBlog = (req: Request,res: Response) => {
-    const payload: BlogsInputModel = req.body
+    const payload: BlogsInputModel = req.body;
     const blog = blogsRepository.create(payload);
     res.status(Statuses.CREATED).send(blog)
 }

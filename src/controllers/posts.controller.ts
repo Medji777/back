@@ -10,11 +10,10 @@ export const getPosts = (req: Request,res: Response) => {
 
 export const getPostOnId = (req: Request,res: Response) => {
     const post = postsRepository.findById(req.params.id);
-    if(post) {
-        res.status(Statuses.OK).send(post)
-    } else {
-        res.sendStatus(Statuses.NOT_FOUND)
+    if(!post) {
+        return res.sendStatus(Statuses.NOT_FOUND)
     }
+    res.status(Statuses.OK).send(post)
 }
 
 export const createPost = (req: Request,res: Response) => {

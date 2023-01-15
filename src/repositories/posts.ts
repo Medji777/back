@@ -3,14 +3,14 @@ import {PostsViewModel,PostInputModel} from '../types/posts'
 const posts = [] as Array<PostsViewModel>;
 
 export const postsRepository = {
-    getAll(){
+    getAll(): Array<PostsViewModel>{
         return posts
     },
-    findById(id: string) {
+    findById(id: string): PostsViewModel | undefined {
         return posts.find((v:PostsViewModel)=>v.id === id)
     },
     create(payload: PostInputModel): PostsViewModel {
-        const id = ++posts.length;
+        const id = posts.length + 1;
         const newPost = {
             id:	`${id}`,
             title: payload.title,

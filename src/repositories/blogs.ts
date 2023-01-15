@@ -3,15 +3,16 @@ import {BlogsViewModel,BlogsInputModel} from '../types/blogs'
 const blogs = [] as Array<BlogsViewModel>
 
 export const blogsRepository = {
-    getAll(){
+    getAll(): Array<BlogsViewModel> {
         return blogs
     },
-    findById(id: string) {
+    findById(id: string): BlogsViewModel | undefined {
         return blogs.find((v:BlogsViewModel)=>v.id === id)
     },
     create(payload: BlogsInputModel): BlogsViewModel {
+        const id = blogs.length + 1;
         const newBlog = {
-            id:	`${++blogs.length}`,
+            id:	`${id}`,
             name: payload.name,
             description: payload.description,
             websiteUrl:	payload.websiteUrl
@@ -19,7 +20,7 @@ export const blogsRepository = {
         blogs.push(newBlog)
         return newBlog
     },
-    update(id: string,payload:BlogsInputModel): boolean {
+    update(id: string, payload: BlogsInputModel): boolean {
         const index = blogs.findIndex((v: BlogsViewModel)=>v.id === id);
         if(index < 0) return false;
         blogs[index] = {...blogs[index], ...payload}
