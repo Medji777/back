@@ -2,6 +2,7 @@ import {Router} from "express";
 import {body} from "express-validator";
 import {basicAuthMiddleware, sanitizationBody, validateMiddleware} from "../middlewares";
 import {createPost, deletePost, getPostOnId, getPosts, updatePost} from "../controllers/posts.controller";
+import {blogsRepository} from "../repositories";
 
 const sanitizationBodyPosts = sanitizationBody(['title','shortDescription','content','blogId'])
 const validateBodyPost = validateMiddleware([
@@ -24,6 +25,13 @@ const validateBodyPost = validateMiddleware([
         //.isString().withMessage('input is string')
         .trim()
         .notEmpty().withMessage('input is required')
+        .custom((blogId)=>{
+            const blog = blogsRepository.findById(blogId);
+            if(!blog){
+                throw new Error('blog with this id don\'t exist in the DB')
+            }
+            return true
+        })
 ])
 
 export const postsRouter = Router({});

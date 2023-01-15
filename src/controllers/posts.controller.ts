@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
-import {postsRepository} from "../repositories";
+import {blogsRepository, postsRepository} from "../repositories";
 import {Statuses} from "../types/types";
-import {PostInputModel} from "../types/posts";
+import {BlogName, PostInputModel} from "../types/posts";
 
 export const getPosts = (req: Request,res: Response) => {
     const posts = postsRepository.getAll()
@@ -17,7 +17,14 @@ export const getPostOnId = (req: Request,res: Response) => {
 }
 
 export const createPost = (req: Request,res: Response) => {
-    const payload: PostInputModel = req.body
+    const blog = blogsRepository.findById(req.body.blogId);
+    if(!blog){
+        return res.sendStatus(Statuses.NOT_FOUND)
+    }
+    const payload: PostInputModel & BlogName = {
+        ...req.body,
+        blogName: blog.name
+    };
     const post = postsRepository.create(payload);
     res.status(Statuses.CREATED).send(post)
 }

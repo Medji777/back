@@ -13,3 +13,7 @@ export type PostInputModel = {
     content: string,
     blogId:	string
 }
+
+export type BlogName = {
+    blogName: string
+}

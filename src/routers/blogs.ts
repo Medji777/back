@@ -19,8 +19,9 @@ const validateBodyBlog = validateMiddleware([
         //.isString().withMessage('input is string')
         .trim()
         .notEmpty().withMessage('input is required')
-        .isURL({ protocols: ['https'] }).withMessage('input is URL')
-        .isLength({max: 100}).withMessage('input is max length 100 symbol')
+        .isURL({ protocols: ['https'] })
+        .withMessage('input is URL')
+        //.isLength({max: 100}).withMessage('input is max length 100 symbol')
 ])
 
 export const blogsRouter = Router({});

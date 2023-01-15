@@ -1,4 +1,4 @@
-import {PostsViewModel,PostInputModel} from '../types/posts'
+import {PostsViewModel, PostInputModel, BlogName} from '../types/posts'
 
 const posts = [] as Array<PostsViewModel>;
 
@@ -9,7 +9,7 @@ export const postsRepository = {
     findById(id: string): PostsViewModel | undefined {
         return posts.find((v:PostsViewModel)=>v.id === id)
     },
-    create(payload: PostInputModel): PostsViewModel {
+    create(payload: PostInputModel & BlogName): PostsViewModel {
         const id = posts.length + 1;
         const newPost = {
             id:	`${id}`,
@@ -17,7 +17,7 @@ export const postsRepository = {
             shortDescription: payload.shortDescription,
             content: payload.content,
             blogId: payload.blogId,
-            blogName: `new blog ${id}`
+            blogName: payload.blogName
         }
         posts.push(newPost)
         return newPost
