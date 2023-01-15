@@ -1,10 +1,12 @@
 import {Router,Request,Response} from 'express';
-import {videosRepository} from "../repositories/repo";
+import {videosRepository} from "../repositories";
 import {bodyFieldValidator} from "../validations";
-import {pick} from "../utils";
-import {CreateVideoInputModel, IVideo, Statuses} from "../types/types";
+import {CreateVideoInputModel, Statuses} from "../types/types";
+import {sanitizationBody} from "../middlewares";
 
 export const baseRouter = Router({});
+
+const sanitizationBodyBase = sanitizationBody(['title','author','canBeDownloaded','minAgeRestriction','publicationDate','availableResolutions'])
 
 baseRouter.get('/videos',(req: Request,res: Response)=>{
     const videos = videosRepository.getAll();
@@ -31,33 +33,25 @@ baseRouter.post('/videos',(req: Request,res: Response)=>{
     res.status(Statuses.CREATED).send(video)
 })
 
-baseRouter.put('/videos/:id',(req: Request,res: Response)=>{
+baseRouter.put('/videos/:id', sanitizationBodyBase, (req: Request,res: Response)=>{
     const videoId = +req.params.id;
-    const video = videosRepository.findById(videoId);
-    if(!video) {
-        return res.sendStatus(Statuses.NOT_FOUND)
-    }
 
-    const resultBody = pick(
-        req.body,
-        ['title','author','canBeDownloaded','minAgeRestriction','publicationDate','availableResolutions']
-    )
-
-    const errors = bodyFieldValidator(resultBody);
+    const errors = bodyFieldValidator(req.body);
     if(!!errors){
         return res.status(Statuses.BAD_REQUEST).send(errors)
     }
 
-    videosRepository.updateVideo(videoId,resultBody)
+    const isUpdated = videosRepository.updateVideo(videoId,req.body);
+    if(!isUpdated){
+        return res.sendStatus(Statuses.NOT_FOUND)
+    }
     res.sendStatus(Statuses.NO_CONTENT)
 })
 
 baseRouter.delete('/videos/:id',(req: Request,res: Response)=>{
-    const videoId = +req.params.id;
-    const videos = videosRepository.getAll();
-    if(!videos.find((v:IVideo)=>v?.id === videoId)){
+    const isDeleted = videosRepository.deleteVideo(+req.params.id)
+    if(!isDeleted){
         return res.sendStatus(Statuses.NOT_FOUND)
     }
-    videosRepository.deleteVideo(videoId)
     res.sendStatus(Statuses.NO_CONTENT)
 })

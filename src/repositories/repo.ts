@@ -26,11 +26,15 @@ export const videosRepository = {
     },
     updateVideo(id: number,payload: IUpdateVideoInputModel){
         const index = videos.findIndex((v: IVideo)=>v.id === id);
+        if(index < 0) return false;
         videos[index] = {...videos[index], ...payload}
+        return true
     },
     deleteVideo(id: number){
         const index = videos.findIndex((v: IVideo)=>v.id === id);
+        if(index < 0) return false;
         videos.splice(index,1)
+        return true
     },
     deleteAll(){
         videos.splice(0)
