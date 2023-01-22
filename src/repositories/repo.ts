@@ -1,4 +1,4 @@
-import {CreateVideoInputModel, IUpdateVideoInputModel, IVideo} from "../types/types";
+import {CreateVideoInputModel, IUpdateVideoInputModel, IVideo} from "../types/videos";
 
 const videos = [] as Array<IVideo>
 

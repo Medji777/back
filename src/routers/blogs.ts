@@ -6,21 +6,21 @@ import {createBlog, deleteBlog, getBlogOnId, getBlogs, updateBlog} from "../cont
 const sanitizationBodyBlogs = sanitizationBody(['name','description','websiteUrl'])
 const validateBodyBlog = validateMiddleware([
     body('name')
-        //.isString().withMessage('input is string')
+        .isString().withMessage('input is string')
         .trim().escape()
         .notEmpty().withMessage('input is required')
-        .isLength({max: 15}).withMessage('input is max length 15 symbol'),
+        .isLength({max: 15}).withMessage('input is max 15 symbol'),
     body('description')
-        //.isString().withMessage('input is string')
+        .isString().withMessage('input is string')
         .trim().escape()
         .notEmpty().withMessage('input is required')
-        .isLength({max: 500}).withMessage('input is max length 500 symbol'),
+        .isLength({max: 500}).withMessage('input is max 500 symbol'),
     body('websiteUrl')
         .trim()
-        //.notEmpty().withMessage('input is required')
+        .notEmpty().withMessage('input is required')
         .isURL({ protocols: ['https'] })
         .withMessage('input is URL')
-        .isLength({max: 100}).withMessage('input is max length 100 symbol')
+        .isLength({max: 100}).withMessage('input is max 100 symbol')
 ])
 
 export const blogsRouter = Router({});

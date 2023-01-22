@@ -18,7 +18,7 @@ export const validateMiddleware = (validations: Array<ValidationChain>) => async
         return next();
     }
 
-    const errorBody: APIErrorResult = { errorsMessages: errors.array() }
+    const errorBody: APIErrorResult = { errorsMessages: errors.array({ onlyFirstError: true }) }
 
     res.status(400).send(errorBody);
 }

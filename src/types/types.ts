@@ -7,12 +7,6 @@ export type FieldError = {
     field: string | null
 }
 
-export type CreateVideoInputModel = {
-    title: string,
-    author: string,
-    availableResolutions?: Array<Resolutions> | null
-}
-
 export enum Resolutions {
     P144="P144",
     P240="P240",
@@ -29,25 +23,6 @@ export enum Statuses {
     CREATED = 201,
     NO_CONTENT = 204,
     BAD_REQUEST = 400,
+    UN_AUTHORIZED = 401,
     NOT_FOUND = 404,
-}
-
-export interface IVideo {
-    id?: number,
-    title: string,
-    author: string,
-    canBeDownloaded?: boolean,
-    minAgeRestriction?: number | null,
-    createdAt?: string,
-    publicationDate?: string,
-    availableResolutions?: Array<Resolutions> | null
-}
-
-export interface IUpdateVideoInputModel {
-    title: string,
-    author: string,
-    canBeDownloaded?: boolean,
-    minAgeRestriction?: number | null,
-    publicationDate?: string,
-    availableResolutions?: Array<Resolutions> | null
 }

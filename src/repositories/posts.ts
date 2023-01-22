@@ -34,7 +34,7 @@ export const postsRepository = {
         posts.splice(index,1)
         return true
     },
-    deleteAll(){
+    deleteAll(): void {
         posts.splice(0)
     }
 }

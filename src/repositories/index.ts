@@ -1,6 +1,6 @@
-import {blogsRepository} from './blogs';
-import {postsRepository} from './posts';
-import {videosRepository} from './repo';
+import {blogsRepository} from './blogs-db';
+import {postsRepository} from './posts-db';
+import {videosRepository} from './repo-db';
 
 export {
     blogsRepository,

@@ -1,4 +1,5 @@
 import {Request,Response,NextFunction} from "express";
+import {Statuses} from "../types/types";
 
 const authData = {login: 'admin', password: 'qwerty'} as const
 
@@ -11,5 +12,5 @@ export const basicAuthMiddleware = (req:Request,res:Response,next:NextFunction) 
             return next()
         }
     }
-    return res.sendStatus(401)
+    return res.sendStatus(Statuses.UN_AUTHORIZED)
 }
