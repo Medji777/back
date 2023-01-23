@@ -3,10 +3,10 @@ import {videosCollection} from "./db";
 
 export const videosRepository = {
     async getAll(): Promise<IVideo[]> {
-        return videosCollection.find({}).toArray()
+        return videosCollection.find({},{projection: {_id:0}}).toArray()
     },
     async findById(id: number): Promise<IVideo | null>{
-        return videosCollection.findOne({id})
+        return videosCollection.findOne({id},{projection: {_id:0}})
     },
     async createVideo(payload: CreateVideoInputModel): Promise<IVideo> {
         const date = new Date();

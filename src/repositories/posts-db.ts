@@ -3,10 +3,10 @@ import {postsCollection} from "./db";
 
 export const postsRepository = {
     async getAll(): Promise<Array<PostsViewModel>>{
-        return postsCollection.find({}).toArray()
+        return postsCollection.find({},{projection: {_id:0}}).toArray()
     },
     async findById(id: string): Promise<PostsViewModel | null> {
-        return postsCollection.findOne({id})
+        return postsCollection.findOne({id},{projection: {_id:0}})
     },
     async create(payload: PostInputModel & BlogName): Promise<PostsViewModel> {
         const date = new Date();
