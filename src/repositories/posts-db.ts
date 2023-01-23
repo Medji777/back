@@ -19,7 +19,7 @@ export const postsRepository = {
             blogName: payload.blogName,
             createdAt: date.toISOString()
         }
-        await postsCollection.insertOne(newPost)
+        await postsCollection.insertOne({...newPost})
         return newPost
     },
     async update(id: string,payload:PostInputModel): Promise<boolean> {

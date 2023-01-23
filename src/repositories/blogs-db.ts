@@ -17,7 +17,7 @@ export const blogsRepository = {
             websiteUrl:	payload.websiteUrl,
             createdAt: date.toISOString()
         }
-        await blogsCollection.insertOne(newBlog)
+        await blogsCollection.insertOne({...newBlog})
         return newBlog
     },
     async update(id: string, payload: BlogsInputModel): Promise<boolean> {

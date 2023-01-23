@@ -19,7 +19,7 @@ export async function runDb () {
     try {
         await client.connect();
         await client.db().command({ping: 1})
-        console.log("Connected to DB Ok!",URI)
+        console.log("Connected to DB Ok!")
     }
     catch (e) {
         console.log("Connected to DB failed!")
