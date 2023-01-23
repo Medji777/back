@@ -25,8 +25,8 @@ const validateBodyPost = validateMiddleware([
         .isString().withMessage('input is string')
         .trim()
         .notEmpty().withMessage('input is required')
-        .custom((blogId)=>{
-            const blog = blogsRepository.findById(blogId);
+        .custom(async (blogId)=>{
+            const blog = await blogsRepository.findById(blogId);
             if(!blog){
                 throw new Error('blog with this id don\'t exist in the DB')
             }

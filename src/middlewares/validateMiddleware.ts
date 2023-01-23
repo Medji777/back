@@ -2,7 +2,7 @@ import {NextFunction, Request, Response} from "express";
 import {ValidationChain, validationResult, ValidationError} from "express-validator";
 import {APIErrorResult, FieldError} from "../types/types";
 
-export const validateMiddleware = (validations: Array<ValidationChain>) => async (req:Request,res:Response,next:NextFunction) => {
+export const validateMiddleware = (validations: Array<ValidationChain>,onlyFirstError: boolean = true) => async (req:Request,res:Response,next:NextFunction) => {
 
     await Promise.all(validations.map(validation => validation.run(req)));
 
@@ -18,7 +18,7 @@ export const validateMiddleware = (validations: Array<ValidationChain>) => async
         return next();
     }
 
-    const errorBody: APIErrorResult = { errorsMessages: errors.array({ onlyFirstError: true }) }
+    const errorBody: APIErrorResult = { errorsMessages: errors.array({ onlyFirstError }) }
 
     res.status(400).send(errorBody);
 }
