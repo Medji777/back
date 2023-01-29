@@ -1,15 +1,16 @@
 import {Request, Response} from "express";
-import {blogsRepository, postsRepository} from "../repositories";
-import {Statuses} from "../types/types";
+import {postsRepository} from "../repositories";
+import {RequestWithParams, Statuses} from "../types/types";
 import {BlogName, PostInputModel} from "../types/posts";
+import {blogsQueryRepository, postsQueryRepository, QueryPosts} from "../repositories/query";
 
 export const getPosts = async (req: Request,res: Response) => {
-    const posts = await postsRepository.getAll()
+    const posts = await postsQueryRepository.getAll(req.query as unknown as QueryPosts)
     res.status(Statuses.OK).send(posts)
 }
 
-export const getPostOnId = async (req: Request,res: Response) => {
-    const post = await postsRepository.findById(req.params.id);
+export const getPostOnId = async (req: RequestWithParams<{id: string}>,res: Response) => {
+    const post = await postsQueryRepository.findById(req.params.id);
     if(!post) {
         return res.sendStatus(Statuses.NOT_FOUND)
     }
@@ -17,7 +18,7 @@ export const getPostOnId = async (req: Request,res: Response) => {
 }
 
 export const createPost = async (req: Request,res: Response) => {
-    const blog = await blogsRepository.findById(req.body.blogId);
+    const blog = await blogsQueryRepository.findById(req.body.blogId);
     if(!blog){
         return res.sendStatus(Statuses.NOT_FOUND)
     }

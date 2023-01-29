@@ -2,12 +2,6 @@ import {BlogsViewModel,BlogsInputModel} from '../types/blogs'
 import {blogsCollection} from "./db";
 
 export const blogsRepository = {
-    async getAll(): Promise<Array<BlogsViewModel>> {
-        return blogsCollection.find({},{projection: {_id:0}}).toArray()
-    },
-    async findById(id: string): Promise<BlogsViewModel | null> {
-        return blogsCollection.findOne({id},{projection: {_id:0}})
-    },
     async create(payload: BlogsInputModel): Promise<BlogsViewModel> {
         const date = new Date();
         const newBlog = {

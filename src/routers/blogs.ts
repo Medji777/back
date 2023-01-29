@@ -1,32 +1,38 @@
 import {Router} from "express";
-import {body} from "express-validator";
-import {basicAuthMiddleware,sanitizationBody,validateMiddleware} from "../middlewares";
-import {createBlog, deleteBlog, getBlogOnId, getBlogs, updateBlog} from "../controllers/blogs.controller";
+import {basicAuthMiddleware, sanitizationBody, validateMiddleware} from "../middlewares";
+import {
+    createBlog, createPostForBlogId,
+    deleteBlog,
+    getBlogOnId,
+    getBlogs,
+    getPostByBlogIdWithQuery,
+    updateBlog
+} from "../controllers/blogs.controller";
+import {validateBodyBlog, validateBodyPost} from "../validations";
+import {validatePaginationQuery, validateSearchNameTermQuery, validateSortQuery} from "../validations/query";
+import {ValidationChain} from "express-validator";
 
 const sanitizationBodyBlogs = sanitizationBody(['name','description','websiteUrl'])
-const validateBodyBlog = validateMiddleware([
-    body('name')
-        .isString().withMessage('input is string')
-        .trim().escape()
-        .notEmpty().withMessage('input is required')
-        .isLength({max: 15}).withMessage('input is max 15 symbol'),
-    body('description')
-        .isString().withMessage('input is string')
-        .trim().escape()
-        .notEmpty().withMessage('input is required')
-        .isLength({max: 500}).withMessage('input is max 500 symbol'),
-    body('websiteUrl')
-        .trim()
-        .notEmpty().withMessage('input is required')
-        .isURL({ protocols: ['https'] })
-        .withMessage('input is URL')
-        .isLength({max: 100}).withMessage('input is max 100 symbol')
+const sanitizationBodyPostByBlog = sanitizationBody(['title','shortDescription','content'])
+
+const validateQuery = (validate: Array<ValidationChain> = []) => validateMiddleware([
+    ...validateSortQuery,
+    ...validatePaginationQuery,
+    ...validate
 ])
 
 export const blogsRouter = Router({});
 
-blogsRouter.get('/blogs',getBlogs)
+blogsRouter.get('/blogs',validateQuery(validateSearchNameTermQuery),getBlogs)
 blogsRouter.get('/blogs/:id',getBlogOnId)
 blogsRouter.post('/blogs',basicAuthMiddleware,sanitizationBodyBlogs,validateBodyBlog,createBlog)
 blogsRouter.put('/blogs/:id',basicAuthMiddleware,sanitizationBodyBlogs,validateBodyBlog,updateBlog)
 blogsRouter.delete('/blogs/:id',basicAuthMiddleware,deleteBlog)
+blogsRouter.get('/blogs/:blogId/posts',validateQuery(),getPostByBlogIdWithQuery)
+blogsRouter.post(
+    '/blogs/:blogId/posts',
+    basicAuthMiddleware,
+    sanitizationBodyPostByBlog,
+    validateBodyPost(),
+    createPostForBlogId
+)

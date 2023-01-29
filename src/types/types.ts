@@ -1,3 +1,5 @@
+import {Request} from "express";
+
 export type APIErrorResult = {
     errorsMessages: Array<FieldError>
 }
@@ -5,6 +7,14 @@ export type APIErrorResult = {
 export type FieldError = {
     message: string | null,
     field: string | null
+}
+
+export type Paginator<T> = {
+    pagesCount?: number,
+    page?: number,
+    pageSize?: number,
+    totalCount?: number,
+    items: Array<T>
 }
 
 export enum Resolutions {
@@ -26,3 +36,14 @@ export enum Statuses {
     UN_AUTHORIZED = 401,
     NOT_FOUND = 404,
 }
+
+export enum SortDirections {
+    asc = 'asc',
+    desc = 'desc'
+}
+
+export type RequestWithBody<T> = Request<{},{},T>
+export type RequestWithQuery<T> = Request<{},{},{},T>
+export type RequestWithParams<T> = Request<T>
+export type RequestWithParamsAndBody<T,B> = Request<T,{},B>
+export type RequestWithParamsAndQuery<T,Q> = Request<T,{},{},Q>
