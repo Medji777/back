@@ -7,11 +7,10 @@ import {
     RequestWithBody,
     RequestWithParamsAndQuery,
     RequestWithParamsAndBody,
-    Statuses, SortDirections,
+    Statuses
 } from "../types/types";
 import {BlogsInputModel, BlogsViewModel} from "../types/blogs";
 import {PostInputModel, PostsViewModel} from "../types/posts";
-import * as queryString from "querystring";
 
 export const getBlogs = async (req: Request,res: Response<Paginator<BlogsViewModel>>) => {
     const blogs = await blogsQueryRepository.getAll(req.query as unknown as QueryBlogs);

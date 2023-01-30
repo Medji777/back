@@ -19,7 +19,7 @@ export const validateSortQuery = [
         .optional()
         .trim()
         .customSanitizer((v: keyof typeof SortDirections)=>{
-            return !!v &&!SortDirections[v] ? SortDirections.desc : SortDirections[v]
+            return !v || !!v && !SortDirections[v] ? SortDirections.desc : SortDirections[v]
         })
         .default(SortDirections.desc),
     query('sortDirection').default(SortDirections.desc)
