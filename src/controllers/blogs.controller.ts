@@ -7,17 +7,20 @@ import {
     RequestWithBody,
     RequestWithParamsAndQuery,
     RequestWithParamsAndBody,
-    Statuses,
+    Statuses, SortDirections,
 } from "../types/types";
-import {BlogsInputModel} from "../types/blogs";
-import {PostsViewModel} from "../types/posts";
+import {BlogsInputModel, BlogsViewModel} from "../types/blogs";
+import {PostInputModel, PostsViewModel} from "../types/posts";
+import * as queryString from "querystring";
 
-export const getBlogs = async (req: Request,res: Response) => {
+export const getBlogs = async (req: Request,res: Response<Paginator<BlogsViewModel>>) => {
     const blogs = await blogsQueryRepository.getAll(req.query as unknown as QueryBlogs);
     res.status(Statuses.OK).send(blogs)
 }
 
-export const getBlogOnId = async (req: RequestWithParams<{id: string}>,res: Response) => {
+export const getBlogOnId = async (
+    req: RequestWithParams<{id: string}>,
+    res: Response<BlogsViewModel>) => {
     const blog = await blogsQueryRepository.findById(req.params.id);
     if(!blog) {
         return res.sendStatus(Statuses.NOT_FOUND)
@@ -25,12 +28,16 @@ export const getBlogOnId = async (req: RequestWithParams<{id: string}>,res: Resp
     res.status(Statuses.OK).send(blog)
 }
 
-export const createBlog = async (req: RequestWithBody<BlogsInputModel>,res: Response) => {
+export const createBlog = async (
+    req: RequestWithBody<BlogsInputModel>,
+    res: Response<BlogsViewModel>) => {
     const blog = await blogsService.create(req.body);
     res.status(Statuses.CREATED).send(blog)
 }
 
-export const updateBlog = async (req: RequestWithParamsAndBody<{id: string}, BlogsInputModel>,res: Response)=>{
+export const updateBlog = async (
+    req: RequestWithParamsAndBody<{id: string}, BlogsInputModel>,
+    res: Response)=>{
     const isUpdated = await blogsService.update(req.params.id,req.body);
     if(!isUpdated){
         return res.sendStatus(Statuses.NOT_FOUND)
@@ -47,7 +54,7 @@ export const deleteBlog = async (req: RequestWithParams<{id: string}>,res: Respo
 }
 
 export const getPostByBlogIdWithQuery = async (
-    req: RequestWithParamsAndQuery<{blogId: string},{}>,
+    req: RequestWithParamsAndQuery<{blogId: string}, any>,
     res: Response<Paginator<PostsViewModel>>) => {
     const blogId = req.params.blogId;
     const blog = await blogsQueryRepository.findById(blogId);
@@ -55,11 +62,13 @@ export const getPostByBlogIdWithQuery = async (
         return res.sendStatus(Statuses.NOT_FOUND);
     }
 
-    const posts = await postsQueryRepository.getPostsByBlogId(blogId,req.query as unknown as QueryPosts)
+    const posts = await postsQueryRepository.getPostsByBlogId(blogId,req.query)
     res.status(Statuses.OK).send(posts)
 }
 
-export const createPostForBlogId = async (req: Request,res: Response) => {
+export const createPostForBlogId = async (
+    req: RequestWithParamsAndBody<{blogId: string}, PostInputModel>,
+    res: Response<PostsViewModel>) => {
     const blogId = req.params.blogId;
     const blog = await blogsQueryRepository.findById(blogId);
     if(!blog) {

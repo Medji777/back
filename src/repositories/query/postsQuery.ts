@@ -7,7 +7,7 @@ import {transformPagination} from "../../utils/transform";
 export type QueryPosts = {
     sortBy: string,
     sortDirection: SortDirections,
-    pageNumber: number,
+    pageNumber: number ,
     pageSize: number
 }
 
@@ -15,8 +15,8 @@ export const postsQueryRepository = {
     async getAll(query: QueryPosts): Promise<Paginator<PostsViewModel>> {
         const {sortBy,sortDirection,pageNumber,pageSize} = query;
         const sortNumber = getSortNumber(sortDirection);
-        const count = await postsCollection.countDocuments();
         const skipNumber = (pageNumber - 1) * pageSize;
+        const count = await postsCollection.countDocuments();
         const data = await postsCollection
             .find({},{projection: {_id:0}})
             .sort({[sortBy]: sortNumber})
@@ -32,8 +32,8 @@ export const postsQueryRepository = {
         const filter = {blogId: id};
         const {sortBy,sortDirection,pageNumber,pageSize} = query;
         const sortNumber = getSortNumber(sortDirection);
-        const count = await postsCollection.countDocuments(filter);
         const skipNumber = (pageNumber - 1) * pageSize;
+        const count = await postsCollection.countDocuments(filter);
         const data = await postsCollection
             .find(filter,{projection: {_id:0}})
             .sort({[sortBy]: sortNumber})

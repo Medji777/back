@@ -18,21 +18,24 @@ export const validateSortQuery = [
     query('sortDirection')
         .optional()
         .trim()
-        .custom((v: keyof typeof SortDirections)=>{
-            if(!!v &&!SortDirections[v]){
-                throw new Error(`field not valid`)
-            }
-            return true
-        }).default(SortDirections.desc),
+        .customSanitizer((v: keyof typeof SortDirections)=>{
+            return !!v &&!SortDirections[v] ? SortDirections.desc : SortDirections[v]
+        })
+        .default(SortDirections.desc),
+    query('sortDirection').default(SortDirections.desc)
 ]
 
 export const validatePaginationQuery = [
     query('pageNumber')
         .optional()
-        .isInt({min:1}).withMessage('field not valid'),
+        .customSanitizer((v)=>{
+            return !v || !isNaN(+v) && +v === 0 || isNaN(+v) ? 1 : v
+        }).default(1).toInt(),
     query('pageNumber').default(1).toInt(),
     query('pageSize')
         .optional()
-        .isInt({min:10}).withMessage('field not valid'),
+        .customSanitizer((v)=>{
+            return !v || !isNaN(+v) && +v === 0 || isNaN(+v) ? 10 : v
+        }).default(10).toInt(),
     query('pageSize').default(10).toInt()
 ]

@@ -1,15 +1,19 @@
 import {Request, Response} from "express";
 import {blogsQueryRepository, postsQueryRepository, QueryPosts} from "../repositories/query";
 import {postsService} from "../domain";
-import {RequestWithParams, RequestWithParamsAndBody, Statuses} from "../types/types";
-import {PostInputModel} from "../types/posts";
+import {Paginator, RequestWithParams, RequestWithParamsAndBody, Statuses} from "../types/types";
+import {PostInputModel, PostsViewModel} from "../types/posts";
 
-export const getPosts = async (req: Request,res: Response) => {
+export const getPosts = async (
+    req: Request,
+    res: Response<Paginator<PostsViewModel>>) => {
     const posts = await postsQueryRepository.getAll(req.query as unknown as QueryPosts)
     res.status(Statuses.OK).send(posts)
 }
 
-export const getPostOnId = async (req: RequestWithParams<{id: string}>,res: Response) => {
+export const getPostOnId = async (
+    req: RequestWithParams<{id: string}>,
+    res: Response<PostsViewModel>) => {
     const post = await postsQueryRepository.findById(req.params.id);
     if(!post) {
         return res.sendStatus(Statuses.NOT_FOUND)
@@ -17,7 +21,7 @@ export const getPostOnId = async (req: RequestWithParams<{id: string}>,res: Resp
     res.status(Statuses.OK).send(post)
 }
 
-export const createPost = async (req: Request,res: Response) => {
+export const createPost = async (req: Request,res: Response<PostsViewModel>) => {
     const blog = await blogsQueryRepository.findById(req.body.blogId);
     if(!blog){
         return res.sendStatus(Statuses.NOT_FOUND)
@@ -29,7 +33,9 @@ export const createPost = async (req: Request,res: Response) => {
     res.status(Statuses.CREATED).send(post)
 }
 
-export const updatePost = async (req: RequestWithParamsAndBody<{id: string}, PostInputModel>,res: Response)=>{
+export const updatePost = async (
+    req: RequestWithParamsAndBody<{id: string}, PostInputModel>,
+    res: Response)=>{
     const isUpdated = await postsService.update(req.params.id,req.body);
     if(!isUpdated){
         return res.sendStatus(Statuses.NOT_FOUND)
@@ -37,7 +43,9 @@ export const updatePost = async (req: RequestWithParamsAndBody<{id: string}, Pos
     res.sendStatus(Statuses.NO_CONTENT)
 }
 
-export const deletePost = async (req: RequestWithParams<{id: string}>,res: Response)=>{
+export const deletePost = async (
+    req: RequestWithParams<{id: string}>,
+    res: Response)=>{
     const isDeleted = await postsService.delete(req.params.id)
     if(!isDeleted){
         return res.sendStatus(Statuses.NOT_FOUND)

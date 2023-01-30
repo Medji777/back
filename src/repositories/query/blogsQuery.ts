@@ -17,8 +17,8 @@ export const blogsQueryRepository = {
         const {searchNameTerm, sortBy, sortDirection, pageNumber, pageSize} = query;
         const sortNumber = getSortNumber(sortDirection);
         const filter = !searchNameTerm ? {} : {name:{$regex: new RegExp(searchNameTerm,'gi')}};
-        const count = await blogsCollection.countDocuments(filter);
         const skipNumber = (pageNumber - 1) * pageSize;
+        const count = await blogsCollection.countDocuments(filter);
         const data = await blogsCollection
             .find(filter,{projection: {_id:0}})
             .sort({[sortBy]: sortNumber})
