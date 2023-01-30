@@ -29,8 +29,8 @@ export const postsQueryRepository = {
         return postsCollection.findOne({id},{projection: {_id:0}})
     },
     async getPostsByBlogId(id: string, query: QueryPosts): Promise<Paginator<PostsViewModel>>{
-        const {sortBy,sortDirection,pageNumber,pageSize} = query;
         const filter = {blogId: id};
+        const {sortBy,sortDirection,pageNumber,pageSize} = query;
         const sortNumber = getSortNumber(sortDirection);
         const count = await postsCollection.countDocuments(filter);
         const skipNumber = (pageNumber - 1) * pageSize;

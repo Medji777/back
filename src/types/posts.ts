@@ -15,7 +15,7 @@ export type PostInputModel = {
     title: string,
     shortDescription: string,
     content: string,
-    blogId:	string
+    blogId: string
 }
 
 export type BlogName = {

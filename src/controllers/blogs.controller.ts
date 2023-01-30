@@ -1,15 +1,16 @@
 import {Request, Response} from "express";
-import {blogsRepository, postsRepository} from "../repositories";
+import {blogsQueryRepository, postsQueryRepository, QueryBlogs, QueryPosts} from "../repositories/query";
+import {blogsService,postsService} from "../domain";
 import {
     Paginator,
     RequestWithParams,
     RequestWithBody,
-    Statuses,
     RequestWithParamsAndQuery,
+    RequestWithParamsAndBody,
+    Statuses,
 } from "../types/types";
 import {BlogsInputModel} from "../types/blogs";
 import {PostsViewModel} from "../types/posts";
-import {blogsQueryRepository, postsQueryRepository, QueryBlogs, QueryPosts} from "../repositories/query";
 
 export const getBlogs = async (req: Request,res: Response) => {
     const blogs = await blogsQueryRepository.getAll(req.query as unknown as QueryBlogs);
@@ -25,12 +26,12 @@ export const getBlogOnId = async (req: RequestWithParams<{id: string}>,res: Resp
 }
 
 export const createBlog = async (req: RequestWithBody<BlogsInputModel>,res: Response) => {
-    const blog = await blogsRepository.create(req.body);
+    const blog = await blogsService.create(req.body);
     res.status(Statuses.CREATED).send(blog)
 }
 
-export const updateBlog = async (req: Request,res: Response)=>{
-    const isUpdated = await blogsRepository.update(req.params.id,req.body);
+export const updateBlog = async (req: RequestWithParamsAndBody<{id: string}, BlogsInputModel>,res: Response)=>{
+    const isUpdated = await blogsService.update(req.params.id,req.body);
     if(!isUpdated){
         return res.sendStatus(Statuses.NOT_FOUND)
     }
@@ -38,7 +39,7 @@ export const updateBlog = async (req: Request,res: Response)=>{
 }
 
 export const deleteBlog = async (req: RequestWithParams<{id: string}>,res: Response)=>{
-    const isDeleted = await blogsRepository.deleteById(req.params.id)
+    const isDeleted = await blogsService.delete(req.params.id)
     if(!isDeleted){
         return res.sendStatus(Statuses.NOT_FOUND)
     }
@@ -65,7 +66,7 @@ export const createPostForBlogId = async (req: Request,res: Response) => {
         return res.sendStatus(Statuses.NOT_FOUND);
     }
 
-    const post = await postsRepository.create({
+    const post = await postsService.create({
         ...req.body,
         blogId,
         blogName: blog.name

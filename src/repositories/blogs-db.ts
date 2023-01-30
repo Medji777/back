@@ -2,17 +2,9 @@ import {BlogsViewModel,BlogsInputModel} from '../types/blogs'
 import {blogsCollection} from "./db";
 
 export const blogsRepository = {
-    async create(payload: BlogsInputModel): Promise<BlogsViewModel> {
-        const date = new Date();
-        const newBlog = {
-            id:	`${+date}`,
-            name: payload.name,
-            description: payload.description,
-            websiteUrl:	payload.websiteUrl,
-            createdAt: date.toISOString()
-        }
-        await blogsCollection.insertOne({...newBlog})
-        return newBlog
+    async create(payload: BlogsViewModel): Promise<BlogsViewModel> {
+        await blogsCollection.insertOne({...payload});
+        return payload
     },
     async update(id: string, payload: BlogsInputModel): Promise<boolean> {
         const result = await blogsCollection.updateOne({id},{$set:{...payload}});
