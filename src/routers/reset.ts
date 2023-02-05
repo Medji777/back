@@ -4,7 +4,7 @@ import {Statuses} from "../types/types";
 
 export const resetRouter = Router()
 
-resetRouter.delete('/testing/all-data',async (req:Request,res:Response)=>{
+resetRouter.delete('/all-data',async (req:Request,res:Response)=>{
     await postsRepository.deleteAll();
     await blogsRepository.deleteAll();
     await videosRepository.deleteAll();

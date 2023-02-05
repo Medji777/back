@@ -1,5 +1,5 @@
-import {blogsService} from "./blogsService";
-import {postsService} from "./postsService";
+import {blogsService} from "./blogs.service";
+import {postsService} from "./posts.service";
 
 export {
     blogsService,

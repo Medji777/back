@@ -14,8 +14,8 @@ const validateQuery = validateMiddleware([
 
 export const postsRouter = Router({});
 
-postsRouter.get('/posts',validateQuery,getPosts)
-postsRouter.get('/posts/:id',getPostOnId)
-postsRouter.post('/posts',basicAuthMiddleware,sanitizationBodyPosts,validateBody,createPost)
-postsRouter.put('/posts/:id',basicAuthMiddleware,sanitizationBodyPosts,validateBody,updatePost)
-postsRouter.delete('/posts/:id',basicAuthMiddleware,deletePost)
+postsRouter.get('/',validateQuery,getPosts)
+postsRouter.get('/:id',getPostOnId)
+postsRouter.post('/',basicAuthMiddleware,sanitizationBodyPosts,validateBody,createPost)
+postsRouter.put('/:id',basicAuthMiddleware,sanitizationBodyPosts,validateBody,updatePost)
+postsRouter.delete('/:id',basicAuthMiddleware,deletePost)

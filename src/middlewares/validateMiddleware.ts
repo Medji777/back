@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {ValidationChain, validationResult, ValidationError} from "express-validator";
-import {APIErrorResult, FieldError} from "../types/types";
+import {APIErrorResult, FieldError, Statuses} from "../types/types";
 
 export const validateMiddleware = (validations: Array<ValidationChain>,onlyFirstError: boolean = true) => async (req:Request,res:Response,next:NextFunction) => {
 
@@ -20,5 +20,5 @@ export const validateMiddleware = (validations: Array<ValidationChain>,onlyFirst
 
     const errorBody: APIErrorResult = { errorsMessages: errors.array({ onlyFirstError }) }
 
-    res.status(400).send(errorBody);
+    res.status(Statuses.BAD_REQUEST).send(errorBody);
 }

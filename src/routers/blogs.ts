@@ -1,4 +1,5 @@
 import {Router} from "express";
+import {ValidationChain} from "express-validator";
 import {basicAuthMiddleware, sanitizationBody, validateMiddleware} from "../middlewares";
 import {
     createBlog, createPostForBlogId,
@@ -9,8 +10,8 @@ import {
     updateBlog
 } from "../controllers/blogs.controller";
 import {validateBodyBlog, validateBodyPost} from "../validations";
-import {validatePaginationQuery, validateSearchNameTermQuery, validateSortQuery} from "../validations/query";
-import {ValidationChain} from "express-validator";
+import {validatePaginationQuery, validateSortQuery, createSearchTermQuery} from "../validations/query";
+import {SearchTermQuery} from "../types/types";
 
 const sanitizationBodyBlogs = sanitizationBody(['name','description','websiteUrl'])
 const sanitizationBodyPostByBlog = sanitizationBody(['title','shortDescription','content'])
@@ -21,16 +22,18 @@ const validateQuery = (validate: Array<ValidationChain> = []) => validateMiddlew
     ...validate
 ])
 
+const validateSearchNameTermQuery = createSearchTermQuery(SearchTermQuery.searchNameTerm)
+
 export const blogsRouter = Router({});
 
-blogsRouter.get('/blogs',validateQuery(validateSearchNameTermQuery),getBlogs)
-blogsRouter.get('/blogs/:id',getBlogOnId)
-blogsRouter.post('/blogs',basicAuthMiddleware,sanitizationBodyBlogs,validateBodyBlog,createBlog)
-blogsRouter.put('/blogs/:id',basicAuthMiddleware,sanitizationBodyBlogs,validateBodyBlog,updateBlog)
-blogsRouter.delete('/blogs/:id',basicAuthMiddleware,deleteBlog)
-blogsRouter.get('/blogs/:blogId/posts',validateQuery(),getPostByBlogIdWithQuery)
+blogsRouter.get('/',validateQuery(validateSearchNameTermQuery),getBlogs)
+blogsRouter.get('/:id',getBlogOnId)
+blogsRouter.post('/',basicAuthMiddleware,sanitizationBodyBlogs,validateBodyBlog,createBlog)
+blogsRouter.put('/:id',basicAuthMiddleware,sanitizationBodyBlogs,validateBodyBlog,updateBlog)
+blogsRouter.delete('/:id',basicAuthMiddleware,deleteBlog)
+blogsRouter.get('/:blogId/posts',validateQuery(),getPostByBlogIdWithQuery)
 blogsRouter.post(
-    '/blogs/:blogId/posts',
+    '/:blogId/posts',
     basicAuthMiddleware,
     sanitizationBodyPostByBlog,
     validateBodyPost(),

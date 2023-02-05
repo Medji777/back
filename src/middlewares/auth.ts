@@ -1,7 +1,10 @@
 import {Request,Response,NextFunction} from "express";
+import {config} from 'dotenv';
 import {Statuses} from "../types/types";
 
-const authData = {login: 'admin', password: 'qwerty'} as const
+config()
+
+const authData = {login: process.env.BASIC_LOGIN, password: process.env.BASIC_PASS} as const
 
 export const basicAuthMiddleware = (req:Request,res:Response,next:NextFunction) => {
     const auth = req.headers['authorization'];

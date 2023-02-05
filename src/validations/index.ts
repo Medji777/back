@@ -88,3 +88,39 @@ export const validateBodyPost = (...validationChains: Array<ValidationChain>) =>
         .isLength({max: 1000}).withMessage('input is max 1000 symbol'),
     ...validationChains
 ]);
+
+export const validateBodyUser = validateMiddleware([
+    body('login')
+        .isString().withMessage('input is string')
+        .trim()
+        .notEmpty().withMessage('input is required')
+        .isLength({min: 3, max: 10}).withMessage('input is min 3 and max 10 symbol')
+        .custom((v)=>{
+            const regExp = new RegExp('^[a-zA-Z0-9_-]*$')
+            if(!regExp.test(v)){
+                throw new Error('Not valid login field')
+            }
+            return true
+        }),
+    body('password')
+        .isString().withMessage('input is string')
+        .trim()
+        .notEmpty().withMessage('input is required')
+        .isLength({min: 6, max: 20}).withMessage('input is min 6 and max 20 symbol'),
+    body('email')
+        .isString().withMessage('input is string')
+        .trim()
+        .notEmpty().withMessage('input is required')
+        .isEmail().withMessage('Not valid email field')
+])
+
+export const validateBodyLogin = validateMiddleware([
+    body('loginOrEmail')
+        .isString().withMessage('input is string')
+        .trim()
+        .notEmpty().withMessage('input is required'),
+    body('password')
+        .isString().withMessage('input is string')
+        .trim()
+        .notEmpty().withMessage('input is required')
+])

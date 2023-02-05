@@ -42,6 +42,12 @@ export enum SortDirections {
     desc = 'desc'
 }
 
+export enum SearchTermQuery {
+    searchNameTerm = 'searchNameTerm',
+    searchLoginTerm = 'searchLoginTerm',
+    searchEmailTerm = 'searchEmailTerm'
+}
+
 export type RequestWithBody<T> = Request<{},{},T>
 export type RequestWithQuery<T> = Request<{},{},{},T>
 export type RequestWithParams<T> = Request<T>

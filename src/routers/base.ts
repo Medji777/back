@@ -6,8 +6,8 @@ export const baseRouter = Router({});
 
 const sanitizationBodyBase = sanitizationBody(['title','author','canBeDownloaded','minAgeRestriction','publicationDate','availableResolutions'])
 
-baseRouter.get('/videos',getVideos)
-baseRouter.get('/videos/:id',getVideoById)
-baseRouter.post('/videos',createVideo)
-baseRouter.put('/videos/:id',sanitizationBodyBase,updateVideo)
-baseRouter.delete('/videos/:id',deleteVideo)
+baseRouter.get('/',getVideos)
+baseRouter.get('/:id',getVideoById)
+baseRouter.post('/',createVideo)
+baseRouter.put('/:id',sanitizationBodyBase,updateVideo)
+baseRouter.delete('/:id',deleteVideo)

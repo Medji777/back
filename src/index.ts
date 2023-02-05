@@ -1,6 +1,6 @@
 import express,{Request,Response} from 'express';
 import {config} from 'dotenv';
-import {baseRouter,blogsRouter,postsRouter,resetRouter} from "./routers";
+import {usersRouter, baseRouter, blogsRouter, postsRouter, resetRouter, authRouter} from "./routers";
 import {runDb} from "./repositories/db";
 
 config()
@@ -12,14 +12,15 @@ const parseMiddleware = express.json()
 app.use(parseMiddleware)
 
 app.get('/',(req:Request,res:Response)=>{
-    const str = 'This is Work!';
-    res.send(str)
+    res.send('This is Work!')
 })
 
-app.use('/',baseRouter)
-app.use('/',blogsRouter)
-app.use('/',postsRouter)
-app.use('/',resetRouter)
+app.use('/auth',authRouter)
+app.use('/users',usersRouter)
+app.use('/videos',baseRouter)
+app.use('/blogs',blogsRouter)
+app.use('/posts',postsRouter)
+app.use('/testing',resetRouter)
 
 const bootstrap = async () => {
     await runDb()
