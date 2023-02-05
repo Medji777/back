@@ -7,6 +7,7 @@ export type BlogsViewModel = {
     description: string
     websiteUrl:	string
     createdAt?: string
+    isMembership?: boolean
 }
 
 export type BlogsInputModel = {

@@ -9,7 +9,8 @@ export const blogsService = {
             name: payload.name,
             description: payload.description,
             websiteUrl:	payload.websiteUrl,
-            createdAt: date.toISOString()
+            createdAt: date.toISOString(),
+            isMembership: false
         }
         return blogsRepository.create(newBlog)
     },
