@@ -1,7 +1,12 @@
 import bcrypt from "bcrypt"
-import {UserInputModel, UserViewModel} from "../types/users";
+import {UserInputModel, UserModel, UserViewModel} from "../types/users";
 import {usersRepository} from "../repositories";
 import {usersQueryRepository} from "../repositories/query/usersQuery";
+
+type Cred = {
+    check: boolean,
+    user: UserModel | null
+}
 
 export const usersService = {
     async createUser(payload: UserInputModel): Promise<UserViewModel>{
@@ -19,10 +24,20 @@ export const usersService = {
     async deleteUser(id: string): Promise<boolean>{
         return usersRepository.deleteById(id)
     },
-    async checkCredentials(input: string, password: string){
+    async checkCredentials(input: string, password: string): Promise<Cred>{
         const user = await usersQueryRepository.getUserByLoginOrEmail(input)
-        if(!user) return false;
-        return bcrypt.compare(password,user.passwordHash)
+        if(!user) {
+            return {
+                check: false,
+                user: null
+            }
+        } else {
+            const check = await bcrypt.compare(password,user.passwordHash)
+            return {
+                check,
+                user
+            }
+        }
     },
     async _createPasswordHash(password: string){
         const salt = await bcrypt.genSalt(10)

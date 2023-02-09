@@ -2,7 +2,7 @@ import {usersCollection} from "../db";
 import {Paginator, SortDirections} from "../../types/types";
 import {getSortNumber} from "../../utils/sort";
 import {transformPagination} from "../../utils/transform";
-import {UserViewModel,UserModel} from "../../types/users";
+import {UserViewModel,UserModel,MeViewModel} from "../../types/users";
 
 export type QueryUsers = {
     searchLoginTerm: string | null,
@@ -36,6 +36,17 @@ export const usersQueryRepository = {
         return transformPagination<UserViewModel>(items,pageSize,pageNumber,count)
     },
     async getUserByLoginOrEmail(input: string): Promise<UserModel | null>{
-        return await usersCollection.findOne({$or:[{login: input},{email: input}]},{projection: {_id:0}})
+        return usersCollection.findOne({$or:[{login: input},{email: input}]},{projection: {_id:0}})
+    },
+    async getUserByUserId(userId: string): Promise<UserModel | null> {
+       return usersCollection.findOne({id: userId});
+    },
+    async getMeProfile(userId: string): Promise<MeViewModel>{
+        const user = await this.getUserByUserId(userId);
+        return {
+            email: user!.email,
+            login: user!.login,
+            userId: user!.id
+        }
     }
 }

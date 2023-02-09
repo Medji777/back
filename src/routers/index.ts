@@ -4,6 +4,7 @@ import {postsRouter} from "./posts";
 import {resetRouter} from "./reset";
 import {usersRouter} from "./users";
 import {authRouter} from "./auth";
+import {commentsRouter} from "./comments"
 
 export {
     authRouter,
@@ -11,5 +12,6 @@ export {
     baseRouter,
     blogsRouter,
     postsRouter,
+    commentsRouter,
     resetRouter
 }

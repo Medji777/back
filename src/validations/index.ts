@@ -124,3 +124,9 @@ export const validateBodyLogin = validateMiddleware([
         .trim()
         .notEmpty().withMessage('input is required')
 ])
+
+export const validatorBodyContent = body('content')
+    .isString().withMessage('input is string')
+    .trim()
+    .notEmpty().withMessage('input is required')
+    .isLength({min: 20, max: 300}).withMessage('input is min 20 and max 300 symbol')

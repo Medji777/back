@@ -11,6 +11,12 @@ export type UserViewModel = {
     createdAt?: string
 }
 
+export type MeViewModel = {
+    login: string,
+    email: string,
+    userId: string
+}
+
 export type PasswordHash = {
     passwordHash: string
 }
