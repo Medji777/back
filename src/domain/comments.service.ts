@@ -1,13 +1,7 @@
 import {CommentatorInfo, CommentInputModel, CommentViewModel, PostId} from "../types/comments";
-import {commentsRepository} from "../repositories/comments-db";
+import {commentsRepository} from "../repositories";
 
 export const commentsService = {
-    getAll(){
-
-    },
-    getById(){
-
-    },
     async create(payload: CommentInputModel & CommentatorInfo & PostId): Promise<CommentViewModel>{
         const date = new Date();
         const newComment = {
@@ -22,10 +16,10 @@ export const commentsService = {
         }
         return commentsRepository.create(newComment)
     },
-    update(){
-
+    async update(id: string, payload: CommentInputModel): Promise<boolean> {
+        return commentsRepository.update(id,payload)
     },
-    delete(){
-
+    async delete(id: string): Promise<boolean> {
+        return commentsRepository.delete(id)
     }
 }

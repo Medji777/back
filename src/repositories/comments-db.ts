@@ -1,4 +1,4 @@
-import {CommentViewModel,CommentModel} from "../types/comments";
+import {CommentViewModel, CommentModel, CommentInputModel} from "../types/comments";
 import {commentsCollection} from "./db";
 
 export const commentsRepository = {
@@ -11,13 +11,15 @@ export const commentsRepository = {
             createdAt: payload.createdAt
         }
     },
-    update(){
-
+    async update(id: string, payload: CommentInputModel): Promise<boolean>{
+        const result = await commentsCollection.updateOne({id},{$set: {...payload}});
+        return result.matchedCount === 1
     },
-    delete(){
-
+    async delete(id: string): Promise<boolean>{
+        const result = await commentsCollection.deleteOne({id})
+        return result.deletedCount === 1
     },
-    deleteAll(){
-
+    async deleteAll(): Promise<void>{
+        await commentsCollection.deleteMany({})
     }
 }

@@ -1,11 +1,16 @@
 import {Request, Response} from "express";
-import {blogsQueryRepository, postsQueryRepository, QueryPosts} from "../repositories/query";
+import {commentsQueryRepository,blogsQueryRepository, postsQueryRepository, QueryPosts, QueryComments} from "../repositories/query";
 import {postsService} from "../domain";
-import {Paginator, RequestWithParams, RequestWithParamsAndBody, Statuses} from "../types/types";
-import {PostInputModel, PostsViewModel} from "../types/posts";
-import {commentsQueryRepository} from "../repositories/query/commentsQuery";
-import {CommentViewModel} from "../types/comments";
 import {commentsService} from "../domain/comments.service";
+import {
+    Paginator,
+    RequestWithParams,
+    RequestWithParamsAndBody,
+    RequestWithParamsAndQuery,
+    Statuses
+} from "../types/types";
+import {PostInputModel, PostsViewModel} from "../types/posts";
+import {CommentInputModel, CommentViewModel} from "../types/comments";
 
 export const getPosts = async (
     req: Request,
@@ -56,30 +61,30 @@ export const deletePost = async (
     res.sendStatus(Statuses.NO_CONTENT)
 }
 
-export const createCommentByPost = async (req:Request,res:Response<CommentViewModel>) => {
+export const createCommentByPost = async (
+    req:RequestWithParamsAndBody<{id: string}, CommentInputModel>,
+    res:Response<CommentViewModel>) => {
     const post = await postsQueryRepository.findById(req.params.id);
     if(!post) {
         return res.sendStatus(Statuses.NOT_FOUND)
     }
-
     const comment = await commentsService.create({
         ...req.body,
         postId: post.id,
         userId: req.user!.id,
         userLogin: req.user!.login
     })
-
     res.status(Statuses.CREATED).send(comment)
 }
 
-export const getCommentByPost = async (req:Request,res:Response<Paginator<CommentViewModel>>) => {
+export const getCommentByPost = async (
+    req:RequestWithParamsAndQuery<{id: string}, any>,
+    res:Response<Paginator<CommentViewModel>>) => {
     const post = await postsQueryRepository.findById(req.params.id);
     if(!post) {
         return res.sendStatus(Statuses.NOT_FOUND)
     }
-
     const comments = await commentsQueryRepository
-        .getCommentsByPostId(req.params.id,req.query as unknown as QueryPosts);
-
+        .getCommentsByPostId(req.params.id,req.query as unknown as QueryComments);
     res.status(Statuses.OK).send(comments)
 }
