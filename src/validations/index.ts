@@ -90,12 +90,6 @@ export const validateBodyPost = (...validationChains: Array<ValidationChain>) =>
     ...validationChains
 ]);
 
-export const validatorBodyEmail = body('email')
-    .isString().withMessage('input is string')
-    .trim()
-    .notEmpty().withMessage('input is required')
-    .isEmail().withMessage('Not valid email field')
-
 export const validationConfirmed = validateMiddleware([
     body('email')
         .isString().withMessage('input is string')
@@ -133,7 +127,22 @@ export const validateBodyUser = validateMiddleware([
         .trim()
         .notEmpty().withMessage('input is required')
         .isLength({min: 6, max: 20}).withMessage('input is min 6 and max 20 symbol'),
-    validatorBodyEmail
+    body('email')
+        .isString().withMessage('input is string')
+        .trim()
+        .notEmpty().withMessage('input is required')
+        .isEmail().withMessage('Not valid email field')
+])
+
+export const validateExistUserOnEmailOrLogin = validateMiddleware([
+    body(['login','email'])
+        .custom(async (input)=>{
+            const user = await usersQueryRepository.getUserByLoginOrEmail(input);
+            if(user){
+                throw new Error('User already registration')
+            }
+            return true
+        })
 ])
 
 export const validateBodyLogin = validateMiddleware([

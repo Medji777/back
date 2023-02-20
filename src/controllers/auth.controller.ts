@@ -41,7 +41,7 @@ export const confirmation = async (
     res: Response) => {
     const isConfirmed = await authService.confirmUser(req.query)
     if(!isConfirmed){
-        return res.sendStatus(Statuses.NOT_FOUND)
+        return res.sendStatus(Statuses.BAD_REQUEST)
     }
     res.sendStatus(Statuses.NO_CONTENT)
 }
@@ -51,7 +51,7 @@ export const emailResending = async (
     res: Response) => {
     const isResend = await authService.resendingCode(req.body.email)
     if(!isResend){
-        return res.sendStatus(Statuses.NOT_FOUND)
+        return res.sendStatus(Statuses.BAD_REQUEST)
     }
     res.sendStatus(Statuses.NO_CONTENT)
 }
