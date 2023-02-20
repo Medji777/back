@@ -33,7 +33,7 @@ export const registration = async (
     req: RequestWithBody<UserInputModel>,
     res: Response) => {
     await authService.saveUser(req.body)
-    res.sendStatus(Statuses.CREATED)
+    res.sendStatus(Statuses.NO_CONTENT)
 }
 
 export const confirmation = async (
@@ -43,7 +43,7 @@ export const confirmation = async (
     if(!isConfirmed){
         return res.sendStatus(Statuses.NOT_FOUND)
     }
-    res.sendStatus(Statuses.CREATED)
+    res.sendStatus(Statuses.NO_CONTENT)
 }
 
 export const emailResending = async (
@@ -53,5 +53,5 @@ export const emailResending = async (
     if(!isResend){
         return res.sendStatus(Statuses.NOT_FOUND)
     }
-    res.sendStatus(Statuses.CREATED)
+    res.sendStatus(Statuses.NO_CONTENT)
 }
