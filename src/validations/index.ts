@@ -3,6 +3,7 @@ import {APIErrorResult, FieldError, Resolutions} from "../types/types";
 import {equalSize} from "../utils";
 import {validateMiddleware} from "../middlewares";
 import {blogsQueryRepository} from "../repositories/query";
+import {usersQueryRepository} from "../repositories/query/usersQuery";
 
 export const isNotValidString = (val:any,size:number=0):boolean => !val || typeof val !== 'string' || !val.trim() || (!size ? false : val.length > size);
 export const isNotValidResolution = (res:Array<Resolutions>) => !res.length || !equalSize(res) || !res.every((v:Resolutions)=>Resolutions[v]);
@@ -89,6 +90,31 @@ export const validateBodyPost = (...validationChains: Array<ValidationChain>) =>
     ...validationChains
 ]);
 
+export const validatorBodyEmail = body('email')
+    .isString().withMessage('input is string')
+    .trim()
+    .notEmpty().withMessage('input is required')
+    .isEmail().withMessage('Not valid email field')
+
+export const validationConfirmed = validateMiddleware([
+    body('email')
+        .isString().withMessage('input is string')
+        .trim()
+        .notEmpty().withMessage('input is required')
+        .isEmail().withMessage('Not valid email field')
+        .custom(async (email)=>{
+            const user = await usersQueryRepository.getUserByLoginOrEmail(email);
+            if(!user){
+                throw new Error('user with this id don\'t exist in the DB')
+            }
+            console.log(user)
+            if(user.emailConfirmation.isConfirmed){
+                throw new Error('email is already confirmed')
+            }
+            return true
+        })
+])
+
 export const validateBodyUser = validateMiddleware([
     body('login')
         .isString().withMessage('input is string')
@@ -107,11 +133,7 @@ export const validateBodyUser = validateMiddleware([
         .trim()
         .notEmpty().withMessage('input is required')
         .isLength({min: 6, max: 20}).withMessage('input is min 6 and max 20 symbol'),
-    body('email')
-        .isString().withMessage('input is string')
-        .trim()
-        .notEmpty().withMessage('input is required')
-        .isEmail().withMessage('Not valid email field')
+    validatorBodyEmail
 ])
 
 export const validateBodyLogin = validateMiddleware([

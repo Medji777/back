@@ -21,4 +21,14 @@ export type PasswordHash = {
     passwordHash: string
 }
 
-export type UserModel = UserViewModel & PasswordHash;
+export type UserModel = UserViewModel & PasswordHash & EmailConfirmUserDataModel;
+
+export type EmailConfirmUserDataModel = {
+    emailConfirmation: EmailConfirmUserModel
+}
+
+export type EmailConfirmUserModel = {
+    confirmationCode?: string | null,
+    expirationDate?: Date,
+    isConfirmed: boolean
+}

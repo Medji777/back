@@ -17,7 +17,11 @@ export const usersService = {
             login: payload.login,
             email: payload.email,
             createdAt: date.toISOString(),
-            passwordHash
+            passwordHash,
+            emailConfirmation: {
+                confirmationCode: null,
+                isConfirmed: true
+            }
         }
         return usersRepository.create(newUser)
     },
@@ -42,5 +46,5 @@ export const usersService = {
     async _createPasswordHash(password: string){
         const salt = await bcrypt.genSalt(10)
         return bcrypt.hash(password,salt)
-    }
+    },
 }

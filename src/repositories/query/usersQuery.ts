@@ -28,7 +28,7 @@ export const usersQueryRepository = {
         const skipNumber = (pageNumber - 1) * pageSize;
         const count = await usersCollection.countDocuments(filter);
         const items = await usersCollection
-            .find(filter,{projection: {_id:0, passwordHash: 0}})
+            .find(filter,{projection: {_id:0, passwordHash: 0, emailConfirmation: 0}})
             .sort({[sortBy]: sortNumber})
             .skip(skipNumber)
             .limit(pageSize)
@@ -40,6 +40,9 @@ export const usersQueryRepository = {
     },
     async getUserByUserId(userId: string): Promise<UserModel | null> {
        return usersCollection.findOne({id: userId});
+    },
+    async getUserByCode(code: string): Promise<UserModel | null> {
+        return usersCollection.findOne({'emailConfirmation.confirmationCode': code});
     },
     async getMeProfile(userId: string): Promise<MeViewModel>{
         const user = await this.getUserByUserId(userId);

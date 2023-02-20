@@ -1,4 +1,4 @@
-import {Request,Response,NextFunction} from "express";
+import {NextFunction, Request, Response} from "express";
 import {settings} from "../settings";
 import {Statuses} from "../types/types";
 import {jwtService} from "../application/jwt.service";

@@ -1,4 +1,4 @@
-import {Request, RequestHandler} from "express";
+import {Request} from "express";
 
 export type APIErrorResult = {
     errorsMessages: Array<FieldError>

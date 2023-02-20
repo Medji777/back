@@ -1,5 +1,5 @@
 import {usersCollection} from "./db";
-import {UserViewModel,UserModel} from "../types/users";
+import {UserViewModel, UserModel, EmailConfirmUserModel} from "../types/users";
 
 export const usersRepository = {
     async create(payload: UserModel): Promise<UserViewModel>{
@@ -10,6 +10,20 @@ export const usersRepository = {
             email: payload.email,
             createdAt: payload.createdAt
         }
+    },
+    async updateConfirmation(id: string) {
+        const result = await usersCollection.updateOne(
+            {id},
+            {$set: {'emailConfirmation.isConfirmed': true}}
+        );
+        return result.modifiedCount === 1
+    },
+    async updateConfirmationData(email: string, payload: EmailConfirmUserModel) {
+        const result = await usersCollection.updateOne(
+            {email},
+            {$set:{emailConfirmation: payload}}
+        )
+        return result.modifiedCount === 1
     },
     async deleteById(id: string): Promise<boolean>{
         const result = await usersCollection.deleteOne({id});
