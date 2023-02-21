@@ -23,7 +23,7 @@ export const authService = {
         }
         await usersRepository.create(newUser)
         try {
-            await emailManager.sendCodeConfirmationMessage(newUser)
+            await emailManager.sendCodeConfirmationMessage(newUser, 'confirm-email')
         }
         catch (err) {
             console.log(err)
@@ -40,7 +40,7 @@ export const authService = {
         const emailConfirmation = this._createEmailConfirmation();
         const result = await usersRepository.updateConfirmationData(email,emailConfirmation)
         try {
-            await emailManager.sendCodeConfirmationMessage({email, emailConfirmation})
+            await emailManager.sendCodeConfirmationMessage({email, emailConfirmation}, 'confirm-registration')
         }
         catch (err) {
             console.log(err)

@@ -91,7 +91,7 @@ export const validateBodyPost = (...validationChains: Array<ValidationChain>) =>
 ]);
 
 export const validationConfirmation = validateMiddleware([
-    query('code')
+    body('code')
         .trim()
         .custom(async (code)=>{
             const user = await usersQueryRepository.getUserByCode(code);

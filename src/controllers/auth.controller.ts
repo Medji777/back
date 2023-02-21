@@ -37,9 +37,9 @@ export const registration = async (
 }
 
 export const confirmation = async (
-    req: RequestWithQuery<RegistrationConfirmationCodeModel>,
+    req: RequestWithBody<RegistrationConfirmationCodeModel>,
     res: Response) => {
-    const isConfirmed = await authService.confirmUser(req.query)
+    const isConfirmed = await authService.confirmUser(req.body)
     if(!isConfirmed){
         return res.sendStatus(Statuses.BAD_REQUEST)
     }
