@@ -34,11 +34,7 @@ export const authService = {
     },
     async confirmUser(payload: RegistrationConfirmationCodeModel): Promise<boolean> {
         const user = await usersQueryRepository.getUserByCode(payload.code);
-        if (!user) return false;
-        if(user.emailConfirmation.isConfirmed) return false;
-        const expirationDate = user.emailConfirmation.expirationDate;
-        if (expirationDate && expirationDate < new Date()) return false;
-        return usersRepository.updateConfirmation(user.id)
+        return usersRepository.updateConfirmation(user!.id)
     },
     async resendingCode(email: string): Promise<boolean> {
         const emailConfirmation = this._createEmailConfirmation();

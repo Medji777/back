@@ -9,5 +9,6 @@ export const settings = {
     PORT: process.env.PORT || "3000",
     JWT_SECRET: process.env.SECRET || "123",
     EMAIL_USER: process.env.EMAIL_USER,
-    EMAIL_PASS: process.env.EMAIL_PASS
+    EMAIL_PASS: process.env.EMAIL_PASS,
+    EMAIL_BASE_URI: process.env.EMAIL_BASE_URI || "localhost:3000"
 }

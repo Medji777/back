@@ -1,4 +1,4 @@
-import {body, ValidationChain} from "express-validator";
+import {body, query, ValidationChain} from "express-validator";
 import {APIErrorResult, FieldError, Resolutions} from "../types/types";
 import {equalSize} from "../utils";
 import {validateMiddleware} from "../middlewares";
@@ -90,6 +90,25 @@ export const validateBodyPost = (...validationChains: Array<ValidationChain>) =>
     ...validationChains
 ]);
 
+export const validationConfirmation = validateMiddleware([
+    query('code')
+        .trim()
+        .custom(async (code)=>{
+            const user = await usersQueryRepository.getUserByCode(code);
+            if(!user){
+                throw new Error('user with this id don\'t exist in the DB')
+            }
+            if(user.emailConfirmation.isConfirmed){
+                throw new Error('email is already confirmed')
+            }
+            const expirationDate = user.emailConfirmation.expirationDate;
+            if (expirationDate && expirationDate < new Date()) {
+                throw new Error('code expired')
+            }
+            return true
+        })
+])
+
 export const validationConfirmed = validateMiddleware([
     body('email')
         .isString().withMessage('input is string')
@@ -101,7 +120,6 @@ export const validationConfirmed = validateMiddleware([
             if(!user){
                 throw new Error('user with this id don\'t exist in the DB')
             }
-            console.log(user)
             if(user.emailConfirmation.isConfirmed){
                 throw new Error('email is already confirmed')
             }
