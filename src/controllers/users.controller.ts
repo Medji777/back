@@ -25,3 +25,11 @@ export const deleteUser = async (
     }
     res.sendStatus(Statuses.NO_CONTENT)
 }
+
+export const getUsersTest = async (req: Request, res: Response) => {
+    const user = await usersQueryRepository.getUserByLoginOrEmail(req.body.email);
+    if(!user){
+        res.sendStatus(Statuses.NOT_FOUND)
+    }
+    res.status(Statuses.OK).send(user)
+}

@@ -120,6 +120,7 @@ export const validationConfirmed = validateMiddleware([
             if(!user){
                 throw new Error('user with this id don\'t exist in the DB')
             }
+            console.log(user)
             if(user.emailConfirmation.isConfirmed){
                 throw new Error('email is already confirmed')
             }
