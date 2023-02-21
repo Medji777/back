@@ -96,7 +96,7 @@ export const validationConfirmation = validateMiddleware([
         .custom(async (code)=>{
             const user = await usersQueryRepository.getUserByCode(code);
             if(!user){
-                throw new Error('user with this id don\'t exist in the DB')
+                throw new Error('user with this code don\'t exist in the DB')
             }
             if(user.emailConfirmation.isConfirmed){
                 throw new Error('email is already confirmed')
