@@ -1,4 +1,5 @@
 import express,{Request,Response} from 'express';
+import cookieParser from 'cookie-parser';
 import {usersRouter, baseRouter, blogsRouter, postsRouter, resetRouter, authRouter, commentsRouter} from "./routers";
 import {runDb} from "./repositories/db";
 import {settings} from "./settings";
@@ -7,6 +8,7 @@ export const app = express();
 const port = settings.PORT;
 
 const parseMiddleware = express.json()
+app.use(cookieParser())
 app.use(parseMiddleware)
 
 app.get('/',(req:Request,res:Response)=>{

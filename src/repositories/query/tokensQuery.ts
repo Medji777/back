@@ -4,5 +4,8 @@ import {TokensModel} from "../../types/tokens";
 export const tokensQueryRepository = {
     async findById(userId: string): Promise<TokensModel | null>{
         return tokensCollection.findOne({userId},{projection: {_id:0}})
+    },
+    async getAll() {
+        return tokensCollection.find({}).toArray()
     }
 }

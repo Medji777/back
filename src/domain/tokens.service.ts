@@ -16,6 +16,9 @@ export const tokensService = {
     async delete(userId: string){
         return tokensRepository.delete(userId)
     },
+    async deleteAllById(userId: string){
+      return tokensRepository.deleteAllById(userId)
+    },
     async checkRefreshToken(token: string): Promise<string | null>{
         const userId = await jwtService.getUserIdByToken(token, settings.JWT_REFRESH_SECRET);
         if(userId){

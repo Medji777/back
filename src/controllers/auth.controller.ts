@@ -23,8 +23,10 @@ export const login = async (req:RequestWithBody<LoginInputModel>,res:Response) =
     }
     const accessTokenData: LoginSuccessViewModel = await jwtService.createAccessToken(checkData.user);
     const refreshTokenData: RefreshTypeModel = await jwtService.createRefreshToken(checkData.user);
+    await tokensService.deleteAllById(checkData.user.id);
+    const data = await tokensService.create(refreshTokenData.refreshToken,checkData.user.id);
     res
-        .cookie('refreshToken',refreshTokenData.refreshToken,{
+        .cookie('refreshToken',data.token,{
             httpOnly: true,
             secure: true
         })
