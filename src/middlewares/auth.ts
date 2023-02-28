@@ -33,7 +33,7 @@ export const bearerAuthMiddleware = async (req:Request,res:Response,next:NextFun
 }
 
 export const checkRefreshTokenMiddleware = async (req:Request,res:Response,next:NextFunction) => {
-    const refresh = req.cookies.refreshToken;
+    const refresh = req.cookies?.refreshToken;
     if(refresh){
         const userId = await tokensService.checkRefreshToken(refresh);
         if(userId){
