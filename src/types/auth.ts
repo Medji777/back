@@ -7,6 +7,10 @@ export type LoginSuccessViewModel = {
     accessToken: string
 }
 
+export type RefreshTypeModel = {
+    refreshToken: string
+}
+
 export type RegistrationConfirmationCodeModel = {
     code: string
 }

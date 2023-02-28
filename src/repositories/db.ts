@@ -5,6 +5,7 @@ import {PostsViewModel} from '../types/posts'
 import {IVideo} from "../types/videos";
 import {UserModel} from "../types/users";
 import {CommentModel} from "../types/comments";
+import {TokensModel} from "../types/tokens";
 
 export const client = new MongoClient(settings.mongoURI);
 
@@ -14,6 +15,7 @@ export const blogsCollection = db.collection<BlogsViewModel>('blogs');
 export const postsCollection = db.collection<PostsViewModel>('posts');
 export const commentsCollection = db.collection<CommentModel>('comments')
 export const videosCollection = db.collection<IVideo>('videos');
+export const tokensCollection = db.collection<TokensModel>('tokens');
 
 export async function runDb () {
     try {
