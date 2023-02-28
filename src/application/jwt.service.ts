@@ -13,7 +13,7 @@ export const jwtService = {
         return {accessToken}
     },
     async createRefreshToken(user: UserModel): Promise<RefreshTypeModel>{
-        const refreshToken = jwt.sign({userId: user.id},settings.JWT_REFRESH_SECRET,{expiresIn: '1h'});
+        const refreshToken = jwt.sign({userId: user.id},settings.JWT_REFRESH_SECRET,{expiresIn: '20s'});
         return {refreshToken}
     },
     async getUserIdByToken(token: string, secret: string): Promise<string | null>{
