@@ -11,7 +11,8 @@ import {
 // import {usersQueryRepository} from "../repositories/query/usersQuery";
 import {authService} from "../domain/auth.service";
 import {UserInputModel} from "../types/users";
-import {tokensService} from "../domain/tokens.service";
+import {securityService} from "../domain/security.service";
+import {randomUUID} from "crypto";
 
 export const login = async (req:RequestWithBody<LoginInputModel>,res:Response) => {
     const checkData = await usersService.checkCredentials(req.body.loginOrEmail,req.body.password);
@@ -21,12 +22,15 @@ export const login = async (req:RequestWithBody<LoginInputModel>,res:Response) =
     if(!checkData.user.emailConfirmation.isConfirmed){
         return res.sendStatus(Statuses.UN_AUTHORIZED)
     }
+    const deviceId = randomUUID();
     const accessTokenData: LoginSuccessViewModel = await jwtService.createAccessToken(checkData.user);
-    const refreshTokenData: RefreshTypeModel = await jwtService.createRefreshToken(checkData.user);
-    await tokensService.deleteAllById(checkData.user.id);
-    const data = await tokensService.create(refreshTokenData.refreshToken,checkData.user.id);
+    const refreshTokenData: RefreshTypeModel = await jwtService.createRefreshToken(checkData.user,deviceId);
+
+    const deviceName = req.headers?.["user-agent"] || 'device';
+    await securityService.createSession(refreshTokenData.refreshToken,deviceName,req.ip);
+
     res
-        .cookie('refreshToken',data.token,{
+        .cookie('refreshToken',refreshTokenData.refreshToken,{
             httpOnly: true,
             secure: true
         })
@@ -34,10 +38,10 @@ export const login = async (req:RequestWithBody<LoginInputModel>,res:Response) =
 }
 
 export const refreshToken = async (req: Request, res: Response) => {
-    const userId = req.user!.id;
+    const deviceId = req.deviceId!;
     const accessTokenData: LoginSuccessViewModel = await jwtService.createAccessToken(req.user!);
-    const refreshTokenData: RefreshTypeModel = await jwtService.createRefreshToken(req.user!);
-    const isUpdated = await tokensService.update(refreshTokenData.refreshToken,userId);
+    const refreshTokenData: RefreshTypeModel = await jwtService.createRefreshToken(req.user!,deviceId);
+    const isUpdated = await securityService.updateLastActiveDataSession(refreshTokenData.refreshToken);
     if(!isUpdated){
         return res.sendStatus(Statuses.BAD_REQUEST)
     }
@@ -50,8 +54,7 @@ export const refreshToken = async (req: Request, res: Response) => {
 }
 
 export const logout = async (req: Request, res: Response) => {
-    const userId = req.user!.id;
-    const isDeleted = await tokensService.delete(userId);
+    const isDeleted = await securityService.deleteSessionByDeviceId(req.deviceId!)
     if (!isDeleted) {
         return res.sendStatus(Statuses.BAD_REQUEST)
     }

@@ -4,10 +4,12 @@ import {postsRouter} from "./posts";
 import {resetRouter} from "./reset";
 import {usersRouter} from "./users";
 import {authRouter} from "./auth";
-import {commentsRouter} from "./comments"
+import {commentsRouter} from "./comments";
+import {securityRouter} from "./security";
 
 export {
     authRouter,
+    securityRouter,
     usersRouter,
     baseRouter,
     blogsRouter,

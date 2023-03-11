@@ -1,6 +1,6 @@
 import express,{Request,Response} from 'express';
 import cookieParser from 'cookie-parser';
-import {usersRouter, baseRouter, blogsRouter, postsRouter, resetRouter, authRouter, commentsRouter} from "./routers";
+import {securityRouter, usersRouter, baseRouter, blogsRouter, postsRouter, resetRouter, authRouter, commentsRouter} from "./routers";
 import {runDb} from "./repositories/db";
 import {settings} from "./settings";
 
@@ -8,6 +8,7 @@ export const app = express();
 const port = settings.PORT;
 
 const parseMiddleware = express.json()
+app.set('trust proxy', true)
 app.use(cookieParser())
 app.use(parseMiddleware)
 
@@ -16,6 +17,7 @@ app.get('/',(req:Request,res:Response)=>{
 })
 
 app.use('/auth',authRouter)
+app.use('/security',securityRouter)
 app.use('/users',usersRouter)
 app.use('/videos',baseRouter)
 app.use('/blogs',blogsRouter)

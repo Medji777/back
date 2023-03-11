@@ -3,7 +3,7 @@ import {settings} from "../settings";
 import {Statuses} from "../types/types";
 import {jwtService} from "../application/jwt.service";
 import {usersQueryRepository} from "../repositories/query/usersQuery";
-import {tokensService} from "../domain/tokens.service";
+import {securityService} from "../domain/security.service";
 
 const authData = {login: settings.BASIC_LOGIN, password: settings.BASIC_PASS} as const
 
@@ -35,9 +35,10 @@ export const bearerAuthMiddleware = async (req:Request,res:Response,next:NextFun
 export const checkRefreshTokenMiddleware = async (req:Request,res:Response,next:NextFunction) => {
     const refresh = req.cookies?.refreshToken;
     if(refresh){
-        const userId = await tokensService.checkRefreshToken(refresh);
-        if(userId){
-            req.user = await usersQueryRepository.getUserByUserId(userId);
+        const payload = await securityService.checkRefreshToken(refresh);
+        if(payload?.userId && payload?.deviceId){
+            req.user = await usersQueryRepository.getUserByUserId(payload.userId);
+            req.deviceId = payload.deviceId
             return next()
         }
     }
