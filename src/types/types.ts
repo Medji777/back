@@ -36,6 +36,7 @@ export enum Statuses {
     UN_AUTHORIZED = 401,
     FORBIDDEN = 403,
     NOT_FOUND = 404,
+    TOO_MANY_REQUEST = 429
 }
 
 export enum SortDirections {

@@ -13,7 +13,7 @@ import {
     validationConfirmation,
     validationConfirmed
 } from "../validations";
-import {sanitizationBody, bearerAuthMiddleware as authMiddleware} from "../middlewares";
+import {sanitizationBody, bearerAuthMiddleware as authMiddleware, limitIp} from "../middlewares";
 import {validateBodyUser as validateBodyReg} from "../validations";
 import {checkRefreshTokenMiddleware} from "../middlewares/auth";
 
@@ -22,15 +22,16 @@ export const authRouter = Router({});
 const sanitizationBodyLogin = sanitizationBody(['loginOrEmail','password'])
 const sanitizationBodyReg = sanitizationBody(['login','email','password'])
 
-authRouter.post('/login',sanitizationBodyLogin,validateBodyLogin,login)
+authRouter.post('/login',limitIp,sanitizationBodyLogin,validateBodyLogin,login)
 authRouter.post('/refresh-token',checkRefreshTokenMiddleware,refreshToken)
 authRouter.post('/logout',checkRefreshTokenMiddleware,logout)
 authRouter.get('/me',authMiddleware,meProfile)
-authRouter.post('/registration-confirmation',validationConfirmation,confirmation)
+authRouter.post('/registration-confirmation',limitIp,validationConfirmation,confirmation)
 authRouter.post(
     '/registration',
+    limitIp,
     sanitizationBodyReg,
     validateBodyReg,
     validateExistUserOnEmailOrLogin,
     registration)
-authRouter.post('/registration-email-resending',validationConfirmed,emailResending)
+authRouter.post('/registration-email-resending',limitIp,validationConfirmed,emailResending)
