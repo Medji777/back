@@ -7,10 +7,6 @@ import bcrypt from "bcrypt";
 import {usersRepository} from "../repositories";
 import {RegistrationConfirmationCodeModel} from "../types/auth";
 import {usersQueryRepository} from "../repositories/query/usersQuery";
-import {tokensService} from "./tokens.service";
-import {jwtService} from "../application/jwt.service";
-import {settings} from "../settings";
-import {tokensQueryRepository} from "../repositories/query/tokensQuery";
 
 export const authService = {
     async saveUser(payload: UserInputModel): Promise<UserViewModel | null> {

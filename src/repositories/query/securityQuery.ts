@@ -9,5 +9,9 @@ export const securityQueryRepository = {
     },
     async findSession(userId: string, deviceId: string): Promise<DeviceModel | null>{
         return sessionsCollection.findOne({userId,deviceId},{projection: {_id:0}})
+    },
+    async checkSessionByDeviceId(deviceId: string): Promise<boolean>{
+        const count = await sessionsCollection.countDocuments({deviceId})
+        return !!count
     }
 }

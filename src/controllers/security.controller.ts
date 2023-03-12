@@ -17,6 +17,10 @@ export const deleteAllDevices = async (req: Request, res: Response) => {
 }
 
 export const deleteDeviceById = async (req: RequestWithParams<{deviceId: string}>, res: Response) => {
+    const isInclude = await securityQueryRepository.checkSessionByDeviceId(req.params.deviceId);
+    if(!isInclude){
+        return res.sendStatus(Statuses.NOT_FOUND)
+    }
     const session = await securityQueryRepository.findSession(req.user!.id,req.params.deviceId)
     if(!session) {
         return res.sendStatus(Statuses.FORBIDDEN)
