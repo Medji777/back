@@ -4,15 +4,18 @@ import {jwtService} from "../application/jwt.service";
 import {RequestWithBody, Statuses} from "../types/types";
 import {
     LoginInputModel,
-    LoginSuccessViewModel, RefreshTypeModel,
+    LoginSuccessViewModel,
+    NewPasswordRecoveryInputModel,
+    PasswordRecoveryInputModel,
+    RefreshTypeModel,
     RegistrationConfirmationCodeModel,
     RegistrationEmailResending
 } from "../types/auth";
-// import {usersQueryRepository} from "../repositories/query/usersQuery";
 import {authService} from "../domain/auth.service";
 import {UserInputModel} from "../types/users";
 import {securityService} from "../domain/security.service";
 import {randomUUID} from "crypto";
+import {usersQueryRepository} from "../repositories/query/usersQuery";
 
 export const login = async (req:RequestWithBody<LoginInputModel>,res:Response) => {
     const checkData = await usersService.checkCredentials(req.body.loginOrEmail,req.body.password);
@@ -93,6 +96,30 @@ export const emailResending = async (
     res: Response) => {
     const isResend = await authService.resendingCode(req.body.email)
     if(!isResend){
+        return res.sendStatus(Statuses.BAD_REQUEST)
+    }
+    res.sendStatus(Statuses.NO_CONTENT)
+}
+
+export const passwordRecovery = async (
+    req: RequestWithBody<PasswordRecoveryInputModel>,
+    res: Response) => {
+    const user = await usersQueryRepository.getUserByLoginOrEmail(req.body.email);
+    if(!user){
+        return res.sendStatus(Statuses.NO_CONTENT)
+    }
+    const isSend = await authService.recoveryPassword(req.body.email)
+    if(!isSend){
+        return res.sendStatus(Statuses.BAD_REQUEST)
+    }
+    res.sendStatus(Statuses.NO_CONTENT)
+}
+
+export const newPassword = async (
+    req: RequestWithBody<NewPasswordRecoveryInputModel>,
+    res: Response) => {
+    const isUpdated = await authService.confirmRecoveryPassword(req.body);
+    if(!isUpdated){
         return res.sendStatus(Statuses.BAD_REQUEST)
     }
     res.sendStatus(Statuses.NO_CONTENT)

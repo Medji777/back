@@ -21,6 +21,10 @@ export const usersService = {
             emailConfirmation: {
                 confirmationCode: null,
                 isConfirmed: true
+            },
+            passwordConfirmation: {
+                confirmationCode: null,
+                isConfirmed: true
             }
         }
         return usersRepository.create(newUser)

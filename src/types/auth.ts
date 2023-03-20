@@ -18,3 +18,10 @@ export type RegistrationConfirmationCodeModel = {
 export type RegistrationEmailResending = {
     email: string
 }
+
+export type PasswordRecoveryInputModel = RegistrationEmailResending
+
+export type NewPasswordRecoveryInputModel = {
+    newPassword: string,
+    recoveryCode: string
+}

@@ -42,12 +42,10 @@ export const usersQueryRepository = {
        return usersCollection.findOne({id: userId});
     },
     async getUserByCode(code: string): Promise<UserModel | null> {
-        const users = await usersCollection.find().toArray()
-        console.log('users', users)
-        console.log('code', code)
-        const user = await usersCollection.findOne({'emailConfirmation.confirmationCode': code});
-        console.log('user', user)
         return usersCollection.findOne({'emailConfirmation.confirmationCode': code});
+    },
+    async getUserByRecoveryCode(code: string): Promise<UserModel | null> {
+        return usersCollection.findOne({'passwordConfirmation.confirmationCode': code});
     },
     async getMeProfile(userId: string): Promise<MeViewModel>{
         const user = await this.getUserByUserId(userId);

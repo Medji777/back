@@ -120,12 +120,40 @@ export const validationConfirmed = validateMiddleware([
             if(!user){
                 throw new Error('user with this id don\'t exist in the DB')
             }
-            console.log(user)
             if(user.emailConfirmation.isConfirmed){
                 throw new Error('email is already confirmed')
             }
             return true
         })
+])
+
+export const validationPasswordRecovery = validateMiddleware([
+    body('email')
+        .isString().withMessage('input is string')
+        .trim()
+        .notEmpty().withMessage('input is required')
+        .isEmail().withMessage('Not valid email field')
+])
+
+export const validationNewPassword = validateMiddleware([
+    body('recoveryCode')
+        .trim()
+        .custom(async (code)=>{
+            const user = await usersQueryRepository.getUserByRecoveryCode(code);
+            if(!user){
+                throw new Error('user with this code don\'t exist in the DB')
+            }
+            const expirationDate = user.passwordConfirmation.expirationDate;
+            if (expirationDate && expirationDate < new Date()) {
+                throw new Error('code expired')
+            }
+            return true
+        }),
+    body('newPassword')
+        .isString().withMessage('input is string')
+        .trim()
+        .notEmpty().withMessage('input is required')
+        .isLength({min: 6, max: 20}).withMessage('input is min 6 and max 20 symbol'),
 ])
 
 export const validateBodyUser = validateMiddleware([

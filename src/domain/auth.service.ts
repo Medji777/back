@@ -1,17 +1,17 @@
-import {EmailConfirmUserModel, UserInputModel, UserViewModel} from "../types/users";
+import {EmailConfirmUserModel, PasswordConfirmUserModel, UserInputModel, UserViewModel} from "../types/users";
 import {usersService} from "./users.service";
 import {emailManager} from "../managers/email.manager";
 import {randomUUID as uuidV4} from "crypto";
 import add from "date-fns/add";
 import bcrypt from "bcrypt";
 import {usersRepository} from "../repositories";
-import {RegistrationConfirmationCodeModel} from "../types/auth";
+import {NewPasswordRecoveryInputModel, RegistrationConfirmationCodeModel} from "../types/auth";
 import {usersQueryRepository} from "../repositories/query/usersQuery";
 
 export const authService = {
     async saveUser(payload: UserInputModel): Promise<UserViewModel | null> {
         const passwordHash = await this._createPasswordHash(payload.password);
-        const emailConfirmation = this._createEmailConfirmation();
+        const emailConfirmation = this._createConfirmation();
         const date = new Date();
         const newUser = {
             id: `${+date}`,
@@ -19,7 +19,11 @@ export const authService = {
             email: payload.email,
             createdAt: date.toISOString(),
             passwordHash,
-            emailConfirmation
+            emailConfirmation,
+            passwordConfirmation: {
+                confirmationCode: null,
+                isConfirmed: true
+            }
         }
         await usersRepository.create(newUser)
         try {
@@ -37,7 +41,7 @@ export const authService = {
         return usersRepository.updateConfirmation(user!.id)
     },
     async resendingCode(email: string): Promise<boolean> {
-        const emailConfirmation = this._createEmailConfirmation();
+        const emailConfirmation = this._createConfirmation();
         const result = await usersRepository.updateConfirmationData(email,emailConfirmation)
         try {
             await emailManager.sendCodeConfirmationMessage({email, emailConfirmation}, 'confirm-registration')
@@ -48,7 +52,23 @@ export const authService = {
         }
         return result
     },
-    _createEmailConfirmation(): EmailConfirmUserModel {
+    async recoveryPassword(email: string): Promise<boolean> {
+        const passwordConfirmation = this._createConfirmation();
+        const result = await usersRepository.updatePasswordConfirmationData(email, passwordConfirmation)
+        try {
+            await emailManager.sendRecoveryCodeConfirmationMessage({email, passwordConfirmation},'password-recovery')
+        }
+        catch (err) {
+            console.log(err)
+            return false
+        }
+        return result
+    },
+    async confirmRecoveryPassword(payload: NewPasswordRecoveryInputModel) {
+        const passwordHash = await this._createPasswordHash(payload.newPassword);
+        return usersRepository.updatePassword(payload.recoveryCode,{passwordHash})
+    },
+    _createConfirmation(): EmailConfirmUserModel | PasswordConfirmUserModel {
         return ({
             confirmationCode: uuidV4(),
             expirationDate: add(new Date(),{

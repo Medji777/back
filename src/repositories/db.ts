@@ -5,7 +5,6 @@ import {PostsViewModel} from '../types/posts'
 import {IVideo} from "../types/videos";
 import {UserModel} from "../types/users";
 import {CommentModel} from "../types/comments";
-import {TokensModel} from "../types/tokens";
 import {DeviceModel} from "../types/security";
 
 export const client = new MongoClient(settings.mongoURI);

@@ -1,5 +1,10 @@
 import {usersCollection} from "./db";
-import {UserViewModel, UserModel, EmailConfirmUserModel} from "../types/users";
+import {
+    UserViewModel,
+    UserModel,
+    EmailConfirmUserModel,
+    PasswordConfirmUserModel, PasswordHash
+} from "../types/users";
 
 export const usersRepository = {
     async create(payload: UserModel): Promise<UserViewModel>{
@@ -23,6 +28,19 @@ export const usersRepository = {
             {email},
             {$set:{emailConfirmation: payload}}
         )
+        return result.modifiedCount === 1
+    },
+    async updatePasswordConfirmationData(email: string, payload: PasswordConfirmUserModel) {
+        const result = await usersCollection.updateOne(
+            {email},
+            {$set:{passwordConfirmation: payload}}
+        )
+        return result.modifiedCount === 1
+    },
+    async updatePassword(code: string,payload: PasswordHash){
+        const result = await usersCollection.updateOne(
+            {'passwordConfirmation.confirmationCode': code},
+            {$set:{...payload}})
         return result.modifiedCount === 1
     },
     async deleteById(id: string): Promise<boolean>{
