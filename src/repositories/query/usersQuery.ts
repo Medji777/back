@@ -38,7 +38,7 @@ export const usersQueryRepository = {
         return transformPagination<UserViewModel>(items,pageSize,pageNumber,count)
     },
     async getUserByLoginOrEmail(input: string): Promise<UserModel | null>{
-        return UsersModel.findOne({$or:[{login: input},{email: input}]},{_id: 0}).lean()
+        return UsersModel.findOne({$or:[{login: input},{email: input}]},{_id: 0,__v:0}).lean()
     },
     async getUserByUserId(userId: string): Promise<UserModel | null> {
        return UsersModel.findOne({id: userId}).lean();
