@@ -1,4 +1,4 @@
-import {MongoClient} from "mongodb";
+import {connect, disconnect, model} from "mongoose";
 import {settings} from "../settings";
 import {BlogsViewModel} from '../types/blogs'
 import {PostsViewModel} from '../types/posts'
@@ -6,25 +6,22 @@ import {IVideo} from "../types/videos";
 import {UserModel} from "../types/users";
 import {CommentModel} from "../types/comments";
 import {DeviceModel} from "../types/security";
+import {usersSchema, blogsSchema, postsSchema, commentsSchema, videoSchema, sessionsSchema} from "./schema";
 
-export const client = new MongoClient(settings.mongoURI);
-
-const db = client.db();
-export const usersCollection = db.collection<UserModel>('users');
-export const blogsCollection = db.collection<BlogsViewModel>('blogs');
-export const postsCollection = db.collection<PostsViewModel>('posts');
-export const commentsCollection = db.collection<CommentModel>('comments')
-export const videosCollection = db.collection<IVideo>('videos');
-export const sessionsCollection = db.collection<DeviceModel>('sessions');
+export const UsersModel = model<UserModel>('users', usersSchema);
+export const BlogsModel = model<BlogsViewModel>('blogs', blogsSchema);
+export const PostsModel = model<PostsViewModel>('posts', postsSchema);
+export const CommentsModel = model<CommentModel>('comments', commentsSchema);
+export const VideoModel = model<IVideo>('videos', videoSchema);
+export const SessionsModel = model<DeviceModel>('sessions', sessionsSchema);
 
 export async function runDb () {
     try {
-        await client.connect();
-        await client.db().command({ping: 1})
+        await connect(settings.mongoURI)
         console.log("Connected to DB Ok!")
     }
     catch (e) {
         console.log("Connected to DB failed!")
-        await client.close()
+        await disconnect()
     }
 }

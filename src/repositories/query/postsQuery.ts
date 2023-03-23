@@ -1,7 +1,7 @@
 import {Paginator, SortDirections} from "../../types/types";
 import {PostsViewModel} from "../../types/posts";
 import {getSortNumber} from "../../utils/sort";
-import {postsCollection} from "../db";
+import {PostsModel} from "../db";
 import {transformPagination} from "../../utils/transform";
 
 export type QueryPosts = {
@@ -16,30 +16,30 @@ export const postsQueryRepository = {
         const {sortBy,sortDirection,pageNumber,pageSize} = query;
         const sortNumber = getSortNumber(sortDirection);
         const skipNumber = (pageNumber - 1) * pageSize;
-        const count = await postsCollection.countDocuments();
-        const data = await postsCollection
-            .find({},{projection: {_id:0}})
+        const count = await PostsModel.countDocuments();
+        const data = await PostsModel
+            .find({},{_id:0,__v:0})
             .sort({[sortBy]: sortNumber})
             .skip(skipNumber)
             .limit(pageSize)
-            .toArray()
+            .lean()
         return transformPagination<PostsViewModel>(data,pageSize,pageNumber,count)
     },
     async findById(id: string): Promise<PostsViewModel | null> {
-        return postsCollection.findOne({id},{projection: {_id:0}})
+        return PostsModel.findOne({id},{_id:0,__v:0}).lean()
     },
     async getPostsByBlogId(id: string, query: QueryPosts): Promise<Paginator<PostsViewModel>>{
         const filter = {blogId: id};
         const {sortBy,sortDirection,pageNumber,pageSize} = query;
         const sortNumber = getSortNumber(sortDirection);
         const skipNumber = (pageNumber - 1) * pageSize;
-        const count = await postsCollection.countDocuments(filter);
-        const data = await postsCollection
-            .find(filter,{projection: {_id:0}})
+        const count = await PostsModel.countDocuments(filter);
+        const data = await PostsModel
+            .find(filter,{_id:0, __v:0})
             .sort({[sortBy]: sortNumber})
             .skip(skipNumber)
             .limit(pageSize)
-            .toArray()
+            .lean()
         return transformPagination<PostsViewModel>(data,pageSize,pageNumber,count)
     }
 }

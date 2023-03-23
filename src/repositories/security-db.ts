@@ -1,9 +1,9 @@
-import {sessionsCollection} from "./db";
+import {SessionsModel} from "./db";
 import {DeviceModel, DeviceViewModel} from "../types/security";
 
 export const securityRepository = {
     async createSession(payload: DeviceModel): Promise<DeviceViewModel>{
-        await sessionsCollection.insertOne({...payload});
+        await SessionsModel.create({...payload});
         return {
             title: payload.title,
             deviceId: payload.deviceId,
@@ -12,18 +12,18 @@ export const securityRepository = {
         }
     },
     async updateLastActiveDataSession(userId: string, deviceId: string, issueAt: string): Promise<boolean> {
-        const result = await sessionsCollection.updateOne({userId,deviceId},{$set:{lastActiveDate: issueAt}})
+        const result = await SessionsModel.updateOne({userId,deviceId},{$set:{lastActiveDate: issueAt}})
         return result.matchedCount === 1
     },
     async deleteAllSessionsWithoutCurrent(userId: string, deviceId: string): Promise<boolean> {
-        const result = await sessionsCollection.deleteMany({userId, deviceId: {$nin: [deviceId]}})
+        const result = await SessionsModel.deleteMany({userId, deviceId: {$nin: [deviceId]}})
         return !!result.deletedCount
     },
     async deleteSessionByDeviceId(deviceId: string): Promise<boolean> {
-        const result = await sessionsCollection.deleteOne({deviceId})
+        const result = await SessionsModel.deleteOne({deviceId})
         return result.deletedCount === 1
     },
     async deleteAll(): Promise<void>{
-        await sessionsCollection.deleteMany({})
+        await SessionsModel.deleteMany({})
     }
 }

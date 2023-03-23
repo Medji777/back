@@ -1,17 +1,17 @@
-import {sessionsCollection} from "../db";
+import {SessionsModel} from "../db";
 import {DeviceModel,DeviceViewModel} from "../../types/security";
 
 export const securityQueryRepository = {
     async getAllActiveSessions(userId: string): Promise<Array<DeviceViewModel>>{
-        return sessionsCollection
-            .find({userId},{projection: {_id:0, expiredTokenDate: 0, userId: 0}})
-            .toArray()
+        return SessionsModel
+            .find({userId},{_id:0, expiredTokenDate: 0, userId: 0,__v:0})
+            .lean()
     },
     async findSession(userId: string, deviceId: string): Promise<DeviceModel | null>{
-        return sessionsCollection.findOne({userId,deviceId},{projection: {_id:0}})
+        return SessionsModel.findOne({userId,deviceId},{_id:0,__v:0}).lean()
     },
     async checkSessionByDeviceId(deviceId: string): Promise<boolean>{
-        const count = await sessionsCollection.countDocuments({deviceId})
+        const count = await SessionsModel.countDocuments({deviceId})
         return !!count
     }
 }

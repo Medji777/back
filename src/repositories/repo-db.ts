@@ -1,12 +1,12 @@
 import {CreateVideoInputModel, IUpdateVideoInputModel, IVideo} from "../types/videos";
-import {videosCollection} from "./db";
+import {VideoModel} from "./db";
 
 export const videosRepository = {
     async getAll(): Promise<IVideo[]> {
-        return videosCollection.find({},{projection: {_id:0}}).toArray()
+        return VideoModel.find({},{_id:0,__v:0}).lean()
     },
     async findById(id: number): Promise<IVideo | null>{
-        return videosCollection.findOne({id},{projection: {_id:0}})
+        return VideoModel.findOne({id},{_id:0,__v:0}).lean()
     },
     async createVideo(payload: CreateVideoInputModel): Promise<IVideo> {
         const date = new Date();
@@ -20,18 +20,18 @@ export const videosRepository = {
             publicationDate: new Date(date.setDate(date.getDate() + 1)).toISOString(),
             availableResolutions: payload.availableResolutions || null
         };
-        await videosCollection.insertOne(newVideo)
+        await VideoModel.create(newVideo)
         return newVideo
     },
     async updateVideo(id: number,payload: IUpdateVideoInputModel): Promise<boolean>{
-        const result = await videosCollection.updateOne({id},{$set:{...payload}});
+        const result = await VideoModel.updateOne({id},{$set:{...payload}});
         return result.matchedCount === 1
     },
     async deleteVideo(id: number): Promise<boolean>{
-        const result = await videosCollection.deleteOne({id});
+        const result = await VideoModel.deleteOne({id});
         return result.deletedCount === 1
     },
     async deleteAll(): Promise<void>{
-        await videosCollection.deleteMany({})
+        await VideoModel.deleteMany({})
     }
 }

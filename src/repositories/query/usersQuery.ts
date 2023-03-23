@@ -1,4 +1,4 @@
-import {usersCollection} from "../db";
+import {UsersModel} from "../db";
 import {Paginator, SortDirections} from "../../types/types";
 import {getSortNumber} from "../../utils/sort";
 import {transformPagination} from "../../utils/transform";
@@ -13,6 +13,8 @@ export type QueryUsers = {
     pageSize: number
 }
 
+const projectionFilter = {_id: 0, passwordHash: 0, emailConfirmation: 0, passwordConfirmation: 0, __v: 0}
+
 export const usersQueryRepository = {
     async getAll(query: QueryUsers): Promise<Paginator<UserViewModel>>{
         const arrayFilters = []
@@ -26,26 +28,26 @@ export const usersQueryRepository = {
         }
         const filter = !arrayFilters.length ? {} : {$or:arrayFilters};
         const skipNumber = (pageNumber - 1) * pageSize;
-        const count = await usersCollection.countDocuments(filter);
-        const items = await usersCollection
-            .find(filter,{projection: {_id:0, passwordHash: 0, emailConfirmation: 0}})
+        const count = await UsersModel.countDocuments(filter);
+        const items = await UsersModel
+            .find(filter, projectionFilter)
             .sort({[sortBy]: sortNumber})
             .skip(skipNumber)
             .limit(pageSize)
-            .toArray()
+            .lean()
         return transformPagination<UserViewModel>(items,pageSize,pageNumber,count)
     },
     async getUserByLoginOrEmail(input: string): Promise<UserModel | null>{
-        return usersCollection.findOne({$or:[{login: input},{email: input}]},{projection: {_id:0}})
+        return UsersModel.findOne({$or:[{login: input},{email: input}]},{_id: 0}).lean()
     },
     async getUserByUserId(userId: string): Promise<UserModel | null> {
-       return usersCollection.findOne({id: userId});
+       return UsersModel.findOne({id: userId}).lean();
     },
     async getUserByCode(code: string): Promise<UserModel | null> {
-        return usersCollection.findOne({'emailConfirmation.confirmationCode': code});
+        return UsersModel.findOne({'emailConfirmation.confirmationCode': code}).lean();
     },
     async getUserByRecoveryCode(code: string): Promise<UserModel | null> {
-        return usersCollection.findOne({'passwordConfirmation.confirmationCode': code});
+        return UsersModel.findOne({'passwordConfirmation.confirmationCode': code}).lean();
     },
     async getMeProfile(userId: string): Promise<MeViewModel>{
         const user = await this.getUserByUserId(userId);
