@@ -1,6 +1,6 @@
+import {HydratedDocument} from "mongoose";
 import {CommentsLikeModel} from "../db";
 import {LikesCommentModel} from "../../types/likes";
-import {HydratedDocument} from "mongoose";
 
 export const commentsLikeQueryRepository = {
     async getLike(userId: string, commentId: string): Promise<LikesCommentModel | null> {

@@ -42,8 +42,7 @@ export const commentsService = {
                 myStatus: payload.likeStatus
             })
         } else {
-            const updatedLike = { myStatus: payload.likeStatus }
-            await commentsLikesRepository.updateLike(likeInfo, updatedLike)
+            await commentsLikesRepository.updateLike(likeInfo, payload.likeStatus)
             lastStatus = likeInfo.myStatus
         }
         const likesInfo = {

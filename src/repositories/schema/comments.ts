@@ -12,7 +12,6 @@ const commentsSchema = new Schema({
     likesInfo: {
         likesCount: {type: Number, required: true},
         dislikesCount: {type: Number, required: true},
-        myStatus: {type: String, required: true}
     }
 })
 
