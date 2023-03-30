@@ -53,8 +53,10 @@ export const commentsQueryRepository = {
     },
     async _setStatusLike(comments: Array<CommentViewModel>, userId: string) {
         if (!userId) return comments
+        console.log('Like-comments: ',comments, userId)
         await Promise.all(comments.map(async (comment) => {
             const like = await commentsLikeQueryRepository.getLike(userId, comment.id)
+            console.log('Like: ',like,userId, comment.id)
             if (like) {
                 comment.likesInfo.myStatus = like.myStatus
             }
