@@ -14,7 +14,6 @@ app.use(parseMiddleware)
 
 app.get('/',(req:Request,res:Response)=>{
     res.send('This is Work!')
-    
 })
 
 app.use('/auth',authRouter)
@@ -34,3 +33,5 @@ const bootstrap = async () => {
 }
 
 bootstrap()
+
+module.exports = app
