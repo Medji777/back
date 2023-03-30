@@ -4,6 +4,7 @@ import {videosRepository} from './repo-db';
 import {usersRepository} from "./users-db";
 import {commentsRepository} from "./comments-db";
 import {securityRepository} from "./security-db";
+import {commentsLikesRepository} from "./commentsLikes-db";
 
 export {
     usersRepository,
@@ -11,5 +12,6 @@ export {
     postsRepository,
     commentsRepository,
     videosRepository,
-    securityRepository
+    securityRepository,
+    commentsLikesRepository
 }

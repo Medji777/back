@@ -12,10 +12,16 @@ export const blogsService = {
             createdAt: date.toISOString(),
             isMembership: false
         }
-        return blogsRepository.create(newBlog)
+        const createdBlog = await blogsRepository.createV2(newBlog);
+        await blogsRepository.save(createdBlog)
+        return newBlog
     },
     async update(id: string, payload: BlogsInputModel): Promise<boolean> {
-        return blogsRepository.update(id,payload);
+        const blog = await blogsRepository.findBlogById(id)
+        if(!blog) return false
+        blog.update(payload)
+        await blogsRepository.save(blog)
+        return true;
     },
     async delete(id: string): Promise<boolean>{
         return blogsRepository.deleteById(id)

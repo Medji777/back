@@ -4,6 +4,8 @@ import postsSchema from "./posts";
 import commentsSchema from "./comments";
 import videoSchema from "./video";
 import sessionsSchema from "./sessions";
+import commentsLikeSchema from "./commentsLike";
+import postsLikeSchema from "./postsLike";
 
 export {
     usersSchema,
@@ -11,5 +13,7 @@ export {
     postsSchema,
     commentsSchema,
     videoSchema,
-    sessionsSchema
+    sessionsSchema,
+    commentsLikeSchema,
+    postsLikeSchema
 }

@@ -85,6 +85,6 @@ export const getCommentByPost = async (
         return res.sendStatus(Statuses.NOT_FOUND)
     }
     const comments = await commentsQueryRepository
-        .getCommentsByPostId(req.params.id,req.query as unknown as QueryComments);
+        .getCommentsByPostId(req.params.id,req.query as unknown as QueryComments,req.user?.id);
     res.status(Statuses.OK).send(comments)
 }

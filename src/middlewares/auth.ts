@@ -44,3 +44,17 @@ export const checkRefreshTokenMiddleware = async (req:Request,res:Response,next:
     }
     return res.sendStatus(Statuses.UN_AUTHORIZED)
 }
+
+export const getUserMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+    const auth = req.headers['authorization'];
+    if (!auth) {
+        return next()
+    }
+    const [name,bearerToken] = auth.split(' ');
+    const userId = await jwtService.getUserIdByToken(bearerToken, settings.JWT_SECRET)
+    if(name === 'Bearer' && userId){
+        req.user = await usersQueryRepository.getUserByUserId(userId)
+        return next()
+    }
+    next()
+}

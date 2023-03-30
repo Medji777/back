@@ -36,7 +36,8 @@ export enum Statuses {
     UN_AUTHORIZED = 401,
     FORBIDDEN = 403,
     NOT_FOUND = 404,
-    TOO_MANY_REQUEST = 429
+    TOO_MANY_REQUEST = 429,
+    INTERNAL_SERVER_ERROR = 500
 }
 
 export enum SortDirections {
@@ -48,6 +49,12 @@ export enum SearchTermQuery {
     searchNameTerm = 'searchNameTerm',
     searchLoginTerm = 'searchLoginTerm',
     searchEmailTerm = 'searchEmailTerm'
+}
+
+export enum LikeStatus {
+    None="None",
+    Like="Like",
+    Dislike="Dislike"
 }
 
 export type RequestWithBody<T> = Request<{},{},T>

@@ -1,6 +1,13 @@
-import {Schema} from "mongoose";
+import {Model, Schema} from "mongoose";
+import {BlogsInputModel, BlogsViewModel} from "../../types/blogs";
 
-const blogsSchema = new Schema({
+export type BlogsModelMethods = {
+    update(payload: BlogsInputModel): void
+}
+
+export type BlogsModelType = Model<BlogsViewModel,{},BlogsModelMethods>
+
+const blogsSchema = new Schema<BlogsViewModel,BlogsModelType,BlogsModelMethods>({
     id:	{type: String, required: true},
     name: {type: String, required: true},
     description: {type: String, required: true},
@@ -8,5 +15,11 @@ const blogsSchema = new Schema({
     createdAt: String,
     isMembership: Boolean
 })
+
+blogsSchema.methods.update = function (payload: BlogsInputModel) {
+    this.name = payload.name;
+    this.description = payload.description;
+    this.websiteUrl = payload.websiteUrl;
+}
 
 export default blogsSchema

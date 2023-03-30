@@ -1,3 +1,5 @@
+import {LikesInfoViewModel, LikeInfoModel} from "./likes";
+
 export type CommentInputModel = {
     content: string
 }
@@ -8,14 +10,23 @@ export type CommentatorInfo = {
 }
 
 export type CommentViewModel = {
-    id?: string,
+    id: string,
     content: string,
     commentatorInfo: CommentatorInfo,
-    createdAt: string
+    createdAt: string,
+    likesInfo: LikesInfoViewModel
+}
+
+export type CommentDBModel = {
+    id: string,
+    content: string,
+    commentatorInfo: CommentatorInfo,
+    createdAt: string,
+    likesInfo: LikeInfoModel
 }
 
 export type PostId = {
     postId: string
 }
 
-export type CommentModel = CommentViewModel & PostId
+export type CommentModel = CommentDBModel & PostId

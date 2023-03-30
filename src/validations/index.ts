@@ -1,5 +1,5 @@
-import {body, query, ValidationChain} from "express-validator";
-import {APIErrorResult, FieldError, Resolutions} from "../types/types";
+import {body, ValidationChain} from "express-validator";
+import {APIErrorResult, FieldError, LikeStatus, Resolutions} from "../types/types";
 import {equalSize} from "../utils";
 import {validateMiddleware} from "../middlewares";
 import {blogsQueryRepository} from "../repositories/query";
@@ -208,3 +208,14 @@ export const validatorBodyContent = body('content')
     .trim()
     .notEmpty().withMessage('input is required')
     .isLength({min: 20, max: 300}).withMessage('input is min 20 and max 300 symbol')
+
+export const validatorBodyLikes = body('likeStatus')
+    .isString().withMessage('input is string')
+    .trim()
+    .notEmpty().withMessage('input is required')
+    .custom((v: LikeStatus) => {
+        if(!LikeStatus[v]) {
+            throw new Error(`${v} not include in ${Object.values(LikeStatus).toString()}`)
+        }
+        return true
+    })

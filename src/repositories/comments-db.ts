@@ -1,19 +1,29 @@
-import {CommentViewModel, CommentModel, CommentInputModel} from "../types/comments";
+import {CommentModel, CommentInputModel, CommentDBModel} from "../types/comments";
 import {CommentsModel} from "./db";
+import {HydratedDocument} from "mongoose";
+import {LikeInfoModel} from "../types/likes";
 
 export const commentsRepository = {
-    async create(payload: CommentModel): Promise<CommentViewModel>{
-        await CommentsModel.create({...payload})
+    async create(payload: CommentModel): Promise<CommentDBModel>{
+        const doc = new CommentsModel({...payload})
+        await this.save(doc)
         return {
-            id: payload.id,
-            content: payload.content,
-            commentatorInfo: payload.commentatorInfo,
-            createdAt: payload.createdAt
+            id: doc.id,
+            content: doc.content,
+            commentatorInfo: doc.commentatorInfo,
+            createdAt: doc.createdAt,
+            likesInfo: {
+                likesCount: doc.likesInfo.likesCount,
+                dislikesCount: doc.likesInfo.dislikesCount
+            }
         }
     },
     async update(id: string, payload: CommentInputModel): Promise<boolean>{
-        const result = await CommentsModel.updateOne({id},{$set: {...payload}});
-        return result.matchedCount === 1
+        const doc = await CommentsModel.findOne({id});
+        if(!doc) return false;
+        doc.content = payload.content;
+        await this.save(doc);
+        return true;
     },
     async delete(id: string): Promise<boolean>{
         const result = await CommentsModel.deleteOne({id})
@@ -21,5 +31,16 @@ export const commentsRepository = {
     },
     async deleteAll(): Promise<void>{
         await CommentsModel.deleteMany({})
+    },
+    async updateLikeInComment(id: string, likesInfo: LikeInfoModel): Promise<boolean>{
+        const doc = await CommentsModel.findOne({id})
+        if(!doc) return false;
+        doc.likesInfo.likesCount = likesInfo.likesCount
+        doc.likesInfo.dislikesCount = likesInfo.dislikesCount
+        await this.save(doc)
+        return true
+    },
+    async save(model: HydratedDocument<CommentDBModel>): Promise<void> {
+        await model.save()
     }
 }
