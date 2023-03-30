@@ -1,5 +1,11 @@
 import {Router} from "express";
-import {basicAuthMiddleware, bearerAuthMiddleware, sanitizationBody, validateMiddleware} from "../middlewares";
+import {
+    basicAuthMiddleware,
+    bearerAuthMiddleware,
+    getUserMiddleware,
+    sanitizationBody,
+    validateMiddleware
+} from "../middlewares";
 import {
     createCommentByPost,
     createPost,
@@ -25,12 +31,12 @@ const validateBodyComment = validateMiddleware([validatorBodyContent])
 
 export const postsRouter = Router({});
 
-postsRouter.get('/',validateQuery,getPosts)
-postsRouter.get('/:id',getPostOnId)
+postsRouter.get('/',getUserMiddleware,validateQuery,getPosts)
+postsRouter.get('/:id',getUserMiddleware,getPostOnId)
 postsRouter.post('/',basicAuthMiddleware,sanitizationBodyPosts,validateBody,createPost)
 postsRouter.put('/:id',basicAuthMiddleware,sanitizationBodyPosts,validateBody,updatePost)
 postsRouter.delete('/:id',basicAuthMiddleware,deletePost)
-postsRouter.get('/:id/comments',validateQuery,getCommentByPost)
+postsRouter.get('/:id/comments',getUserMiddleware,validateQuery,getCommentByPost)
 postsRouter.post(
     '/:id/comments',
     bearerAuthMiddleware,

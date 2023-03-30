@@ -1,6 +1,6 @@
 import {Router} from "express";
 import {ValidationChain} from "express-validator";
-import {basicAuthMiddleware, sanitizationBody, validateMiddleware} from "../middlewares";
+import {basicAuthMiddleware, getUserMiddleware, sanitizationBody, validateMiddleware} from "../middlewares";
 import {
     createBlog, createPostForBlogId,
     deleteBlog,
@@ -31,7 +31,7 @@ blogsRouter.get('/:id',getBlogOnId)
 blogsRouter.post('/',basicAuthMiddleware,sanitizationBodyBlogs,validateBodyBlog,createBlog)
 blogsRouter.put('/:id',basicAuthMiddleware,sanitizationBodyBlogs,validateBodyBlog,updateBlog)
 blogsRouter.delete('/:id',basicAuthMiddleware,deleteBlog)
-blogsRouter.get('/:blogId/posts',validateQuery(),getPostByBlogIdWithQuery)
+blogsRouter.get('/:blogId/posts',getUserMiddleware,validateQuery(),getPostByBlogIdWithQuery)
 blogsRouter.post(
     '/:blogId/posts',
     basicAuthMiddleware,

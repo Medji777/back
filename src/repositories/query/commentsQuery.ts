@@ -51,22 +51,14 @@ export const commentsQueryRepository = {
             }
         }
     },
-    async _setStatusLike(comments: Array<CommentViewModel>, userId: string) {
+    async _setStatusLike(comments: Array<CommentViewModel>, userId: string): Promise<Array<CommentViewModel>> {
         if (!userId) return comments
-        console.log('Like-comments: ',comments, userId)
         await Promise.all(comments.map(async (comment) => {
             const like = await commentsLikeQueryRepository.getLike(userId, comment.id)
-            console.log('Like: ',like,userId, comment.id)
             if (like) {
                 comment.likesInfo.myStatus = like.myStatus
             }
         }))
-        // for (let i = 0; i < comments.length; i++) {
-        //     const like = await commentsLikeQueryRepository.getLike(userId, comments[i].id)
-        //     if (like) {
-        //         comments[i].likesInfo.myStatus = like.myStatus
-        //     }
-        // }
         return comments
     }
 }
