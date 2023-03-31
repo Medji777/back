@@ -28,7 +28,7 @@ export const getPosts = async (
 export const getPostOnId = async (
     req: RequestWithParams<{id: string}>,
     res: Response<PostsViewModel>) => {
-    const post = await postsQueryRepository.findById(req.params.id);
+    const post = await postsQueryRepository.findById(req.params.id, req.user?.id);
     if(!post) {
         return res.sendStatus(Statuses.NOT_FOUND)
     }
@@ -72,7 +72,7 @@ export const deletePost = async (
 export const createCommentByPost = async (
     req:RequestWithParamsAndBody<{id: string}, CommentInputModel>,
     res:Response<CommentViewModel>) => {
-    const post = await postsQueryRepository.findById(req.params.id);
+    const post = await postsQueryRepository.findById(req.params.id, req.user?.id);
     if(!post) {
         return res.sendStatus(Statuses.NOT_FOUND)
     }
@@ -88,7 +88,7 @@ export const createCommentByPost = async (
 export const getCommentByPost = async (
     req:RequestWithParamsAndQuery<{id: string}, any>,
     res:Response<Paginator<CommentViewModel>>) => {
-    const post = await postsQueryRepository.findById(req.params.id);
+    const post = await postsQueryRepository.findById(req.params.id, req.user?.id);
     if(!post) {
         return res.sendStatus(Statuses.NOT_FOUND)
     }

@@ -1,6 +1,15 @@
 import {Request, Response, Router} from "express";
-import {blogsRepository, commentsRepository, postsRepository, usersRepository, videosRepository, securityRepository} from "../repositories";
+import {
+    blogsRepository,
+    commentsRepository,
+    postsRepository,
+    usersRepository,
+    videosRepository,
+    securityRepository,
+    commentsLikesRepository
+} from "../repositories";
 import {Statuses} from "../types/types";
+import {postsLikesRepository} from "../repositories/postsLikes-db";
 
 export const resetRouter = Router()
 
@@ -11,6 +20,8 @@ resetRouter.delete('/all-data',async (req:Request,res:Response)=>{
     await commentsRepository.deleteAll();
     await videosRepository.deleteAll();
     await securityRepository.deleteAll();
+    await commentsLikesRepository.deleteAll();
+    await postsLikesRepository.deleteAll();
     res.sendStatus(Statuses.NO_CONTENT)
 })
 

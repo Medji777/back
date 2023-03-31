@@ -5,6 +5,7 @@ import {postsLikesRepository} from "../repositories/postsLikes-db";
 import {LikeStatus} from "../types/types";
 import {postsLikeQueryRepository} from "../repositories/query/postsLikeQuery";
 import {likeCalculateService} from "../application/likeCalculate.service";
+import {LikeInputModel} from "../types/likes";
 
 export const postsService = {
     async create(payload:PostInputModel & BlogName): Promise<PostsViewModel>{
@@ -31,7 +32,7 @@ export const postsService = {
     async delete(id: string): Promise<boolean>{
         return postsRepository.deleteById(id)
     },
-    async updateStatusLike(userId: string, login: string, postId: string, newStatus: LikeStatus): Promise<boolean> {
+    async updateStatusLike(userId: string, login: string, postId: string, newStatus: LikeInputModel ): Promise<boolean> {
         let lastStatus: LikeStatus = LikeStatus.None
         const post = await postsQueryRepository.findById(postId)
         if (!post) return false
@@ -40,13 +41,13 @@ export const postsService = {
             const newLike = {
                 userId,
                 postId,
-                myStatus: newStatus,
+                myStatus: newStatus.likeStatus,
                 login,
                 addedAt: new Date().toISOString()
             }
             await postsLikesRepository.create(newLike)
         } else {
-            await postsLikesRepository.update(userId, postId, newStatus)
+            await postsLikesRepository.update(userId, postId, newStatus.likeStatus)
             lastStatus = likeInfo.myStatus
         }
         const newLikesInfo = await likeCalculateService.getUpdatedLike(
@@ -55,7 +56,7 @@ export const postsService = {
                 dislikesCount: post.extendedLikesInfo.dislikesCount
             },
             lastStatus,
-            newStatus
+            newStatus.likeStatus
         )
         return await postsRepository.updateLikeInPost(post.id, newLikesInfo)
     },

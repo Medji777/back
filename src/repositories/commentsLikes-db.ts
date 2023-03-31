@@ -27,5 +27,8 @@ export const commentsLikesRepository = {
     },
     async save(model: HydratedDocument<LikesCommentModel>): Promise<void> {
         await model.save()
+    },
+    async deleteAll(): Promise<void>{
+        await CommentsLikeModel.deleteMany({})
     }
 }

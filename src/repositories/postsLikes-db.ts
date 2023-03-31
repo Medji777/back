@@ -16,5 +16,8 @@ export const postsLikesRepository = {
         doc.myStatus = myStatus
         await doc.save()
         return true
+    },
+    async deleteAll(): Promise<void>{
+        await PostsLikeModel.deleteMany({})
     }
 }
