@@ -60,8 +60,7 @@ export const getPostByBlogIdWithQuery = async (
     if(!blog) {
         return res.sendStatus(Statuses.NOT_FOUND);
     }
-
-    const posts = await postsQueryRepository.getPostsByBlogId(blogId,req.query)
+    const posts = await postsQueryRepository.getPostsByBlogId(blogId,req.query,req.user?.id)
     res.status(Statuses.OK).send(posts)
 }
 
@@ -73,12 +72,10 @@ export const createPostForBlogId = async (
     if(!blog) {
         return res.sendStatus(Statuses.NOT_FOUND);
     }
-
     const post = await postsService.create({
         ...req.body,
         blogId,
         blogName: blog.name
     })
-
     res.status(Statuses.CREATED).send(post)
 }
