@@ -5,7 +5,7 @@ import {LikeInfoModel} from "../types/likes";
 
 export const commentsRepository = {
     async create(payload: CommentModel): Promise<CommentDBModel>{
-        const doc = new CommentsModel({...payload})
+        const doc = new CommentsModel(payload)
         await this.save(doc)
         return {
             id: doc.id,

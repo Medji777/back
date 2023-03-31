@@ -13,9 +13,9 @@ import {
     getCommentByPost,
     getPostOnId,
     getPosts,
-    updatePost
+    updatePost, updateStatusLike
 } from "../controllers/posts.controller";
-import {validateBodyPost, validatorBlogId, validatorBodyContent} from "../validations";
+import {validateBodyPost, validatorBlogId, validatorBodyContent, validatorBodyLikes} from "../validations";
 import {validatePaginationQuery, validateSortQuery} from "../validations/query";
 
 const sanitizationBodyPosts = sanitizationBody(['title','shortDescription','content','blogId'])
@@ -28,6 +28,7 @@ const validateQuery = validateMiddleware([
 ])
 
 const validateBodyComment = validateMiddleware([validatorBodyContent])
+const validateBodyLike = validateMiddleware([validatorBodyLikes])
 
 export const postsRouter = Router({});
 
@@ -37,6 +38,7 @@ postsRouter.post('/',basicAuthMiddleware,sanitizationBodyPosts,validateBody,crea
 postsRouter.put('/:id',basicAuthMiddleware,sanitizationBodyPosts,validateBody,updatePost)
 postsRouter.delete('/:id',basicAuthMiddleware,deletePost)
 postsRouter.get('/:id/comments',getUserMiddleware,validateQuery,getCommentByPost)
+postsRouter.put('/:id/like-status',bearerAuthMiddleware,validateBodyLike,updateStatusLike)
 postsRouter.post(
     '/:id/comments',
     bearerAuthMiddleware,

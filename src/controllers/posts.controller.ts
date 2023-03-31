@@ -1,9 +1,15 @@
 import {Request, Response} from "express";
-import {commentsQueryRepository,blogsQueryRepository, postsQueryRepository, QueryPosts, QueryComments} from "../repositories/query";
+import {
+    commentsQueryRepository,
+    blogsQueryRepository,
+    postsQueryRepository,
+    QueryPosts, QueryComments
+} from "../repositories/query";
 import {postsService} from "../domain";
 import {commentsService} from "../domain/comments.service";
 import {
-    Paginator,
+    LikeStatus,
+    Paginator, RequestWithBody,
     RequestWithParams,
     RequestWithParamsAndBody,
     RequestWithParamsAndQuery,
@@ -15,7 +21,7 @@ import {CommentInputModel, CommentViewModel} from "../types/comments";
 export const getPosts = async (
     req: Request,
     res: Response<Paginator<PostsViewModel>>): Promise<void> => {
-    const posts = await postsQueryRepository.getAll(req.query as unknown as QueryPosts)
+    const posts = await postsQueryRepository.getAll(req.query as unknown as QueryPosts, req.user?.id)
     res.status(Statuses.OK).send(posts)
 }
 
@@ -29,7 +35,9 @@ export const getPostOnId = async (
     res.status(Statuses.OK).send(post)
 }
 
-export const createPost = async (req: Request,res: Response<PostsViewModel>) => {
+export const createPost = async (
+    req: RequestWithBody<PostInputModel>,
+    res: Response<PostsViewModel>) => {
     const blog = await blogsQueryRepository.findById(req.body.blogId);
     if(!blog){
         return res.sendStatus(Statuses.NOT_FOUND)
@@ -87,4 +95,20 @@ export const getCommentByPost = async (
     const comments = await commentsQueryRepository
         .getCommentsByPostId(req.params.id,req.query as unknown as QueryComments,req.user?.id);
     res.status(Statuses.OK).send(comments)
+}
+
+export const updateStatusLike = async (
+    req: RequestWithParamsAndBody<{id: string}, LikeStatus>,
+    res: Response) =>  {
+    const updatedPostLike = await postsService.updateStatusLike(
+        req.user!.id,
+        req.user!.login,
+        req.params.id,
+        req.body
+    )
+    if (!updatedPostLike) {
+        res.sendStatus(Statuses.NOT_FOUND)
+        return
+    }
+    res.sendStatus(Statuses.NO_CONTENT)
 }

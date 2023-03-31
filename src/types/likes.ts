@@ -13,10 +13,6 @@ export type LikeInfoModel = {
     dislikesCount: number,
 }
 
-export type LikesInfoModel = {
-    likesInfo: LikeInfoModel
-}
-
 export type LikesInfoViewModel = LikeInfoModel & MyStatus
 
 export type LikesCommentModel = {
@@ -30,3 +26,9 @@ export type LikesPostsModel = {
     login: string,
     addedAt: string
 } & MyStatus
+
+export type LikesPostsExtendedViewModel = {
+    addedAt: string
+    userId: string
+    login: string
+}

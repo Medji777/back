@@ -1,14 +1,34 @@
-import {ObjectId} from "mongodb";
+import {LikeStatus} from "./types";
+import {LikesPostsExtendedViewModel} from "./likes";
 
 export type PostsViewModel = {
-    _id?: ObjectId,
-    id: string,
-    title: string,
-    shortDescription: string,
-    content: string,
-    blogId: string,
-    blogName: string,
+    id: string
+    title: string
+    shortDescription: string
+    content: string
+    blogId: string
+    blogName: string
     createdAt?: string
+    extendedLikesInfo: {
+        likesCount: number
+        dislikesCount: number
+        myStatus: LikeStatus
+        newestLikes: Array<LikesPostsExtendedViewModel>
+    }
+}
+
+export type PostsDBModel = {
+    id: string
+    title: string
+    shortDescription: string
+    content: string
+    blogId: string
+    blogName: string
+    createdAt?: string
+    extendedLikesInfo: {
+        likesCount: number
+        dislikesCount: number
+    }
 }
 
 export type PostInputModel = {
