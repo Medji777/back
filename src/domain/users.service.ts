@@ -8,7 +8,7 @@ type Cred = {
     user: UserModel | null
 }
 
-export const usersService = {
+class UsersService {
     async createUser(payload: UserInputModel): Promise<UserViewModel>{
         const passwordHash = await this._createPasswordHash(payload.password);
         const date = new Date();
@@ -28,10 +28,10 @@ export const usersService = {
             }
         }
         return usersRepository.create(newUser)
-    },
+    }
     async deleteUser(id: string): Promise<boolean>{
         return usersRepository.deleteById(id)
-    },
+    }
     async checkCredentials(input: string, password: string): Promise<Cred>{
         const user = await usersQueryRepository.getUserByLoginOrEmail(input)
         if(!user) {
@@ -46,9 +46,11 @@ export const usersService = {
                 user
             }
         }
-    },
-    async _createPasswordHash(password: string){
+    }
+    private async _createPasswordHash(password: string){
         const salt = await bcrypt.genSalt(10)
         return bcrypt.hash(password,salt)
-    },
+    }
 }
+
+export const usersService = new UsersService()

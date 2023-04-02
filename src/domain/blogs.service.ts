@@ -1,7 +1,7 @@
 import {BlogsInputModel, BlogsViewModel} from "../types/blogs";
 import {blogsRepository} from "../repositories";
 
-export const blogsService = {
+class BlogsService {
     async create(payload: BlogsInputModel): Promise<BlogsViewModel>{
         const date = new Date();
         const newBlog = {
@@ -15,15 +15,17 @@ export const blogsService = {
         const createdBlog = await blogsRepository.createV2(newBlog);
         await blogsRepository.save(createdBlog)
         return newBlog
-    },
+    }
     async update(id: string, payload: BlogsInputModel): Promise<boolean> {
         const blog = await blogsRepository.findBlogById(id)
         if(!blog) return false
         blog.update(payload)
         await blogsRepository.save(blog)
         return true;
-    },
+    }
     async delete(id: string): Promise<boolean>{
         return blogsRepository.deleteById(id)
     }
 }
+
+export const blogsService = new BlogsService()

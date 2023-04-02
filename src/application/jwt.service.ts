@@ -13,11 +13,11 @@ type JWTResponse = {
     [key: string]: any;
 }
 
-export const jwtService = {
+class JwtService {
     async createAccessToken(user: UserModel): Promise<LoginSuccessViewModel>{
         const accessToken = jwt.sign({userId: user.id},settings.JWT_SECRET,{expiresIn: '1h'});
         return {accessToken}
-    },
+    }
     async createRefreshToken(user: UserModel, deviceId: string): Promise<RefreshTypeModel>{
         const refreshToken = jwt.sign(
             {userId: user.id, deviceId},
@@ -25,7 +25,7 @@ export const jwtService = {
             {expiresIn: '1d'}
         );
         return {refreshToken}
-    },
+    }
     async getUserIdByToken(token: string, secret: string): Promise<string | null>{
         try {
             const result = jwt.verify(token, secret) as UserId;
@@ -34,7 +34,7 @@ export const jwtService = {
         catch (err) {
             return null
         }
-    },
+    }
     async getJWTData<T>(token: string, secret: string): Promise<JWTResponse & T | null>{
         try {
             const {iat,exp,...rest}: any = await jwt.verify(token, secret) as JwtPayload;
@@ -47,5 +47,7 @@ export const jwtService = {
         catch (err) {
             return null
         }
-    },
+    }
 }
+
+export const jwtService = new JwtService()

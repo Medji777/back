@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {blogsQueryRepository, postsQueryRepository, QueryBlogs, QueryPosts} from "../repositories/query";
+import {blogsQueryRepository, postsQueryRepository, QueryBlogs} from "../repositories/query";
 import {blogsService,postsService} from "../domain";
 import {
     Paginator,

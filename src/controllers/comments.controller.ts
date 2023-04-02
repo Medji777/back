@@ -1,6 +1,6 @@
 import {Response} from "express";
 import {commentsQueryRepository} from "../repositories/query";
-import {commentsService} from "../domain/comments.service";
+import {commentsService} from "../domain";
 import {RequestWithParams, RequestWithParamsAndBody, Statuses} from "../types/types";
 import {CommentInputModel, CommentViewModel} from "../types/comments";
 import {LikeInputModel} from "../types/likes";

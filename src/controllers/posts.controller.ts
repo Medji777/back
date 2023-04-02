@@ -6,7 +6,7 @@ import {
     QueryPosts, QueryComments
 } from "../repositories/query";
 import {postsService} from "../domain";
-import {commentsService} from "../domain/comments.service";
+import {commentsService} from "../domain";
 import {
     Paginator, RequestWithBody,
     RequestWithParams,

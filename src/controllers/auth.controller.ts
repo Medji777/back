@@ -1,5 +1,6 @@
 import {Request, Response} from "express";
-import {usersService} from "../domain/users.service";
+import {randomUUID} from "crypto";
+import {authService,usersService,securityService} from "../domain";
 import {jwtService} from "../application/jwt.service";
 import {RequestWithBody, Statuses} from "../types/types";
 import {
@@ -11,10 +12,7 @@ import {
     RegistrationConfirmationCodeModel,
     RegistrationEmailResending
 } from "../types/auth";
-import {authService} from "../domain/auth.service";
 import {UserInputModel} from "../types/users";
-import {securityService} from "../domain/security.service";
-import {randomUUID} from "crypto";
 import {usersQueryRepository} from "../repositories/query/usersQuery";
 
 class AuthController {

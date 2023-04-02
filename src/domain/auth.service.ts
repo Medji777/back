@@ -8,8 +8,8 @@ import {usersRepository} from "../repositories";
 import {NewPasswordRecoveryInputModel, RegistrationConfirmationCodeModel} from "../types/auth";
 import {usersQueryRepository} from "../repositories/query/usersQuery";
 
-export const authService = {
-    async saveUser(payload: UserInputModel): Promise<UserViewModel | null> {
+class AuthService {
+    async saveUser(payload: UserInputModel): Promise<UserViewModel | null>{
         const passwordHash = await this._createPasswordHash(payload.password);
         const emailConfirmation = this._createConfirmation();
         const date = new Date();
@@ -35,12 +35,12 @@ export const authService = {
             return null
         }
         return newUser
-    },
-    async confirmUser(payload: RegistrationConfirmationCodeModel): Promise<boolean> {
+    }
+    async confirmUser(payload: RegistrationConfirmationCodeModel): Promise<boolean>{
         const user = await usersQueryRepository.getUserByCode(payload.code);
         return usersRepository.updateConfirmation(user!.id)
-    },
-    async resendingCode(email: string): Promise<boolean> {
+    }
+    async resendingCode(email: string): Promise<boolean>{
         const emailConfirmation = this._createConfirmation();
         const result = await usersRepository.updateConfirmationData(email,emailConfirmation)
         try {
@@ -51,8 +51,8 @@ export const authService = {
             return false
         }
         return result
-    },
-    async recoveryPassword(email: string): Promise<boolean> {
+    }
+    async recoveryPassword(email: string): Promise<boolean>{
         const passwordConfirmation = this._createConfirmation();
         const result = await usersRepository.updatePasswordConfirmationData(email, passwordConfirmation)
         try {
@@ -63,12 +63,12 @@ export const authService = {
             return false
         }
         return result
-    },
-    async confirmRecoveryPassword(payload: NewPasswordRecoveryInputModel) {
+    }
+    async confirmRecoveryPassword(payload: NewPasswordRecoveryInputModel){
         const passwordHash = await this._createPasswordHash(payload.newPassword);
         return usersRepository.updatePassword(payload.recoveryCode,{passwordHash})
-    },
-    _createConfirmation(): EmailConfirmUserModel | PasswordConfirmUserModel {
+    }
+    private _createConfirmation(): EmailConfirmUserModel | PasswordConfirmUserModel {
         return ({
             confirmationCode: uuidV4(),
             expirationDate: add(new Date(),{
@@ -77,9 +77,11 @@ export const authService = {
             }),
             isConfirmed: false
         })
-    },
-    async _createPasswordHash(password: string){
+    }
+    private async _createPasswordHash(password: string){
         const salt = await bcrypt.genSalt(10)
         return bcrypt.hash(password,salt)
     }
 }
+
+export const authService = new AuthService()

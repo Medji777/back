@@ -7,7 +7,7 @@ import {postsLikeQueryRepository} from "../repositories/query/postsLikeQuery";
 import {likeCalculateService} from "../application/likeCalculate.service";
 import {LikeInputModel} from "../types/likes";
 
-export const postsService = {
+class PostsService {
     async create(payload:PostInputModel & BlogName): Promise<PostsViewModel>{
         const date = new Date();
         const newPost = {
@@ -25,13 +25,13 @@ export const postsService = {
         }
         const post = await postsRepository.create(newPost)
         return this._likeCreateTransform(post)
-    },
+    }
     async update(id: string,payload:PostInputModel): Promise<boolean>{
         return postsRepository.update(id,payload);
-    },
+    }
     async delete(id: string): Promise<boolean>{
         return postsRepository.deleteById(id)
-    },
+    }
     async updateStatusLike(userId: string, login: string, postId: string, newStatus: LikeInputModel ): Promise<boolean> {
         let lastStatus: LikeStatus = LikeStatus.None
         const post = await postsQueryRepository.findById(postId)
@@ -59,8 +59,8 @@ export const postsService = {
             newStatus.likeStatus
         )
         return await postsRepository.updateLikeInPost(post.id, newLikesInfo)
-    },
-    _likeCreateTransform(post: PostsDBModel): PostsViewModel{
+    }
+    private _likeCreateTransform(post: PostsDBModel): PostsViewModel{
         return {
             ...post,
             extendedLikesInfo: {
@@ -71,3 +71,5 @@ export const postsService = {
         }
     }
 }
+
+export const postsService = new PostsService()

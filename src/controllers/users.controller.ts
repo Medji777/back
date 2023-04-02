@@ -2,7 +2,7 @@ import {Request, Response} from "express";
 import {Paginator, RequestWithBody, RequestWithParams, Statuses} from "../types/types";
 import {UserInputModel, UserViewModel} from "../types/users";
 import {QueryUsers, usersQueryRepository} from "../repositories/query/usersQuery";
-import {usersService} from "../domain/users.service";
+import {usersService} from "../domain";
 
 class UsersController {
     async getUsers(req: Request, res: Response<Paginator<UserViewModel>>){

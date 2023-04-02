@@ -1,7 +1,7 @@
 import {Request,Response} from "express"
 import {securityQueryRepository} from "../repositories/query/securityQuery";
 import {RequestWithParams, Statuses} from "../types/types";
-import {securityService} from "../domain/security.service";
+import {securityService} from "../domain";
 
 class SecurityController {
     async getDevices(req: Request, res: Response){

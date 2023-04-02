@@ -1,7 +1,7 @@
 import {LikeInfoModel} from "../types/likes";
 import {LikeStatus} from "../types/types";
 
-export const likeCalculateService = {
+class LikeCalculateService {
     async getUpdatedLike(likesInfo: LikeInfoModel, lastStatus: LikeStatus, newStatus: LikeStatus): Promise<LikeInfoModel> {
         if (newStatus === LikeStatus.None && lastStatus === LikeStatus.Like) {
             return { ...likesInfo, likesCount: --likesInfo.likesCount }
@@ -32,3 +32,5 @@ export const likeCalculateService = {
         return likesInfo
     }
 }
+
+export const likeCalculateService = new LikeCalculateService()

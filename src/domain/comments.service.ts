@@ -7,7 +7,7 @@ import {likeCalculateService} from "../application/likeCalculate.service";
 
 type CommentPayload = CommentInputModel & CommentatorInfo & PostId
 
-export const commentsService = {
+class CommentsService {
     async create(payload: CommentPayload): Promise<CommentViewModel>{
         const date = new Date();
         const newComment = {
@@ -26,10 +26,10 @@ export const commentsService = {
         }
         const comment = await commentsRepository.create(newComment);
         return this._likeCreateTransform(comment);
-    },
+    }
     async update(id: string, payload: CommentInputModel): Promise<boolean> {
         return commentsRepository.update(id,payload)
-    },
+    }
     async updateLike(commentId: string, userId: string, payload: LikeInputModel): Promise<boolean> {
         let lastStatus: LikeStatus = LikeStatus.None;
         const comment = await commentsQueryRepository.findById(commentId)
@@ -52,11 +52,11 @@ export const commentsService = {
         const likeInfoCalc = await likeCalculateService.getUpdatedLike(likesInfo, lastStatus, payload.likeStatus);
         await commentsRepository.updateLikeInComment(comment.id!, likeInfoCalc)
         return true
-    },
+    }
     async delete(id: string): Promise<boolean> {
         return commentsRepository.delete(id)
-    },
-    _likeCreateTransform(comment: CommentDBModel): CommentViewModel {
+    }
+    private _likeCreateTransform(comment: CommentDBModel): CommentViewModel {
         return ({
             ...comment,
             likesInfo: {
@@ -66,3 +66,5 @@ export const commentsService = {
         })
     }
 }
+
+export const commentsService = new CommentsService()
