@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {getUsers, createUser, deleteUser, getUsersTest} from "../controllers/users.controller";
+import {usersController} from "../controllers";
 import {basicAuthMiddleware, sanitizationBody, validateMiddleware} from "../middlewares";
 import {createSearchTermQuery, validatePaginationQuery, validateSortQuery} from "../validations/query";
 import {SearchTermQuery} from "../types/types";
@@ -18,7 +18,7 @@ const validateQuery = validateMiddleware([
     ...validateSearchEmailTermQuery
 ])
 
-usersRouter.get('/',basicAuthMiddleware,validateQuery,getUsers)
-usersRouter.post('/',basicAuthMiddleware,sanitizationBodyUser,validateBodyUser,createUser)
-usersRouter.delete('/:id',basicAuthMiddleware,deleteUser)
-usersRouter.get('/tests',basicAuthMiddleware,getUsersTest)
+usersRouter.get('/',basicAuthMiddleware,validateQuery,usersController.getUsers)
+usersRouter.post('/',basicAuthMiddleware,sanitizationBodyUser,validateBodyUser,usersController.createUser)
+usersRouter.delete('/:id',basicAuthMiddleware,usersController.deleteUser)
+usersRouter.get('/tests',basicAuthMiddleware,usersController.getUsersTest)

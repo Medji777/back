@@ -1,14 +1,7 @@
 import {Router} from "express";
 import {ValidationChain} from "express-validator";
 import {basicAuthMiddleware, getUserMiddleware, sanitizationBody, validateMiddleware} from "../middlewares";
-import {
-    createBlog, createPostForBlogId,
-    deleteBlog,
-    getBlogOnId,
-    getBlogs,
-    getPostByBlogIdWithQuery,
-    updateBlog
-} from "../controllers/blogs.controller";
+import {blogsController} from "../controllers";
 import {validateBodyBlog, validateBodyPost} from "../validations";
 import {validatePaginationQuery, validateSortQuery, createSearchTermQuery} from "../validations/query";
 import {SearchTermQuery} from "../types/types";
@@ -26,16 +19,16 @@ const validateSearchNameTermQuery = createSearchTermQuery(SearchTermQuery.search
 
 export const blogsRouter = Router({});
 
-blogsRouter.get('/',validateQuery(validateSearchNameTermQuery),getBlogs)
-blogsRouter.get('/:id',getBlogOnId)
-blogsRouter.post('/',basicAuthMiddleware,sanitizationBodyBlogs,validateBodyBlog,createBlog)
-blogsRouter.put('/:id',basicAuthMiddleware,sanitizationBodyBlogs,validateBodyBlog,updateBlog)
-blogsRouter.delete('/:id',basicAuthMiddleware,deleteBlog)
-blogsRouter.get('/:blogId/posts',getUserMiddleware,validateQuery(),getPostByBlogIdWithQuery)
+blogsRouter.get('/',validateQuery(validateSearchNameTermQuery),blogsController.getBlogs)
+blogsRouter.get('/:id',blogsController.getBlogOnId)
+blogsRouter.post('/',basicAuthMiddleware,sanitizationBodyBlogs,validateBodyBlog,blogsController.createBlog)
+blogsRouter.put('/:id',basicAuthMiddleware,sanitizationBodyBlogs,validateBodyBlog,blogsController.updateBlog)
+blogsRouter.delete('/:id',basicAuthMiddleware,blogsController.deleteBlog)
+blogsRouter.get('/:blogId/posts',getUserMiddleware,validateQuery(),blogsController.getPostByBlogIdWithQuery)
 blogsRouter.post(
     '/:blogId/posts',
     basicAuthMiddleware,
     sanitizationBodyPostByBlog,
     validateBodyPost(),
-    createPostForBlogId
+    blogsController.createPostForBlogId
 )
