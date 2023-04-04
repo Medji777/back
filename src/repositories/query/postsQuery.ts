@@ -1,6 +1,6 @@
 import {HydratedDocument} from "mongoose";
 import {PostsModel} from "../db";
-import {postsLikeQueryRepository} from "./postsLikeQuery";
+import {PostsLikeQueryRepository} from "./postsLikeQuery";
 import {getSortNumber} from "../../utils/sort";
 import {transformPagination} from "../../utils/transform";
 import {LikeStatus, Paginator, SortDirections} from "../../types/types";
@@ -13,7 +13,11 @@ export type QueryPosts = {
     pageSize: number
 }
 
-export const postsQueryRepository = {
+export class PostsQueryRepository {
+    private postsLikeQueryRepository: PostsLikeQueryRepository;
+    constructor() {
+        this.postsLikeQueryRepository = new PostsLikeQueryRepository()
+    }
     async getAll(query: QueryPosts, userId?: string): Promise<Paginator<PostsViewModel>> {
         const {sortBy,sortDirection,pageNumber,pageSize} = query;
         const sortNumber = getSortNumber(sortDirection);
@@ -30,7 +34,7 @@ export const postsQueryRepository = {
         const mappedFinishPost = await this._setThreeLastUserMapped(mappedPostWithStatusLike)
 
         return transformPagination<PostsViewModel>(mappedFinishPost,pageSize,pageNumber,count)
-    },
+    }
     async findById(id: string, userId?: string): Promise<PostsViewModel | null> {
         const doc = await PostsModel.findOne({id},{_id:0,__v:0})
         if(!doc) return null;
@@ -42,7 +46,7 @@ export const postsQueryRepository = {
             await this._setLastLike(mappedResult)
         }
         return mappedResult
-    },
+    }
     async getPostsByBlogId(id: string, query: QueryPosts, userId?: string): Promise<Paginator<PostsViewModel>>{
         const filter = {blogId: id};
         const {sortBy,sortDirection,pageNumber,pageSize} = query;
@@ -60,8 +64,8 @@ export const postsQueryRepository = {
         const mappedFinishPost = await this._setThreeLastUserMapped(mappedPostWithStatusLike)
 
         return transformPagination<PostsViewModel>(mappedFinishPost,pageSize,pageNumber,count)
-    },
-    _getOutputPost(post: HydratedDocument<PostsDBModel>): PostsViewModel {
+    }
+    private _getOutputPost(post: HydratedDocument<PostsDBModel>): PostsViewModel {
         return {
             id: post.id,
             title: post.title,
@@ -77,30 +81,32 @@ export const postsQueryRepository = {
                 newestLikes: []
             }
         }
-    },
-    async _setStatusLikeMapped(posts: Array<PostsViewModel>, userId?: string) {
+    }
+    private async _setStatusLikeMapped(posts: Array<PostsViewModel>, userId?: string): Promise<Array<PostsViewModel>> {
         if (!userId) return posts
         await Promise.all(posts.map(async (post: PostsViewModel)=>{
             await this._setLike(userId, post)
         }))
         return posts
-    },
-    async _setThreeLastUserMapped(posts: Array<PostsViewModel>) {
+    }
+    private async _setThreeLastUserMapped(posts: Array<PostsViewModel>): Promise<Array<PostsViewModel>> {
         await Promise.all(posts.map(async (post: PostsViewModel)=>{
             await this._setLastLike(post)
         }))
         return posts
-    },
-    async _setLike(userId: string, model: PostsViewModel): Promise<void>{
-        const like = await postsLikeQueryRepository.getLike(userId, model.id)
+    }
+    private async _setLike(userId: string, model: PostsViewModel): Promise<void>{
+        const like = await this.postsLikeQueryRepository.getLike(userId, model.id)
         if (like) {
             model.extendedLikesInfo.myStatus = like.myStatus
         }
-    },
-    async _setLastLike(model: PostsViewModel): Promise<void>{
-        const lastThreeLikes = await postsLikeQueryRepository.getLastThreeLikes(model.id)
+    }
+    private async _setLastLike(model: PostsViewModel): Promise<void>{
+        const lastThreeLikes = await this.postsLikeQueryRepository.getLastThreeLikes(model.id)
         if (lastThreeLikes) {
             model.extendedLikesInfo.newestLikes = lastThreeLikes
         }
     }
 }
+
+export const postsQueryRepository = new PostsQueryRepository()

@@ -1,15 +1,15 @@
-import {blogsService} from "./blogs.service";
-import {postsService} from "./posts.service";
-import {authService} from './auth.service';
-import {commentsService} from './comments.service';
-import {securityService} from './security.service';
-import {usersService} from './users.service';
+import {BlogsService} from "./blogs.service";
+import {PostsService} from "./posts.service";
+import {AuthService} from './auth.service';
+import {CommentsService} from './comments.service';
+import {securityService, SecurityService} from './security.service';
+import {UsersService} from './users.service';
 
 export {
-    blogsService,
-    postsService,
-    authService,
-    commentsService,
-    securityService,
-    usersService
+    BlogsService,
+    PostsService,
+    AuthService,
+    CommentsService,
+    securityService, SecurityService,
+    UsersService
 }

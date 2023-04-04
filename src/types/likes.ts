@@ -20,12 +20,30 @@ export type LikesCommentModel = {
     commentId: string,
 } & MyStatus
 
+export class LikesCommentModelDTO {
+    constructor(
+        public userId: string,
+        public commentId: string,
+        public myStatus: LikeStatus
+    ) {}
+}
+
 export type LikesPostsModel = {
     userId: string,
     postId: string,
     login: string,
     addedAt: string
 } & MyStatus
+
+export class LikesPostsModelDTO {
+    constructor(
+        public userId: string,
+        public postId: string,
+        public login: string,
+        public addedAt: string,
+        public myStatus: LikeStatus
+    ) {}
+}
 
 export type LikesPostsExtendedViewModel = {
     addedAt: string

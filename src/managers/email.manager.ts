@@ -2,8 +2,8 @@ import {EmailConfirmUserDataModel, PasswordConfirmUserDataModel, UserModel} from
 import {emailAdapter} from "../adapters/email.adapter";
 import {settings} from "../settings";
 
-export const emailManager = {
-    async sendCodeConfirmationMessage(user: UserModel | EmailConfirmUserDataModel & {email: string}, action: string){
+export class EmailManager {
+    async sendCodeConfirmationMessage(user: UserModel | EmailConfirmUserDataModel & {email: string}, action: string): Promise<void>{
         const code = user.emailConfirmation.confirmationCode
         await emailAdapter.send({
             email: user.email,
@@ -13,8 +13,8 @@ export const emailManager = {
                 '          <a href=\'https://'+ settings.EMAIL_BASE_URI + '/' + action + '?code=' + code +'\'>complete registration</a>\n' +
                 '      </p>'
         })
-    },
-    async sendRecoveryCodeConfirmationMessage(user: UserModel | PasswordConfirmUserDataModel & {email: string}, action: string){
+    }
+    async sendRecoveryCodeConfirmationMessage(user: UserModel | PasswordConfirmUserDataModel & {email: string}, action: string): Promise<void>{
         const code = user.passwordConfirmation.confirmationCode
         await emailAdapter.send({
             email: user.email,
@@ -24,5 +24,5 @@ export const emailManager = {
                 '          <a href=\'https://'+ settings.EMAIL_BASE_URI + '/' + action + '?recoveryCode=' + code +'\'>recovery password</a>\n' +
                 '      </p>'
         })
-    },
+    }
 }

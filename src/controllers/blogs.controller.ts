@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
-import {blogsQueryRepository, postsQueryRepository, QueryBlogs} from "../repositories/query";
-import {blogsService,postsService} from "../domain";
+import {QueryBlogs} from "../repositories/query";
+import {BlogsService, PostsService} from "../domain";
+import {BlogsQueryRepository, PostsQueryRepository} from "../repositories/query";
 import {
     Paginator,
     RequestWithParams,
@@ -13,30 +14,40 @@ import {BlogsInputModel, BlogsViewModel} from "../types/blogs";
 import {PostInputModel, PostsViewModel} from "../types/posts";
 
 class BlogsController {
+    private blogsService: BlogsService;
+    private blogsQueryRepository: BlogsQueryRepository;
+    private postsQueryRepository: PostsQueryRepository;
+    private postsService: PostsService;
+    constructor() {
+        this.blogsService = new BlogsService()
+        this.postsService = new PostsService()
+        this.blogsQueryRepository = new BlogsQueryRepository()
+        this.postsQueryRepository = new PostsQueryRepository()
+    }
     async getBlogs(req: Request,res: Response<Paginator<BlogsViewModel>>){
-        const blogs = await blogsQueryRepository.getAll(req.query as unknown as QueryBlogs);
+        const blogs = await this.blogsQueryRepository.getAll(req.query as unknown as QueryBlogs);
         res.status(Statuses.OK).send(blogs)
     }
     async getBlogOnId(req: RequestWithParams<{id: string}>,res: Response<BlogsViewModel>){
-        const blog = await blogsQueryRepository.findById(req.params.id);
+        const blog = await this.blogsQueryRepository.findById(req.params.id);
         if(!blog) {
             return res.sendStatus(Statuses.NOT_FOUND)
         }
         res.status(Statuses.OK).send(blog)
     }
     async createBlog(req: RequestWithBody<BlogsInputModel>,res: Response<BlogsViewModel>){
-        const blog = await blogsService.create(req.body);
+        const blog = await this.blogsService.create(req.body);
         res.status(Statuses.CREATED).send(blog)
     }
     async updateBlog(req: RequestWithParamsAndBody<{id: string}, BlogsInputModel>,res: Response){
-        const isUpdated = await blogsService.update(req.params.id,req.body);
+        const isUpdated = await this.blogsService.update(req.params.id,req.body);
         if(!isUpdated){
             return res.sendStatus(Statuses.NOT_FOUND)
         }
         res.sendStatus(Statuses.NO_CONTENT)
     }
     async deleteBlog(req: RequestWithParams<{id: string}>,res: Response){
-        const isDeleted = await blogsService.delete(req.params.id)
+        const isDeleted = await this.blogsService.delete(req.params.id)
         if(!isDeleted){
             return res.sendStatus(Statuses.NOT_FOUND)
         }
@@ -47,11 +58,11 @@ class BlogsController {
         res: Response<Paginator<PostsViewModel>>
     ){
         const blogId = req.params.blogId;
-        const blog = await blogsQueryRepository.findById(blogId);
+        const blog = await this.blogsQueryRepository.findById(blogId);
         if(!blog) {
             return res.sendStatus(Statuses.NOT_FOUND);
         }
-        const posts = await postsQueryRepository.getPostsByBlogId(blogId,req.query,req.user?.id)
+        const posts = await this.postsQueryRepository.getPostsByBlogId(blogId,req.query,req.user?.id)
         res.status(Statuses.OK).send(posts)
     }
     async createPostForBlogId(
@@ -59,11 +70,11 @@ class BlogsController {
         res: Response<PostsViewModel>
     ){
         const blogId = req.params.blogId;
-        const blog = await blogsQueryRepository.findById(blogId);
+        const blog = await this.blogsQueryRepository.findById(blogId);
         if(!blog) {
             return res.sendStatus(Statuses.NOT_FOUND);
         }
-        const post = await postsService.create({
+        const post = await this.postsService.create({
             ...req.body,
             blogId,
             blogName: blog.name

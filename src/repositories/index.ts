@@ -1,17 +1,19 @@
-import {blogsRepository} from './blogs-db';
-import {postsRepository} from './posts-db';
-import {videosRepository} from './repo-db';
-import {usersRepository} from "./users-db";
-import {commentsRepository} from "./comments-db";
-import {securityRepository} from "./security-db";
-import {commentsLikesRepository} from "./commentsLikes-db";
+import {blogsRepository, BlogsRepository} from './blogs-db';
+import {postsRepository, PostsRepository} from './posts-db';
+import {videosRepository, VideosRepository} from './repo-db';
+import {usersRepository, UsersRepository} from "./users-db";
+import {commentsRepository, CommentsRepository} from "./comments-db";
+import {securityRepository, SecurityRepository} from "./security-db";
+import {commentsLikesRepository, CommentsLikesRepository} from "./commentsLikes-db";
+import {PostsLikesRepository} from './postsLikes-db';
 
 export {
-    usersRepository,
-    blogsRepository,
-    postsRepository,
-    commentsRepository,
-    videosRepository,
-    securityRepository,
-    commentsLikesRepository
+    usersRepository, UsersRepository,
+    blogsRepository, BlogsRepository,
+    postsRepository, PostsRepository,
+    commentsRepository, CommentsRepository,
+    videosRepository, VideosRepository,
+    securityRepository, SecurityRepository,
+    commentsLikesRepository, CommentsLikesRepository,
+    PostsLikesRepository
 }

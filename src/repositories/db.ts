@@ -6,7 +6,7 @@ import {IVideo} from "../types/videos";
 import {UserModel} from "../types/users";
 import {CommentModel} from "../types/comments";
 import {DeviceModel} from "../types/security";
-import {LikesCommentModel, LikesPostsModel} from "../types/likes";
+import {LikesCommentModelDTO, LikesPostsModelDTO} from "../types/likes";
 import {
     usersSchema,
     blogsSchema,
@@ -26,8 +26,8 @@ export const PostsModel = model<PostsDBModel,PostsModelType>('posts', postsSchem
 export const CommentsModel = model<CommentModel>('comments', commentsSchema);
 export const VideoModel = model<IVideo>('videos', videoSchema);
 export const SessionsModel = model<DeviceModel>('sessions', sessionsSchema);
-export const PostsLikeModel = model<LikesPostsModel>('postsLike', postsLikeSchema);
-export const CommentsLikeModel = model<LikesCommentModel>('commentsLike', commentsLikeSchema)
+export const PostsLikeModel = model<LikesPostsModelDTO>('postsLike', postsLikeSchema);
+export const CommentsLikeModel = model<LikesCommentModelDTO>('commentsLike', commentsLikeSchema)
 
 export async function runDb () {
     try {

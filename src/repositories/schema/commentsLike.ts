@@ -1,8 +1,8 @@
 import {Schema} from "mongoose";
-import {LikesCommentModel} from "../../types/likes";
+import {LikesCommentModelDTO} from "../../types/likes";
 import {LikeStatus} from "../../types/types";
 
-const commentsLikeSchema = new Schema<LikesCommentModel>({
+const commentsLikeSchema = new Schema<LikesCommentModelDTO>({
     userId: {type: String, required: true},
     commentId: {type: String, required: true},
     myStatus: {

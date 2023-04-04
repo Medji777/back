@@ -3,7 +3,7 @@ import {PostsLikeModel} from "../db";
 import {LikesPostsExtendedViewModel, LikesPostsModel} from "../../types/likes";
 import {LikeStatus} from "../../types/types";
 
-export const postsLikeQueryRepository = {
+export class PostsLikeQueryRepository {
     async getLastThreeLikes(postId: string): Promise<LikesPostsExtendedViewModel[]> {
         const desc = -1
         const threeLastUser = 3
@@ -14,13 +14,13 @@ export const postsLikeQueryRepository = {
 
         if (!result) return []
         return result.map(this._getOutputExtendedLike)
-    },
+    }
     async getLike(userId: string, postId: string): Promise<LikesPostsModel | null> {
         const result = await PostsLikeModel.findOne({ userId, postId })
         if (!result) return null
         return this._getOutputLike(result)
-    },
-    _getOutputLike(like: HydratedDocument<LikesPostsModel>): LikesPostsModel {
+    }
+    private _getOutputLike(like: HydratedDocument<LikesPostsModel>): LikesPostsModel {
         return {
             userId: like.userId,
             postId: like.postId,
@@ -28,8 +28,8 @@ export const postsLikeQueryRepository = {
             login: like.login,
             addedAt: like.addedAt
         }
-    },
-    _getOutputExtendedLike(like: LikesPostsModel): LikesPostsExtendedViewModel {
+    }
+    private _getOutputExtendedLike(like: LikesPostsModel): LikesPostsExtendedViewModel {
         return {
             addedAt: like.addedAt,
             userId: like.userId,

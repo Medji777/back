@@ -1,16 +1,19 @@
 import {HydratedDocument} from "mongoose";
 import {CommentsModel} from "../db";
-import {commentsLikeQueryRepository} from "./commentsLikeQuery";
+import {CommentsLikeQueryRepository} from "./commentsLikeQuery";
 import {QueryPosts} from "./postsQuery";
 import {getSortNumber} from "../../utils/sort";
 import {transformPagination} from "../../utils/transform";
 import {CommentDBModel, CommentViewModel} from "../../types/comments";
 import {LikeStatus, Paginator} from "../../types/types";
 
-
 export type QueryComments = QueryPosts;
 
-export const commentsQueryRepository = {
+export class CommentsQueryRepository {
+    private commentsLikeQueryRepository: CommentsLikeQueryRepository;
+    constructor() {
+        this.commentsLikeQueryRepository = new CommentsLikeQueryRepository()
+    }
     async findById(id: string, userId?: string): Promise<CommentViewModel | null>{
         const doc = await CommentsModel.findOne({id},{_id:0,postId:0,__v:0})
         if(!doc) return null
@@ -19,7 +22,7 @@ export const commentsQueryRepository = {
             await this._setLike(userId, mappedResult)
         }
         return mappedResult
-    },
+    }
     async getCommentsByPostId(id: string, query: QueryComments, userId?: string): Promise<Paginator<CommentViewModel>>{
         const filter = {postId: id};
         const {sortBy,sortDirection,pageNumber,pageSize} = query;
@@ -36,8 +39,8 @@ export const commentsQueryRepository = {
         const mappedCommentsWithStatusLike = await this._setStatusLikeMapped(mappedComments, userId!)
 
         return transformPagination<CommentViewModel>(mappedCommentsWithStatusLike,pageSize,pageNumber,count)
-    },
-    _getOutputComment(comment: HydratedDocument<CommentDBModel>): CommentViewModel {
+    }
+    private _getOutputComment(comment: HydratedDocument<CommentDBModel>): CommentViewModel {
         return {
             id: comment.id,
             content: comment.content,
@@ -49,18 +52,20 @@ export const commentsQueryRepository = {
                 myStatus: LikeStatus.None
             }
         }
-    },
-    async _setStatusLikeMapped(comments: Array<CommentViewModel>, userId: string): Promise<Array<CommentViewModel>> {
+    }
+    private async _setStatusLikeMapped(comments: Array<CommentViewModel>, userId: string): Promise<Array<CommentViewModel>> {
         if (!userId) return comments
         await Promise.all(comments.map(async (comment: CommentViewModel) => {
             await this._setLike(userId, comment)
         }))
         return comments
-    },
-    async _setLike(userId: string, model: CommentViewModel): Promise<void>{
-        const like = await commentsLikeQueryRepository.getLike(userId, model.id)
+    }
+    private async _setLike(userId: string, model: CommentViewModel): Promise<void>{
+        const like = await this.commentsLikeQueryRepository.getLike(userId, model.id)
         if (like) {
             model.likesInfo.myStatus = like.myStatus
         }
     }
 }
+
+export const commentsQueryRepository = new CommentsQueryRepository()

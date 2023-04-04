@@ -24,17 +24,35 @@ const validateBodyLike = validateMiddleware([validatorBodyLikes])
 
 export const postsRouter = Router({});
 
-postsRouter.get('/',getUserMiddleware,validateQuery,postController.getPosts)
-postsRouter.get('/:id',getUserMiddleware,postController.getPostOnId)
-postsRouter.post('/',basicAuthMiddleware,sanitizationBodyPosts,validateBody,postController.createPost)
-postsRouter.put('/:id',basicAuthMiddleware,sanitizationBodyPosts,validateBody,postController.updatePost)
-postsRouter.delete('/:id',basicAuthMiddleware,postController.deletePost)
-postsRouter.get('/:id/comments',getUserMiddleware,validateQuery,postController.getCommentByPost)
-postsRouter.put('/:id/like-status',bearerAuthMiddleware,validateBodyLike,postController.updateStatusLike)
+postsRouter.get('/',getUserMiddleware,validateQuery,postController.getPosts.bind(postController))
+postsRouter.get('/:id',getUserMiddleware,postController.getPostOnId.bind(postController))
+postsRouter.post('/',
+    basicAuthMiddleware,
+    sanitizationBodyPosts,
+    validateBody,
+    postController.createPost.bind(postController)
+)
+postsRouter.put('/:id',
+    basicAuthMiddleware,
+    sanitizationBodyPosts,
+    validateBody,
+    postController.updatePost.bind(postController)
+)
+postsRouter.delete('/:id',basicAuthMiddleware,postController.deletePost.bind(postController))
+postsRouter.get('/:id/comments',
+    getUserMiddleware,
+    validateQuery,
+    postController.getCommentByPost.bind(postController)
+)
+postsRouter.put('/:id/like-status',
+    bearerAuthMiddleware,
+    validateBodyLike,
+    postController.updateStatusLike.bind(postController)
+)
 postsRouter.post(
     '/:id/comments',
     bearerAuthMiddleware,
     sanitizationBodyPostComment,
     validateBodyComment,
-    postController.createCommentByPost
+    postController.createCommentByPost.bind(postController)
 )

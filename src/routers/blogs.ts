@@ -19,16 +19,33 @@ const validateSearchNameTermQuery = createSearchTermQuery(SearchTermQuery.search
 
 export const blogsRouter = Router({});
 
-blogsRouter.get('/',validateQuery(validateSearchNameTermQuery),blogsController.getBlogs)
-blogsRouter.get('/:id',blogsController.getBlogOnId)
-blogsRouter.post('/',basicAuthMiddleware,sanitizationBodyBlogs,validateBodyBlog,blogsController.createBlog)
-blogsRouter.put('/:id',basicAuthMiddleware,sanitizationBodyBlogs,validateBodyBlog,blogsController.updateBlog)
-blogsRouter.delete('/:id',basicAuthMiddleware,blogsController.deleteBlog)
-blogsRouter.get('/:blogId/posts',getUserMiddleware,validateQuery(),blogsController.getPostByBlogIdWithQuery)
+blogsRouter.get('/',
+    validateQuery(validateSearchNameTermQuery),
+    blogsController.getBlogs.bind(blogsController)
+)
+blogsRouter.get('/:id',blogsController.getBlogOnId.bind(blogsController))
+blogsRouter.post('/',
+    basicAuthMiddleware,
+    sanitizationBodyBlogs,
+    validateBodyBlog,
+    blogsController.createBlog.bind(blogsController)
+)
+blogsRouter.put('/:id',
+    basicAuthMiddleware,
+    sanitizationBodyBlogs,
+    validateBodyBlog,
+    blogsController.updateBlog.bind(blogsController)
+)
+blogsRouter.delete('/:id',basicAuthMiddleware,blogsController.deleteBlog.bind(blogsController))
+blogsRouter.get('/:blogId/posts',
+    getUserMiddleware,
+    validateQuery(),
+    blogsController.getPostByBlogIdWithQuery.bind(blogsController)
+)
 blogsRouter.post(
     '/:blogId/posts',
     basicAuthMiddleware,
     sanitizationBodyPostByBlog,
     validateBodyPost(),
-    blogsController.createPostForBlogId
+    blogsController.createPostForBlogId.bind(blogsController)
 )

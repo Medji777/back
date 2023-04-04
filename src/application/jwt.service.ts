@@ -13,7 +13,7 @@ type JWTResponse = {
     [key: string]: any;
 }
 
-class JwtService {
+export class JwtService {
     async createAccessToken(user: UserModel): Promise<LoginSuccessViewModel>{
         const accessToken = jwt.sign({userId: user.id},settings.JWT_SECRET,{expiresIn: '1h'});
         return {accessToken}

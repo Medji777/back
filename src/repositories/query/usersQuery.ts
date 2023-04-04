@@ -15,7 +15,7 @@ export type QueryUsers = {
 
 const projectionFilter = {_id: 0, passwordHash: 0, emailConfirmation: 0, passwordConfirmation: 0, __v: 0}
 
-export const usersQueryRepository = {
+export class UsersQueryRepository {
     async getAll(query: QueryUsers): Promise<Paginator<UserViewModel>>{
         const arrayFilters = []
         const {searchLoginTerm, searchEmailTerm, sortBy, sortDirection, pageNumber, pageSize} = query;
@@ -36,19 +36,19 @@ export const usersQueryRepository = {
             .limit(pageSize)
             .lean()
         return transformPagination<UserViewModel>(items,pageSize,pageNumber,count)
-    },
+    }
     async getUserByLoginOrEmail(input: string): Promise<UserModel | null>{
         return UsersModel.findOne({$or:[{login: input},{email: input}]},{_id: 0,__v:0}).lean()
-    },
+    }
     async getUserByUserId(userId: string): Promise<UserModel | null> {
-       return UsersModel.findOne({id: userId}).lean();
-    },
+        return UsersModel.findOne({id: userId}).lean();
+    }
     async getUserByCode(code: string): Promise<UserModel | null> {
         return UsersModel.findOne({'emailConfirmation.confirmationCode': code}).lean();
-    },
+    }
     async getUserByRecoveryCode(code: string): Promise<UserModel | null> {
         return UsersModel.findOne({'passwordConfirmation.confirmationCode': code}).lean();
-    },
+    }
     async getMeProfile(userId: string): Promise<MeViewModel>{
         const user = await this.getUserByUserId(userId);
         return {
@@ -58,3 +58,5 @@ export const usersQueryRepository = {
         }
     }
 }
+
+export const usersQueryRepository = new UsersQueryRepository()

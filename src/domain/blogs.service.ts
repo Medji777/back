@@ -1,31 +1,33 @@
-import {BlogsInputModel, BlogsViewModel} from "../types/blogs";
-import {blogsRepository} from "../repositories";
+import {BlogsInputModel, BlogsViewModel, BlogsViewModelDTO} from "../types/blogs";
+import {BlogsRepository} from "../repositories";
 
-class BlogsService {
+export class BlogsService {
+    private blogsRepository: BlogsRepository;
+    constructor() {
+        this.blogsRepository = new BlogsRepository()
+    }
     async create(payload: BlogsInputModel): Promise<BlogsViewModel>{
         const date = new Date();
-        const newBlog = {
-            id:	`${+date}`,
-            name: payload.name,
-            description: payload.description,
-            websiteUrl:	payload.websiteUrl,
-            createdAt: date.toISOString(),
-            isMembership: false
-        }
-        const createdBlog = await blogsRepository.createV2(newBlog);
-        await blogsRepository.save(createdBlog)
+        const newBlog = new BlogsViewModelDTO(
+            `${+date}`,
+            payload.name,
+            payload.description,
+            payload.websiteUrl,
+            date.toISOString(),
+            false
+        )
+        const createdBlog = await this.blogsRepository.create(newBlog);
+        await this.blogsRepository.save(createdBlog)
         return newBlog
     }
     async update(id: string, payload: BlogsInputModel): Promise<boolean> {
-        const blog = await blogsRepository.findBlogById(id)
+        const blog = await this.blogsRepository.findBlogById(id)
         if(!blog) return false
         blog.update(payload)
-        await blogsRepository.save(blog)
+        await this.blogsRepository.save(blog)
         return true;
     }
     async delete(id: string): Promise<boolean>{
-        return blogsRepository.deleteById(id)
+        return this.blogsRepository.deleteById(id)
     }
 }
-
-export const blogsService = new BlogsService()

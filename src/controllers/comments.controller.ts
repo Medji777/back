@@ -1,14 +1,20 @@
 import {Response} from "express";
-import {commentsQueryRepository} from "../repositories/query";
-import {commentsService} from "../domain";
 import {RequestWithParams, RequestWithParamsAndBody, Statuses} from "../types/types";
 import {CommentInputModel, CommentViewModel} from "../types/comments";
 import {LikeInputModel} from "../types/likes";
+import {CommentsQueryRepository} from "../repositories/query";
+import {CommentsService} from "../domain";
 
 class CommentsController {
+    private commentsQueryRepository: CommentsQueryRepository;
+    private commentsService: CommentsService;
+    constructor() {
+        this.commentsService = new CommentsService()
+        this.commentsQueryRepository = new CommentsQueryRepository()
+    }
     async getComments(req:RequestWithParams<{id: string}>,res:Response<CommentViewModel | Error>){
         try {
-            const comment = await commentsQueryRepository.findById(req.params.id, req.user?.id)
+            const comment = await this.commentsQueryRepository.findById(req.params.id, req.user?.id)
             if(!comment){
                 return res.sendStatus(Statuses.NOT_FOUND)
             }
@@ -20,39 +26,39 @@ class CommentsController {
         }
     }
     async updateComments(req:RequestWithParamsAndBody<{id: string},CommentInputModel>,res:Response){
-        const comment = await commentsQueryRepository.findById(req.params.id);
+        const comment = await this.commentsQueryRepository.findById(req.params.id);
         if(!comment){
             return res.sendStatus(Statuses.NOT_FOUND)
         }
         if(comment.commentatorInfo.userId !== req.user!.id){
             return res.sendStatus(Statuses.FORBIDDEN)
         }
-        const isUpdated = await commentsService.update(req.params.id,req.body);
+        const isUpdated = await this.commentsService.update(req.params.id,req.body);
         if(!isUpdated){
             return res.sendStatus(Statuses.NOT_FOUND)
         }
         res.sendStatus(Statuses.NO_CONTENT)
     }
     async updateLikeAtComment(req: RequestWithParamsAndBody<{id: string},LikeInputModel>,res: Response){
-        const comment = await commentsQueryRepository.findById(req.params.id);
+        const comment = await this.commentsQueryRepository.findById(req.params.id);
         if(!comment){
             return res.sendStatus(Statuses.NOT_FOUND)
         }
-        const isUpdated = await commentsService.updateLike(req.params.id, req.user?.id!, req.body);
+        const isUpdated = await this.commentsService.updateLike(req.params.id, req.user?.id!, req.body);
         if(!isUpdated){
             return res.sendStatus(Statuses.NOT_FOUND)
         }
         res.sendStatus(Statuses.NO_CONTENT)
     }
     async deleteComments(req:RequestWithParams<{id: string}>,res:Response){
-        const comment = await commentsQueryRepository.findById(req.params.id);
+        const comment = await this.commentsQueryRepository.findById(req.params.id);
         if(!comment){
             return res.sendStatus(Statuses.NOT_FOUND)
         }
         if(comment.commentatorInfo.userId !== req.user!.id){
             return res.sendStatus(Statuses.FORBIDDEN)
         }
-        const isDeleted = await commentsService.delete(req.params.id);
+        const isDeleted = await this.commentsService.delete(req.params.id);
         if(!isDeleted){
             return res.sendStatus(Statuses.NOT_FOUND)
         }

@@ -1,6 +1,6 @@
-import {CommentsLikeModel} from "./db";
-import {LikesCommentModel} from "../types/likes";
 import {HydratedDocument} from "mongoose";
+import {CommentsLikeModel} from "./db";
+import {LikesCommentModel, LikesCommentModelDTO} from "../types/likes";
 import {LikeStatus} from "../types/types";
 
 type LikesInfo = {
@@ -8,8 +8,8 @@ type LikesInfo = {
     commentId: string,
 }
 
-export const commentsLikesRepository = {
-    async create(newLike: LikesCommentModel): Promise<LikesCommentModel> {
+export class CommentsLikesRepository {
+    async create(newLike: LikesCommentModelDTO): Promise<LikesCommentModel> {
         const newDoc = await new CommentsLikeModel(newLike)
         await this.save(newDoc);
         return {
@@ -17,18 +17,20 @@ export const commentsLikesRepository = {
             commentId: newDoc.commentId,
             myStatus: newDoc.myStatus
         }
-    },
+    }
     async updateLike(likeInfo: LikesInfo, myStatus: LikeStatus): Promise<boolean>{
         const doc = await CommentsLikeModel.findOne(likeInfo)
         if(!doc) return false;
         doc.myStatus = myStatus;
         await this.save(doc);
         return true;
-    },
+    }
     async save(model: HydratedDocument<LikesCommentModel>): Promise<void> {
         await model.save()
-    },
+    }
     async deleteAll(): Promise<void>{
         await CommentsLikeModel.deleteMany({})
     }
 }
+
+export const commentsLikesRepository = new CommentsLikesRepository()

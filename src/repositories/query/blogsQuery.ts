@@ -12,7 +12,7 @@ export type QueryBlogs = {
     pageSize: number
 }
 
-export const blogsQueryRepository = {
+export class BlogsQueryRepository {
     async getAll(query: QueryBlogs): Promise<Paginator<BlogsViewModel>> {
         const {searchNameTerm, sortBy, sortDirection, pageNumber, pageSize} = query;
         const sortNumber = getSortNumber(sortDirection);
@@ -26,8 +26,10 @@ export const blogsQueryRepository = {
             .limit(pageSize)
             .lean()
         return transformPagination<BlogsViewModel>(data,pageSize,pageNumber,count)
-    },
+    }
     async findById(id: string): Promise<BlogsViewModel | null> {
         return BlogsModel.findOne({id},{_id:0,__v:0}).lean()
-    },
+    }
 }
+
+export const blogsQueryRepository = new BlogsQueryRepository()

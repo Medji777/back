@@ -1,13 +1,23 @@
-import {postsRepository} from "../repositories";
 import {BlogName, PostInputModel, PostsDBModel, PostsViewModel} from "../types/posts";
-import {postsQueryRepository} from "../repositories/query";
-import {postsLikesRepository} from "../repositories/postsLikes-db";
+import {LikeCalculateService} from "../application/likeCalculate.service";
+import {PostsRepository, PostsLikesRepository} from "../repositories";
+import {PostsQueryRepository, PostsLikeQueryRepository} from "../repositories/query";
 import {LikeStatus} from "../types/types";
-import {postsLikeQueryRepository} from "../repositories/query/postsLikeQuery";
-import {likeCalculateService} from "../application/likeCalculate.service";
-import {LikeInputModel} from "../types/likes";
+import {LikeInputModel, LikesPostsModelDTO} from "../types/likes";
 
-class PostsService {
+export class PostsService {
+    private postsQueryRepository: PostsQueryRepository;
+    private postsRepository: PostsRepository;
+    private postsLikeQueryRepository: PostsLikeQueryRepository;
+    private postsLikesRepository: PostsLikesRepository;
+    private likeCalculateService: LikeCalculateService;
+    constructor() {
+        this.likeCalculateService = new LikeCalculateService()
+        this.postsRepository = new PostsRepository()
+        this.postsLikesRepository = new PostsLikesRepository()
+        this.postsQueryRepository = new PostsQueryRepository()
+        this.postsLikeQueryRepository = new PostsLikeQueryRepository()
+    }
     async create(payload:PostInputModel & BlogName): Promise<PostsViewModel>{
         const date = new Date();
         const newPost = {
@@ -23,34 +33,30 @@ class PostsService {
                 dislikesCount: 0
             }
         }
-        const post = await postsRepository.create(newPost)
+        const post = await this.postsRepository.create(newPost)
         return this._likeCreateTransform(post)
     }
     async update(id: string,payload:PostInputModel): Promise<boolean>{
-        return postsRepository.update(id,payload);
+        return this.postsRepository.update(id,payload);
     }
     async delete(id: string): Promise<boolean>{
-        return postsRepository.deleteById(id)
+        return this.postsRepository.deleteById(id)
     }
     async updateStatusLike(userId: string, login: string, postId: string, newStatus: LikeInputModel ): Promise<boolean> {
         let lastStatus: LikeStatus = LikeStatus.None
-        const post = await postsQueryRepository.findById(postId)
+        const post = await this.postsQueryRepository.findById(postId)
         if (!post) return false
-        const likeInfo = await postsLikeQueryRepository.getLike(userId, postId)
+        const likeInfo = await this.postsLikeQueryRepository.getLike(userId, postId)
         if (!likeInfo) {
-            const newLike = {
-                userId,
-                postId,
-                myStatus: newStatus.likeStatus,
-                login,
-                addedAt: new Date().toISOString()
-            }
-            await postsLikesRepository.create(newLike)
+            const newLike = new LikesPostsModelDTO(
+                userId,postId,login,new Date().toISOString(),newStatus.likeStatus
+            )
+            await this.postsLikesRepository.create(newLike)
         } else {
-            await postsLikesRepository.update(userId, postId, newStatus.likeStatus)
+            await this.postsLikesRepository.update(userId, postId, newStatus.likeStatus)
             lastStatus = likeInfo.myStatus
         }
-        const newLikesInfo = await likeCalculateService.getUpdatedLike(
+        const newLikesInfo = await this.likeCalculateService.getUpdatedLike(
             {
                 likesCount: post.extendedLikesInfo.likesCount,
                 dislikesCount: post.extendedLikesInfo.dislikesCount
@@ -58,7 +64,7 @@ class PostsService {
             lastStatus,
             newStatus.likeStatus
         )
-        return await postsRepository.updateLikeInPost(post.id, newLikesInfo)
+        return await this.postsRepository.updateLikeInPost(post.id, newLikesInfo)
     }
     private _likeCreateTransform(post: PostsDBModel): PostsViewModel{
         return {
@@ -71,5 +77,3 @@ class PostsService {
         }
     }
 }
-
-export const postsService = new PostsService()

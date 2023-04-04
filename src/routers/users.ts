@@ -18,7 +18,12 @@ const validateQuery = validateMiddleware([
     ...validateSearchEmailTermQuery
 ])
 
-usersRouter.get('/',basicAuthMiddleware,validateQuery,usersController.getUsers)
-usersRouter.post('/',basicAuthMiddleware,sanitizationBodyUser,validateBodyUser,usersController.createUser)
-usersRouter.delete('/:id',basicAuthMiddleware,usersController.deleteUser)
-usersRouter.get('/tests',basicAuthMiddleware,usersController.getUsersTest)
+usersRouter.get('/',basicAuthMiddleware,validateQuery,usersController.getUsers.bind(usersController))
+usersRouter.post('/',
+    basicAuthMiddleware,
+    sanitizationBodyUser,
+    validateBodyUser,
+    usersController.createUser.bind(usersController)
+)
+usersRouter.delete('/:id',basicAuthMiddleware,usersController.deleteUser.bind(usersController))
+usersRouter.get('/tests',basicAuthMiddleware,usersController.getUsersTest.bind(usersController))

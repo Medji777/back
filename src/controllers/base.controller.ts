@@ -1,16 +1,20 @@
 import {Request, Response} from "express";
-import {videosRepository} from "../repositories";
 import {Statuses} from "../types/types";
 import {bodyFieldValidator} from "../validations";
 import {CreateVideoInputModel} from "../types/videos";
+import {VideosRepository} from "../repositories";
 
 class VideoController {
+    private videosRepository: VideosRepository;
+    constructor() {
+        this.videosRepository = new VideosRepository()
+    }
     async getVideos(req: Request,res: Response){
-        const videos = await videosRepository.getAll();
+        const videos = await this.videosRepository.getAll();
         res.status(Statuses.OK).send(videos)
     }
     async getVideoById(req: Request,res: Response){
-        const video = await videosRepository.findById(+req.params.id);
+        const video = await this.videosRepository.findById(+req.params.id);
         if(!video) {
             return res.sendStatus(Statuses.NOT_FOUND)
         }
@@ -23,7 +27,7 @@ class VideoController {
             return res.status(Statuses.BAD_REQUEST).send(errors)
         }
         const payload: CreateVideoInputModel = {title,author,availableResolutions}
-        const video = await videosRepository.createVideo(payload);
+        const video = await this.videosRepository.createVideo(payload);
         res.status(Statuses.CREATED).send(video)
     }
     async updateVideo(req: Request,res: Response){
@@ -32,14 +36,14 @@ class VideoController {
         if(!!errors){
             return res.status(Statuses.BAD_REQUEST).send(errors)
         }
-        const isUpdated = await videosRepository.updateVideo(videoId,req.body);
+        const isUpdated = await this.videosRepository.updateVideo(videoId,req.body);
         if(!isUpdated){
             return res.sendStatus(Statuses.NOT_FOUND)
         }
         res.sendStatus(Statuses.NO_CONTENT)
     }
     async deleteVideo(req: Request,res: Response){
-        const isDeleted = await videosRepository.deleteVideo(+req.params.id)
+        const isDeleted = await this.videosRepository.deleteVideo(+req.params.id)
         if(!isDeleted){
             return res.sendStatus(Statuses.NOT_FOUND)
         }

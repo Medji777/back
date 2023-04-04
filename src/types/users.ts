@@ -38,3 +38,7 @@ export type PasswordConfirmUserDataModel = {
 }
 
 export type PasswordConfirmUserModel = EmailConfirmUserModel
+
+export class UserModelDTO {
+    constructor() {}
+}

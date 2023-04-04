@@ -1,7 +1,6 @@
 import {Request, Response} from "express";
 import {randomUUID} from "crypto";
-import {authService,usersService,securityService} from "../domain";
-import {jwtService} from "../application/jwt.service";
+import {JwtService} from "../application/jwt.service";
 import {RequestWithBody, Statuses} from "../types/types";
 import {
     LoginInputModel,
@@ -13,11 +12,24 @@ import {
     RegistrationEmailResending
 } from "../types/auth";
 import {UserInputModel} from "../types/users";
-import {usersQueryRepository} from "../repositories/query/usersQuery";
+import {UsersQueryRepository} from "../repositories/query";
+import {AuthService, SecurityService, UsersService} from "../domain";
 
 class AuthController {
+    private jwtService: JwtService;
+    private securityService: SecurityService;
+    private authService: AuthService;
+    private usersService: UsersService;
+    private usersQueryRepository: UsersQueryRepository;
+    constructor() {
+        this.jwtService = new JwtService()
+        this.securityService = new SecurityService()
+        this.authService = new AuthService()
+        this.usersService = new UsersService()
+        this.usersQueryRepository = new UsersQueryRepository()
+    }
     async login(req:RequestWithBody<LoginInputModel>,res:Response){
-        const checkData = await usersService.checkCredentials(req.body.loginOrEmail,req.body.password);
+        const checkData = await this.usersService.checkCredentials(req.body.loginOrEmail,req.body.password);
         if(!checkData.user || !checkData.check){
             return res.sendStatus(Statuses.UN_AUTHORIZED)
         }
@@ -25,11 +37,11 @@ class AuthController {
             return res.sendStatus(Statuses.UN_AUTHORIZED)
         }
         const deviceId = randomUUID();
-        const accessTokenData: LoginSuccessViewModel = await jwtService.createAccessToken(checkData.user);
-        const refreshTokenData: RefreshTypeModel = await jwtService.createRefreshToken(checkData.user,deviceId);
+        const accessTokenData: LoginSuccessViewModel = await this.jwtService.createAccessToken(checkData.user);
+        const refreshTokenData: RefreshTypeModel = await this.jwtService.createRefreshToken(checkData.user,deviceId);
 
         const deviceName = req.headers?.["user-agent"] || 'device';
-        await securityService.createSession(refreshTokenData.refreshToken,deviceName,req.ip);
+        await this.securityService.createSession(refreshTokenData.refreshToken,deviceName,req.ip);
 
         res
             .cookie('refreshToken',refreshTokenData.refreshToken,{
@@ -39,7 +51,7 @@ class AuthController {
             .status(Statuses.OK).send(accessTokenData)
     }
     async logout(req: Request, res: Response){
-        const isDeleted = await securityService.deleteSessionByDeviceId(req.deviceId!)
+        const isDeleted = await this.securityService.deleteSessionByDeviceId(req.deviceId!)
         if (!isDeleted) {
             return res.sendStatus(Statuses.BAD_REQUEST)
         }
@@ -54,36 +66,36 @@ class AuthController {
         res.status(Statuses.OK).send(profile)
     }
     async registration(req: RequestWithBody<UserInputModel>,res: Response){
-        await authService.saveUser(req.body)
+        await this.authService.saveUser(req.body)
         res.sendStatus(Statuses.NO_CONTENT)
     }
     async confirmation(req: RequestWithBody<RegistrationConfirmationCodeModel>,res: Response){
-        const isConfirmed = await authService.confirmUser(req.body)
+        const isConfirmed = await this.authService.confirmUser(req.body)
         if(!isConfirmed){
             return res.sendStatus(Statuses.BAD_REQUEST)
         }
         res.sendStatus(Statuses.NO_CONTENT)
     }
     async emailResending(req: RequestWithBody<RegistrationEmailResending>,res: Response){
-        const isResend = await authService.resendingCode(req.body.email)
+        const isResend = await this.authService.resendingCode(req.body.email)
         if(!isResend){
             return res.sendStatus(Statuses.BAD_REQUEST)
         }
         res.sendStatus(Statuses.NO_CONTENT)
     }
     async passwordRecovery(req: RequestWithBody<PasswordRecoveryInputModel>,res: Response){
-        const user = await usersQueryRepository.getUserByLoginOrEmail(req.body.email);
+        const user = await this.usersQueryRepository.getUserByLoginOrEmail(req.body.email);
         if(!user){
             return res.sendStatus(Statuses.NO_CONTENT)
         }
-        const isSend = await authService.recoveryPassword(req.body.email)
+        const isSend = await this.authService.recoveryPassword(req.body.email)
         if(!isSend){
             return res.sendStatus(Statuses.BAD_REQUEST)
         }
         res.sendStatus(Statuses.NO_CONTENT)
     }
     async newPassword(req: RequestWithBody<NewPasswordRecoveryInputModel>,res: Response){
-        const isUpdated = await authService.confirmRecoveryPassword(req.body);
+        const isUpdated = await this.authService.confirmRecoveryPassword(req.body);
         if(!isUpdated){
             return res.sendStatus(Statuses.BAD_REQUEST)
         }
@@ -91,9 +103,9 @@ class AuthController {
     }
     async refreshToken(req: Request, res: Response){
         const deviceId = req.deviceId!;
-        const accessTokenData: LoginSuccessViewModel = await jwtService.createAccessToken(req.user!);
-        const refreshTokenData: RefreshTypeModel = await jwtService.createRefreshToken(req.user!,deviceId);
-        const isUpdated = await securityService.updateLastActiveDataSession(refreshTokenData.refreshToken);
+        const accessTokenData: LoginSuccessViewModel = await this.jwtService.createAccessToken(req.user!);
+        const refreshTokenData: RefreshTypeModel = await this.jwtService.createRefreshToken(req.user!,deviceId);
+        const isUpdated = await this.securityService.updateLastActiveDataSession(refreshTokenData.refreshToken);
         if(!isUpdated){
             return res.sendStatus(Statuses.BAD_REQUEST)
         }
