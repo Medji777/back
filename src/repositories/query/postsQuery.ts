@@ -1,3 +1,4 @@
+import {inject, injectable} from "inversify";
 import {HydratedDocument} from "mongoose";
 import {PostsModel} from "../db";
 import {PostsLikeQueryRepository} from "./postsLikeQuery";
@@ -13,8 +14,11 @@ export type QueryPosts = {
     pageSize: number
 }
 
+@injectable()
 export class PostsQueryRepository {
-    constructor(protected postsLikeQueryRepository: PostsLikeQueryRepository) {}
+    constructor(
+        @inject(PostsLikeQueryRepository) protected postsLikeQueryRepository: PostsLikeQueryRepository
+    ) {}
     async getAll(query: QueryPosts, userId?: string): Promise<Paginator<PostsViewModel>> {
         const {sortBy,sortDirection,pageNumber,pageSize} = query;
         const sortNumber = getSortNumber(sortDirection);

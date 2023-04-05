@@ -1,10 +1,15 @@
 import {NextFunction, Request, Response} from "express";
 import {settings} from "../settings";
 import {Statuses} from "../types/types";
-import {
-    securityService, jwtService,
-    usersQueryRepository
-} from "../composition-root";
+import {container} from "../composition-root";
+import {SecurityService} from "../domain";
+import {JwtService} from "../application/jwt.service";
+import {BlogsQueryRepository, UsersQueryRepository} from "../repositories/query";
+
+const securityService = container.get(SecurityService)
+const jwtService = container.get(JwtService)
+export const usersQueryRepository = container.get(UsersQueryRepository)
+export const blogsQueryRepository = container.get(BlogsQueryRepository)
 
 const authData = {login: settings.BASIC_LOGIN, password: settings.BASIC_PASS} as const
 

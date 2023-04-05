@@ -1,3 +1,4 @@
+import {injectable} from "inversify";
 import {UsersModel} from "../db";
 import {Paginator, SortDirections} from "../../types/types";
 import {getSortNumber} from "../../utils/sort";
@@ -15,6 +16,7 @@ export type QueryUsers = {
 
 const projectionFilter = {_id: 0, passwordHash: 0, emailConfirmation: 0, passwordConfirmation: 0, __v: 0}
 
+@injectable()
 export class UsersQueryRepository {
     async getAll(query: QueryUsers): Promise<Paginator<UserViewModel>>{
         const arrayFilters = []

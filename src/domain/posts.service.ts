@@ -1,3 +1,4 @@
+import {inject, injectable} from "inversify";
 import {BlogName, PostInputModel, PostsDBModel, PostsViewModel} from "../types/posts";
 import {LikeCalculateService} from "../application/likeCalculate.service";
 import {PostsRepository, PostsLikesRepository} from "../repositories";
@@ -5,13 +6,14 @@ import {PostsQueryRepository, PostsLikeQueryRepository} from "../repositories/qu
 import {LikeStatus} from "../types/types";
 import {LikeInputModel, LikesPostsModelDTO} from "../types/likes";
 
+@injectable()
 export class PostsService {
     constructor(
-        protected likeCalculateService: LikeCalculateService,
-        protected postsRepository: PostsRepository,
-        protected postsLikesRepository: PostsLikesRepository,
-        protected postsQueryRepository: PostsQueryRepository,
-        protected postsLikeQueryRepository: PostsLikeQueryRepository
+        @inject(LikeCalculateService) protected likeCalculateService: LikeCalculateService,
+        @inject(PostsRepository) protected postsRepository: PostsRepository,
+        @inject(PostsLikesRepository) protected postsLikesRepository: PostsLikesRepository,
+        @inject(PostsQueryRepository) protected postsQueryRepository: PostsQueryRepository,
+        @inject(PostsLikeQueryRepository) protected postsLikeQueryRepository: PostsLikeQueryRepository
     ) {}
     async create(payload:PostInputModel & BlogName): Promise<PostsViewModel>{
         const date = new Date();

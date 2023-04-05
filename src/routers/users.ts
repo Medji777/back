@@ -1,5 +1,6 @@
 import {Router} from "express";
-import {usersController} from "../composition-root";
+import {container} from "../composition-root";
+import {UsersController} from "../controllers";
 import {basicAuthMiddleware, sanitizationBody, validateMiddleware} from "../middlewares";
 import {createSearchTermQuery, validatePaginationQuery, validateSortQuery} from "../validations/query";
 import {SearchTermQuery} from "../types/types";
@@ -17,6 +18,8 @@ const validateQuery = validateMiddleware([
     ...validateSearchLoginTermQuery,
     ...validateSearchEmailTermQuery
 ])
+
+const usersController = container.resolve(UsersController)
 
 usersRouter.get('/',basicAuthMiddleware,validateQuery,usersController.getUsers.bind(usersController))
 usersRouter.post('/',

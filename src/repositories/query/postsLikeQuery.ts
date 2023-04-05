@@ -1,8 +1,10 @@
+import {injectable} from "inversify";
 import {HydratedDocument} from "mongoose";
 import {PostsLikeModel} from "../db";
 import {LikesPostsExtendedViewModel, LikesPostsModel} from "../../types/likes";
 import {LikeStatus} from "../../types/types";
 
+@injectable()
 export class PostsLikeQueryRepository {
     async getLastThreeLikes(postId: string): Promise<LikesPostsExtendedViewModel[]> {
         const desc = -1

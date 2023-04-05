@@ -1,3 +1,4 @@
+import {inject, injectable} from "inversify";
 import {isEqual} from "date-fns";
 import {JwtService} from "../application/jwt.service";
 import {settings} from "../settings";
@@ -6,11 +7,12 @@ import {DeviceViewModel} from "../types/security";
 import {SecurityQueryRepository} from "../repositories/query/securityQuery";
 import {SecurityRepository} from "../repositories";
 
+@injectable()
 export class SecurityService {
     constructor(
-        protected jwtService: JwtService,
-        protected securityRepository: SecurityRepository,
-        protected securityQueryRepository: SecurityQueryRepository
+        @inject(JwtService) protected jwtService: JwtService,
+        @inject(SecurityRepository) protected securityRepository: SecurityRepository,
+        @inject(SecurityQueryRepository) protected securityQueryRepository: SecurityQueryRepository
     ) {}
     async createSession(refreshToken: string, title: string, ip: string): Promise<DeviceViewModel> {
         const meta = await this.jwtService.getJWTData<RefreshPayloadType>(refreshToken,settings.JWT_REFRESH_SECRET)

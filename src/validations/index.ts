@@ -2,7 +2,12 @@ import {body, ValidationChain} from "express-validator";
 import {APIErrorResult, FieldError, LikeStatus, Resolutions} from "../types/types";
 import {equalSize} from "../utils";
 import {validateMiddleware} from "../middlewares/validateMiddleware";
-import {blogsQueryRepository,usersQueryRepository} from '../composition-root'
+// import {container} from '../composition-root';
+// import {BlogsQueryRepository, UsersQueryRepository} from "../repositories/query";
+import {usersQueryRepository, blogsQueryRepository} from "../middlewares/auth";
+
+// const usersQueryRepository = new UsersQueryRepository()
+// const blogsQueryRepository = new BlogsQueryRepository()
 
 export const isNotValidString = (val:any,size:number=0):boolean => !val || typeof val !== 'string' || !val.trim() || (!size ? false : val.length > size);
 export const isNotValidResolution = (res:Array<Resolutions>) => !res.length || !equalSize(res) || !res.every((v:Resolutions)=>Resolutions[v]);

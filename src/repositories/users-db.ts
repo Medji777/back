@@ -1,3 +1,4 @@
+import {injectable} from "inversify";
 import {UsersModel} from "./db";
 import {
     UserViewModel,
@@ -6,6 +7,7 @@ import {
     PasswordConfirmUserModel, PasswordHash
 } from "../types/users";
 
+@injectable()
 export class UsersRepository {
     async create(payload: UserModel): Promise<UserViewModel>{
         await UsersModel.create({...payload})

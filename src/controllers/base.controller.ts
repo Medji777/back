@@ -1,11 +1,15 @@
 import {Request, Response} from "express";
+import {inject, injectable} from "inversify";
 import {Statuses} from "../types/types";
 import {bodyFieldValidator} from "../validations";
 import {CreateVideoInputModel} from "../types/videos";
 import {VideosRepository} from "../repositories";
 
+@injectable()
 export class VideoController {
-    constructor(protected videosRepository: VideosRepository) {}
+    constructor(
+        @inject(VideosRepository) protected videosRepository: VideosRepository
+    ) {}
     async getVideos(req: Request,res: Response){
         const videos = await this.videosRepository.getAll();
         res.status(Statuses.OK).send(videos)

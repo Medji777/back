@@ -1,6 +1,8 @@
+import {injectable} from "inversify";
 import {VideoModel} from "./db";
 import {CreateVideoInputModel, IUpdateVideoInputModel, IVideo} from "../types/videos";
 
+@injectable()
 export class VideosRepository {
     async getAll(): Promise<IVideo[]> {
         return VideoModel.find({},{_id:0,__v:0}).lean()

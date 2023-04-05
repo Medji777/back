@@ -1,3 +1,4 @@
+import {injectable} from "inversify";
 import {HydratedDocument} from "mongoose";
 import {CommentsLikeModel} from "./db";
 import {LikesCommentModel, LikesCommentModelDTO} from "../types/likes";
@@ -8,6 +9,7 @@ type LikesInfo = {
     commentId: string,
 }
 
+@injectable()
 export class CommentsLikesRepository {
     async create(newLike: LikesCommentModelDTO): Promise<LikesCommentModel> {
         const newDoc = await new CommentsLikeModel(newLike)

@@ -2,9 +2,11 @@ import {HydratedDocument} from "mongoose";
 import {BlogsModel} from "./db";
 import {BlogsViewModel, BlogsViewModelDTO} from '../types/blogs'
 import {BlogsModelMethods} from "./schema/blogs";
+import {injectable} from "inversify";
 
 type BlogDocument = HydratedDocument<BlogsViewModel, BlogsModelMethods>
 
+@injectable()
 export class BlogsRepository {
     async create(payload: BlogsViewModelDTO): Promise<BlogDocument> {
         return new BlogsModel(payload)

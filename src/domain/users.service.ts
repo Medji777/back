@@ -1,3 +1,4 @@
+import {inject, injectable} from "inversify";
 import bcrypt from "bcrypt"
 import {
     EmailConfirmUserModel,
@@ -15,10 +16,11 @@ type Cred = {
     user: UserModel | null
 }
 
+@injectable()
 export class UsersService {
     constructor(
-        protected usersRepository: UsersRepository,
-        protected usersQueryRepository: UsersQueryRepository
+        @inject(UsersRepository) protected usersRepository: UsersRepository,
+        @inject(UsersQueryRepository) protected usersQueryRepository: UsersQueryRepository
     ) {}
     async create(payload: UserModel): Promise<UserViewModel>{
         return this.usersRepository.create(payload)

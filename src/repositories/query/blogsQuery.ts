@@ -1,3 +1,4 @@
+import {injectable} from "inversify";
 import {BlogsViewModel} from "../../types/blogs";
 import {BlogsModel} from "../db";
 import {Paginator, SortDirections} from "../../types/types";
@@ -12,6 +13,7 @@ export type QueryBlogs = {
     pageSize: number
 }
 
+@injectable()
 export class BlogsQueryRepository {
     async getAll(query: QueryBlogs): Promise<Paginator<BlogsViewModel>> {
         const {searchNameTerm, sortBy, sortDirection, pageNumber, pageSize} = query;

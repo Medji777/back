@@ -1,3 +1,4 @@
+import {injectable} from "inversify";
 import nodemailer from "nodemailer"
 import {settings} from "../settings"
 
@@ -7,6 +8,7 @@ type EmailBody = {
     message: string
 }
 
+@injectable()
 export class EmailAdapter {
     async send(payload: EmailBody){
         const transport = nodemailer.createTransport({

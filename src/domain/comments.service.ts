@@ -1,3 +1,4 @@
+import {inject, injectable} from "inversify";
 import {CommentatorInfo, CommentDBModel, CommentInputModel, CommentViewModel, PostId} from "../types/comments";
 import {LikeCalculateService} from "../application/likeCalculate.service";
 import {CommentsQueryRepository, CommentsLikeQueryRepository} from "../repositories/query";
@@ -7,13 +8,14 @@ import {LikeInputModel, LikesCommentModelDTO} from "../types/likes";
 
 type CommentPayload = CommentInputModel & CommentatorInfo & PostId
 
+@injectable()
 export class CommentsService {
     constructor(
-        protected likeCalculateService: LikeCalculateService,
-        protected commentsRepository: CommentsRepository,
-        protected commentsLikesRepository: CommentsLikesRepository,
-        protected commentsQueryRepository: CommentsQueryRepository,
-        protected commentsLikeQueryRepository: CommentsLikeQueryRepository
+        @inject(LikeCalculateService) protected likeCalculateService: LikeCalculateService,
+        @inject(CommentsRepository) protected commentsRepository: CommentsRepository,
+        @inject(CommentsLikesRepository) protected commentsLikesRepository: CommentsLikesRepository,
+        @inject(CommentsQueryRepository) protected commentsQueryRepository: CommentsQueryRepository,
+        @inject(CommentsLikeQueryRepository) protected commentsLikeQueryRepository: CommentsLikeQueryRepository
     ) {}
     async create(payload: CommentPayload): Promise<CommentViewModel>{
         const date = new Date();

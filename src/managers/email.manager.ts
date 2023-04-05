@@ -1,9 +1,11 @@
+import {inject, injectable} from "inversify";
 import {EmailConfirmUserDataModel, PasswordConfirmUserDataModel, UserModel} from "../types/users";
 import {EmailAdapter} from "../adapters/email.adapter";
 import {settings} from "../settings";
 
+@injectable()
 export class EmailManager {
-    constructor(protected emailAdapter: EmailAdapter) {}
+    constructor(@inject(EmailAdapter) protected emailAdapter: EmailAdapter) {}
     async sendCodeConfirmationMessage(user: UserModel | EmailConfirmUserDataModel & {email: string}, action: string): Promise<void>{
         const code = user.emailConfirmation.confirmationCode
         await this.emailAdapter.send({

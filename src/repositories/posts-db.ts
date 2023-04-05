@@ -1,8 +1,10 @@
+import {injectable} from "inversify";
 import {HydratedDocument} from "mongoose";
 import {PostsModel} from "./db";
 import {PostInputModel, PostsDBModel} from '../types/posts'
 import {LikeInfoModel} from "../types/likes";
 
+@injectable()
 export class PostsRepository {
     async create(payload: PostsDBModel): Promise<PostsDBModel> {
         const doc = new PostsModel(payload)

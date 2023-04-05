@@ -1,17 +1,19 @@
-import {EmailConfirmUserModel, PasswordConfirmUserModel, UserInputModel, UserViewModel} from "../types/users";
-import {UsersService} from "./users.service";
-import {EmailManager} from "../managers/email.manager";
+import {inject, injectable} from "inversify";
 import {randomUUID as uuidV4} from "crypto";
 import add from "date-fns/add";
 import bcrypt from "bcrypt";
+import {EmailConfirmUserModel, PasswordConfirmUserModel, UserInputModel, UserViewModel} from "../types/users";
+import {UsersService} from "./users.service";
+import {EmailManager} from "../managers/email.manager";
 import {NewPasswordRecoveryInputModel, RegistrationConfirmationCodeModel} from "../types/auth";
 import {UsersQueryRepository} from "../repositories/query";
 
+@injectable()
 export class AuthService {
     constructor(
-        protected emailManager: EmailManager,
-        protected usersService: UsersService,
-        protected usersQueryRepository: UsersQueryRepository
+        @inject(EmailManager) protected emailManager: EmailManager,
+        @inject(UsersService) protected usersService: UsersService,
+        @inject(UsersQueryRepository) protected usersQueryRepository: UsersQueryRepository
     ) {}
     async saveUser(payload: UserInputModel): Promise<UserViewModel | null>{
         const passwordHash = await this._createPasswordHash(payload.password);

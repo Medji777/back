@@ -1,4 +1,5 @@
 import {Request, Response} from "express";
+import {inject, injectable} from "inversify";
 import {
     QueryPosts,
     QueryComments,
@@ -18,13 +19,14 @@ import {CommentInputModel, CommentViewModel} from "../types/comments";
 import {LikeInputModel} from "../types/likes";
 import {PostsService, CommentsService} from "../domain";
 
+@injectable()
 export class PostsController {
     constructor(
-        protected postsService: PostsService,
-        protected commentsService: CommentsService,
-        protected postsQueryRepository: PostsQueryRepository,
-        protected blogsQueryRepository: BlogsQueryRepository,
-        protected commentsQueryRepository: CommentsQueryRepository
+        @inject(PostsService) protected postsService: PostsService,
+        @inject(CommentsService) protected commentsService: CommentsService,
+        @inject(PostsQueryRepository) protected postsQueryRepository: PostsQueryRepository,
+        @inject(BlogsQueryRepository) protected blogsQueryRepository: BlogsQueryRepository,
+        @inject(CommentsQueryRepository) protected commentsQueryRepository: CommentsQueryRepository
     ) {}
     async getPosts(req: Request, res: Response<Paginator<PostsViewModel>>){
         const posts = await this.postsQueryRepository.getAll(req.query as unknown as QueryPosts, req.user?.id)

@@ -1,14 +1,16 @@
 import {Response} from "express";
+import {inject, injectable} from "inversify";
 import {RequestWithParams, RequestWithParamsAndBody, Statuses} from "../types/types";
 import {CommentInputModel, CommentViewModel} from "../types/comments";
 import {LikeInputModel} from "../types/likes";
 import {CommentsQueryRepository} from "../repositories/query";
 import {CommentsService} from "../domain";
 
+@injectable()
 export class CommentsController {
     constructor(
-        protected commentsService: CommentsService,
-        protected commentsQueryRepository: CommentsQueryRepository
+        @inject(CommentsService) protected commentsService: CommentsService,
+        @inject(CommentsQueryRepository) protected commentsQueryRepository: CommentsQueryRepository
     ) {}
     async getComments(req:RequestWithParams<{id: string}>,res:Response<CommentViewModel | Error>){
         try {

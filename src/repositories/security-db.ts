@@ -1,6 +1,8 @@
+import {injectable} from "inversify";
 import {SessionsModel} from "./db";
 import {DeviceModel, DeviceViewModel} from "../types/security";
 
+@injectable()
 export class SecurityRepository {
     async createSession(payload: DeviceModel): Promise<DeviceViewModel>{
         await SessionsModel.create({...payload});

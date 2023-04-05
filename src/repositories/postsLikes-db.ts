@@ -1,7 +1,9 @@
+import {injectable} from "inversify";
 import {PostsLikeModel} from "./db";
 import {LikeStatus} from "../types/types";
 import {LikesPostsModelDTO, MyStatus} from "../types/likes";
 
+@injectable()
 export class PostsLikesRepository {
     async create(newLike: LikesPostsModelDTO): Promise<MyStatus> {
         const doc = new PostsLikeModel(newLike)

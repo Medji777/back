@@ -1,3 +1,4 @@
+import {inject, injectable} from "inversify";
 import {HydratedDocument} from "mongoose";
 import {CommentsModel} from "../db";
 import {CommentsLikeQueryRepository} from "./commentsLikeQuery";
@@ -9,8 +10,11 @@ import {LikeStatus, Paginator} from "../../types/types";
 
 export type QueryComments = QueryPosts;
 
+@injectable()
 export class CommentsQueryRepository {
-    constructor(protected commentsLikeQueryRepository: CommentsLikeQueryRepository) {}
+    constructor(
+        @inject(CommentsLikeQueryRepository) protected commentsLikeQueryRepository: CommentsLikeQueryRepository
+    ) {}
     async findById(id: string, userId?: string): Promise<CommentViewModel | null>{
         const doc = await CommentsModel.findOne({id},{_id:0,postId:0,__v:0})
         if(!doc) return null

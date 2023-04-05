@@ -1,13 +1,15 @@
+import {inject, injectable} from "inversify";
 import {Request, Response} from "express";
 import {Paginator, RequestWithBody, RequestWithParams, Statuses} from "../types/types";
 import {UserInputModel, UserViewModel} from "../types/users";
 import {QueryUsers, UsersQueryRepository} from "../repositories/query";
 import {UsersService} from "../domain";
 
+@injectable()
 export class UsersController {
     constructor(
-        protected usersService: UsersService,
-        protected usersQueryRepository: UsersQueryRepository
+        @inject(UsersService) protected usersService: UsersService,
+        @inject(UsersQueryRepository) protected usersQueryRepository: UsersQueryRepository
     ) {}
     async getUsers(req: Request, res: Response<Paginator<UserViewModel>>){
         const users = await this.usersQueryRepository.getAll(req.query as unknown as QueryUsers)

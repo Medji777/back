@@ -1,12 +1,14 @@
 import {Request,Response} from "express"
+import {inject, injectable} from "inversify";
 import {SecurityQueryRepository} from "../repositories/query/securityQuery";
 import {RequestWithParams, Statuses} from "../types/types";
 import {SecurityService} from "../domain";
 
+@injectable()
 export class SecurityController {
     constructor(
-        protected securityService: SecurityService,
-        protected securityQueryRepository: SecurityQueryRepository
+        @inject(SecurityService) protected securityService: SecurityService,
+        @inject(SecurityQueryRepository) protected securityQueryRepository: SecurityQueryRepository
     ) {}
     async getDevices(req: Request, res: Response){
         const sessions = await this.securityQueryRepository.getAllActiveSessions(req.user!.id);

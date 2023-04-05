@@ -1,4 +1,5 @@
 import {Request, Response} from "express";
+import {inject, injectable} from "inversify";
 import {QueryBlogs} from "../repositories/query";
 import {BlogsService, PostsService} from "../domain";
 import {BlogsQueryRepository, PostsQueryRepository} from "../repositories/query";
@@ -13,13 +14,14 @@ import {
 import {BlogsInputModel, BlogsViewModel} from "../types/blogs";
 import {PostInputModel, PostsViewModel} from "../types/posts";
 
+@injectable()
 export class BlogsController {
     constructor(
-        protected blogsService: BlogsService,
-        protected postsService: PostsService,
-        protected blogsQueryRepository: BlogsQueryRepository,
-        protected postsQueryRepository: PostsQueryRepository) {
-    }
+        @inject(BlogsService) protected blogsService: BlogsService,
+        @inject(PostsService) protected postsService: PostsService,
+        @inject(BlogsQueryRepository) protected blogsQueryRepository: BlogsQueryRepository,
+        @inject(PostsQueryRepository) protected postsQueryRepository: PostsQueryRepository
+    ) {}
     async getBlogs(req: Request,res: Response<Paginator<BlogsViewModel>>){
         const blogs = await this.blogsQueryRepository.getAll(req.query as unknown as QueryBlogs);
         res.status(Statuses.OK).send(blogs)

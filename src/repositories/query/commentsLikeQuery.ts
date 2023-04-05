@@ -1,7 +1,9 @@
+import {injectable} from "inversify";
 import {HydratedDocument} from "mongoose";
 import {CommentsLikeModel} from "../db";
 import {LikesCommentModel} from "../../types/likes";
 
+@injectable()
 export class CommentsLikeQueryRepository {
     async getLike(userId: string, commentId: string): Promise<LikesCommentModel | null> {
         const result = await CommentsLikeModel.findOne({userId, commentId})

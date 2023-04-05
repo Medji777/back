@@ -1,5 +1,6 @@
 import {Request, Response} from "express";
 import {randomUUID} from "crypto";
+import {inject, injectable} from "inversify";
 import {JwtService} from "../application/jwt.service";
 import {RequestWithBody, Statuses} from "../types/types";
 import {
@@ -15,13 +16,14 @@ import {UserInputModel} from "../types/users";
 import {UsersQueryRepository} from "../repositories/query";
 import {AuthService, SecurityService, UsersService} from "../domain";
 
+@injectable()
 export class AuthController {
     constructor(
-        protected jwtService: JwtService,
-        protected securityService: SecurityService,
-        protected authService: AuthService,
-        protected usersService: UsersService,
-        protected usersQueryRepository: UsersQueryRepository
+        @inject(JwtService) protected jwtService: JwtService,
+        @inject(SecurityService) protected securityService: SecurityService,
+        @inject(AuthService) protected authService: AuthService,
+        @inject(UsersService) protected usersService: UsersService,
+        @inject(UsersQueryRepository) protected usersQueryRepository: UsersQueryRepository
     ) {}
     async login(req:RequestWithBody<LoginInputModel>,res:Response){
         const checkData = await this.usersService.checkCredentials(req.body.loginOrEmail,req.body.password);

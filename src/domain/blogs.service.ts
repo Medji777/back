@@ -1,8 +1,12 @@
 import {BlogsInputModel, BlogsViewModel, BlogsViewModelDTO} from "../types/blogs";
 import {BlogsRepository} from "../repositories";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class BlogsService {
-    constructor(protected blogsRepository: BlogsRepository) {}
+    constructor(
+        @inject(BlogsRepository) protected blogsRepository: BlogsRepository
+    ) {}
     async create(payload: BlogsInputModel): Promise<BlogsViewModel>{
         const date = new Date();
         const newBlog = new BlogsViewModelDTO(

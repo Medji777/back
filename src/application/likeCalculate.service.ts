@@ -1,6 +1,8 @@
+import {injectable} from "inversify";
 import {LikeInfoModel} from "../types/likes";
 import {LikeStatus} from "../types/types";
 
+@injectable()
 export class LikeCalculateService {
     async getUpdatedLike(likesInfo: LikeInfoModel, lastStatus: LikeStatus, newStatus: LikeStatus): Promise<LikeInfoModel> {
         if (newStatus === LikeStatus.None && lastStatus === LikeStatus.Like) {

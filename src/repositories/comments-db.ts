@@ -1,8 +1,10 @@
+import {injectable} from "inversify";
 import {HydratedDocument} from "mongoose";
 import {CommentsModel} from "./db";
 import {CommentModel, CommentInputModel, CommentDBModel} from "../types/comments";
 import {LikeInfoModel} from "../types/likes";
 
+@injectable()
 export class CommentsRepository {
     async create(payload: CommentModel): Promise<CommentDBModel>{
         const doc = new CommentsModel(payload)

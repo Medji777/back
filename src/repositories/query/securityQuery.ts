@@ -1,6 +1,8 @@
+import {injectable} from "inversify";
 import {SessionsModel} from "../db";
 import {DeviceModel,DeviceViewModel} from "../../types/security";
 
+@injectable()
 export class SecurityQueryRepository {
     async getAllActiveSessions(userId: string): Promise<Array<DeviceViewModel>>{
         return SessionsModel

@@ -1,3 +1,4 @@
+import {injectable} from "inversify";
 import jwt, {JwtPayload} from "jsonwebtoken";
 import {settings} from "../settings";
 import {UserModel} from "../types/users";
@@ -13,6 +14,7 @@ type JWTResponse = {
     [key: string]: any;
 }
 
+@injectable()
 export class JwtService {
     async createAccessToken(user: UserModel): Promise<LoginSuccessViewModel>{
         const accessToken = jwt.sign({userId: user.id},settings.JWT_SECRET,{expiresIn: '1h'});
