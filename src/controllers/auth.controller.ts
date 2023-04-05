@@ -15,19 +15,14 @@ import {UserInputModel} from "../types/users";
 import {UsersQueryRepository} from "../repositories/query";
 import {AuthService, SecurityService, UsersService} from "../domain";
 
-class AuthController {
-    private jwtService: JwtService;
-    private securityService: SecurityService;
-    private authService: AuthService;
-    private usersService: UsersService;
-    private usersQueryRepository: UsersQueryRepository;
-    constructor() {
-        this.jwtService = new JwtService()
-        this.securityService = new SecurityService()
-        this.authService = new AuthService()
-        this.usersService = new UsersService()
-        this.usersQueryRepository = new UsersQueryRepository()
-    }
+export class AuthController {
+    constructor(
+        protected jwtService: JwtService,
+        protected securityService: SecurityService,
+        protected authService: AuthService,
+        protected usersService: UsersService,
+        protected usersQueryRepository: UsersQueryRepository
+    ) {}
     async login(req:RequestWithBody<LoginInputModel>,res:Response){
         const checkData = await this.usersService.checkCredentials(req.body.loginOrEmail,req.body.password);
         if(!checkData.user || !checkData.check){
@@ -117,5 +112,3 @@ class AuthController {
             .status(Statuses.OK).send(accessTokenData)
     }
 }
-
-export const authController = new AuthController()

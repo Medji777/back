@@ -16,12 +16,10 @@ type Cred = {
 }
 
 export class UsersService {
-    private usersRepository: UsersRepository;
-    private usersQueryRepository: UsersQueryRepository;
-    constructor() {
-        this.usersRepository = new UsersRepository()
-        this.usersQueryRepository = new UsersQueryRepository()
-    }
+    constructor(
+        protected usersRepository: UsersRepository,
+        protected usersQueryRepository: UsersQueryRepository
+    ) {}
     async create(payload: UserModel): Promise<UserViewModel>{
         return this.usersRepository.create(payload)
     }

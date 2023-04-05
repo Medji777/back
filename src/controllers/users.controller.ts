@@ -4,13 +4,11 @@ import {UserInputModel, UserViewModel} from "../types/users";
 import {QueryUsers, UsersQueryRepository} from "../repositories/query";
 import {UsersService} from "../domain";
 
-class UsersController {
-    private usersService: UsersService;
-    private usersQueryRepository: UsersQueryRepository;
-    constructor() {
-        this.usersService = new UsersService()
-        this.usersQueryRepository = new UsersQueryRepository()
-    }
+export class UsersController {
+    constructor(
+        protected usersService: UsersService,
+        protected usersQueryRepository: UsersQueryRepository
+    ) {}
     async getUsers(req: Request, res: Response<Paginator<UserViewModel>>){
         const users = await this.usersQueryRepository.getAll(req.query as unknown as QueryUsers)
         res.status(Statuses.OK).send(users)
@@ -34,5 +32,3 @@ class UsersController {
         res.status(Statuses.OK).send(user)
     }
 }
-
-export const usersController = new UsersController()

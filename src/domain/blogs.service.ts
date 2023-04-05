@@ -2,10 +2,7 @@ import {BlogsInputModel, BlogsViewModel, BlogsViewModelDTO} from "../types/blogs
 import {BlogsRepository} from "../repositories";
 
 export class BlogsService {
-    private blogsRepository: BlogsRepository;
-    constructor() {
-        this.blogsRepository = new BlogsRepository()
-    }
+    constructor(protected blogsRepository: BlogsRepository) {}
     async create(payload: BlogsInputModel): Promise<BlogsViewModel>{
         const date = new Date();
         const newBlog = new BlogsViewModelDTO(

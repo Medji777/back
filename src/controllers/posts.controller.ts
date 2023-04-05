@@ -18,19 +18,14 @@ import {CommentInputModel, CommentViewModel} from "../types/comments";
 import {LikeInputModel} from "../types/likes";
 import {PostsService, CommentsService} from "../domain";
 
-class PostsController {
-    private postsService: PostsService;
-    private blogsQueryRepository: BlogsQueryRepository;
-    private postsQueryRepository: PostsQueryRepository;
-    private commentsService: CommentsService;
-    private commentsQueryRepository: CommentsQueryRepository;
-    constructor() {
-        this.postsService = new PostsService()
-        this.commentsService = new CommentsService()
-        this.postsQueryRepository = new PostsQueryRepository()
-        this.blogsQueryRepository = new BlogsQueryRepository()
-        this.commentsQueryRepository = new CommentsQueryRepository()
-    }
+export class PostsController {
+    constructor(
+        protected postsService: PostsService,
+        protected commentsService: CommentsService,
+        protected postsQueryRepository: PostsQueryRepository,
+        protected blogsQueryRepository: BlogsQueryRepository,
+        protected commentsQueryRepository: CommentsQueryRepository
+    ) {}
     async getPosts(req: Request, res: Response<Paginator<PostsViewModel>>){
         const posts = await this.postsQueryRepository.getAll(req.query as unknown as QueryPosts, req.user?.id)
         res.status(Statuses.OK).send(posts)
@@ -103,5 +98,3 @@ class PostsController {
         res.sendStatus(Statuses.NO_CONTENT)
     }
 }
-
-export const postController = new PostsController();

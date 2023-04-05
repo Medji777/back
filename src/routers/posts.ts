@@ -6,7 +6,7 @@ import {
     sanitizationBody,
     validateMiddleware
 } from "../middlewares";
-import {postController} from "../controllers";
+import {postController} from "../composition-root";
 import {validateBodyPost, validatorBlogId, validatorBodyContent, validatorBodyLikes} from "../validations";
 import {validatePaginationQuery, validateSortQuery} from "../validations/query";
 
@@ -19,8 +19,8 @@ const validateQuery = validateMiddleware([
     ...validatePaginationQuery
 ])
 
-const validateBodyComment = validateMiddleware([validatorBodyContent])
-const validateBodyLike = validateMiddleware([validatorBodyLikes])
+const validateBodyComment = validatorBodyContent
+const validateBodyLike = validatorBodyLikes
 
 export const postsRouter = Router({});
 

@@ -3,13 +3,11 @@ import {SecurityQueryRepository} from "../repositories/query/securityQuery";
 import {RequestWithParams, Statuses} from "../types/types";
 import {SecurityService} from "../domain";
 
-class SecurityController {
-    private securityQueryRepository: SecurityQueryRepository;
-    private securityService: SecurityService;
-    constructor() {
-        this.securityService = new SecurityService()
-        this.securityQueryRepository = new SecurityQueryRepository()
-    }
+export class SecurityController {
+    constructor(
+        protected securityService: SecurityService,
+        protected securityQueryRepository: SecurityQueryRepository
+    ) {}
     async getDevices(req: Request, res: Response){
         const sessions = await this.securityQueryRepository.getAllActiveSessions(req.user!.id);
         res.status(Statuses.OK).send(sessions)
@@ -37,5 +35,3 @@ class SecurityController {
         res.sendStatus(Statuses.NO_CONTENT)
     }
 }
-
-export const securityController = new SecurityController()

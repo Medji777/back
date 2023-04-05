@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import {sanitizationBody} from "../middlewares";
-import {videoController} from "../controllers";
+import {videoController} from "../composition-root";
 
 export const baseRouter = Router({});
 

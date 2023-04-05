@@ -14,10 +14,7 @@ export type QueryPosts = {
 }
 
 export class PostsQueryRepository {
-    private postsLikeQueryRepository: PostsLikeQueryRepository;
-    constructor() {
-        this.postsLikeQueryRepository = new PostsLikeQueryRepository()
-    }
+    constructor(protected postsLikeQueryRepository: PostsLikeQueryRepository) {}
     async getAll(query: QueryPosts, userId?: string): Promise<Paginator<PostsViewModel>> {
         const {sortBy,sortDirection,pageNumber,pageSize} = query;
         const sortNumber = getSortNumber(sortDirection);
@@ -108,5 +105,3 @@ export class PostsQueryRepository {
         }
     }
 }
-
-export const postsQueryRepository = new PostsQueryRepository()

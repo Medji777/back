@@ -1,9 +1,10 @@
 import {NextFunction, Request, Response} from "express";
 import {settings} from "../settings";
 import {Statuses} from "../types/types";
-import {jwtService} from "../application/jwt.service";
-import {usersQueryRepository} from "../repositories/query/usersQuery";
-import {securityService} from "../domain";
+import {
+    securityService, jwtService,
+    usersQueryRepository
+} from "../composition-root";
 
 const authData = {login: settings.BASIC_LOGIN, password: settings.BASIC_PASS} as const
 

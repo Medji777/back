@@ -4,11 +4,8 @@ import {bodyFieldValidator} from "../validations";
 import {CreateVideoInputModel} from "../types/videos";
 import {VideosRepository} from "../repositories";
 
-class VideoController {
-    private videosRepository: VideosRepository;
-    constructor() {
-        this.videosRepository = new VideosRepository()
-    }
+export class VideoController {
+    constructor(protected videosRepository: VideosRepository) {}
     async getVideos(req: Request,res: Response){
         const videos = await this.videosRepository.getAll();
         res.status(Statuses.OK).send(videos)
@@ -50,5 +47,3 @@ class VideoController {
         res.sendStatus(Statuses.NO_CONTENT)
     }
 }
-
-export const videoController = new VideoController()

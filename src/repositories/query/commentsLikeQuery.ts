@@ -16,5 +16,3 @@ export class CommentsLikeQueryRepository {
         }
     }
 }
-
-export const commentsLikeQueryRepository = new CommentsLikeQueryRepository()

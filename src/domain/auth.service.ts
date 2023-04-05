@@ -8,14 +8,11 @@ import {NewPasswordRecoveryInputModel, RegistrationConfirmationCodeModel} from "
 import {UsersQueryRepository} from "../repositories/query";
 
 export class AuthService {
-    private usersService: UsersService;
-    private usersQueryRepository: UsersQueryRepository;
-    private emailManager: EmailManager;
-    constructor() {
-        this.emailManager = new EmailManager()
-        this.usersService = new UsersService()
-        this.usersQueryRepository = new UsersQueryRepository()
-    }
+    constructor(
+        protected emailManager: EmailManager,
+        protected usersService: UsersService,
+        protected usersQueryRepository: UsersQueryRepository
+    ) {}
     async saveUser(payload: UserInputModel): Promise<UserViewModel | null>{
         const passwordHash = await this._createPasswordHash(payload.password);
         const emailConfirmation = this._createConfirmation();

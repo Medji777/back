@@ -1,15 +1,15 @@
-import {blogsQueryRepository, QueryBlogs, BlogsQueryRepository} from "./blogsQuery";
-import {postsQueryRepository, QueryPosts, PostsQueryRepository} from "./postsQuery";
-import {commentsQueryRepository, QueryComments, CommentsQueryRepository} from "./commentsQuery";
-import {commentsLikeQueryRepository, CommentsLikeQueryRepository} from "./commentsLikeQuery";
+import {QueryBlogs, BlogsQueryRepository} from "./blogsQuery";
+import {QueryPosts, PostsQueryRepository} from "./postsQuery";
+import {QueryComments, CommentsQueryRepository} from "./commentsQuery";
+import {CommentsLikeQueryRepository} from "./commentsLikeQuery";
 import {PostsLikeQueryRepository} from './postsLikeQuery';
-import {UsersQueryRepository, QueryUsers} from './usersQuery';
+import {QueryUsers, UsersQueryRepository} from './usersQuery';
 
 export {
-    blogsQueryRepository, QueryBlogs, BlogsQueryRepository,
-    postsQueryRepository, QueryPosts, PostsQueryRepository,
+    QueryBlogs, BlogsQueryRepository,
+    QueryPosts, PostsQueryRepository,
     PostsLikeQueryRepository,
     UsersQueryRepository, QueryUsers,
-    commentsQueryRepository, QueryComments, CommentsQueryRepository,
-    commentsLikeQueryRepository, CommentsLikeQueryRepository
+    QueryComments, CommentsQueryRepository,
+    CommentsLikeQueryRepository
 }

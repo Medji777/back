@@ -31,5 +31,3 @@ export class BlogsQueryRepository {
         return BlogsModel.findOne({id},{_id:0,__v:0}).lean()
     }
 }
-
-export const blogsQueryRepository = new BlogsQueryRepository()

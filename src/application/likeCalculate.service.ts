@@ -32,5 +32,3 @@ export class LikeCalculateService {
         return likesInfo
     }
 }
-
-export const likeCalculateService = new LikeCalculateService()

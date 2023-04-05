@@ -5,13 +5,11 @@ import {LikeInputModel} from "../types/likes";
 import {CommentsQueryRepository} from "../repositories/query";
 import {CommentsService} from "../domain";
 
-class CommentsController {
-    private commentsQueryRepository: CommentsQueryRepository;
-    private commentsService: CommentsService;
-    constructor() {
-        this.commentsService = new CommentsService()
-        this.commentsQueryRepository = new CommentsQueryRepository()
-    }
+export class CommentsController {
+    constructor(
+        protected commentsService: CommentsService,
+        protected commentsQueryRepository: CommentsQueryRepository
+    ) {}
     async getComments(req:RequestWithParams<{id: string}>,res:Response<CommentViewModel | Error>){
         try {
             const comment = await this.commentsQueryRepository.findById(req.params.id, req.user?.id)
@@ -65,5 +63,3 @@ class CommentsController {
         res.sendStatus(Statuses.NO_CONTENT)
     }
 }
-
-export const commentsController = new CommentsController()

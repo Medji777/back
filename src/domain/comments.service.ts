@@ -5,22 +5,16 @@ import {CommentsRepository, CommentsLikesRepository} from "../repositories";
 import {LikeStatus} from "../types/types";
 import {LikeInputModel, LikesCommentModelDTO} from "../types/likes";
 
-
 type CommentPayload = CommentInputModel & CommentatorInfo & PostId
 
 export class CommentsService {
-    private commentsQueryRepository: CommentsQueryRepository;
-    private commentsLikeQueryRepository: CommentsLikeQueryRepository;
-    private commentsLikesRepository: CommentsLikesRepository;
-    private likeCalculateService: LikeCalculateService;
-    private commentsRepository: CommentsRepository;
-    constructor() {
-        this.likeCalculateService = new LikeCalculateService()
-        this.commentsRepository = new CommentsRepository()
-        this.commentsLikesRepository = new CommentsLikesRepository()
-        this.commentsQueryRepository = new CommentsQueryRepository()
-        this.commentsLikeQueryRepository = new CommentsLikeQueryRepository()
-    }
+    constructor(
+        protected likeCalculateService: LikeCalculateService,
+        protected commentsRepository: CommentsRepository,
+        protected commentsLikesRepository: CommentsLikesRepository,
+        protected commentsQueryRepository: CommentsQueryRepository,
+        protected commentsLikeQueryRepository: CommentsLikeQueryRepository
+    ) {}
     async create(payload: CommentPayload): Promise<CommentViewModel>{
         const date = new Date();
         const newComment = {

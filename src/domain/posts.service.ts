@@ -6,18 +6,13 @@ import {LikeStatus} from "../types/types";
 import {LikeInputModel, LikesPostsModelDTO} from "../types/likes";
 
 export class PostsService {
-    private postsQueryRepository: PostsQueryRepository;
-    private postsRepository: PostsRepository;
-    private postsLikeQueryRepository: PostsLikeQueryRepository;
-    private postsLikesRepository: PostsLikesRepository;
-    private likeCalculateService: LikeCalculateService;
-    constructor() {
-        this.likeCalculateService = new LikeCalculateService()
-        this.postsRepository = new PostsRepository()
-        this.postsLikesRepository = new PostsLikesRepository()
-        this.postsQueryRepository = new PostsQueryRepository()
-        this.postsLikeQueryRepository = new PostsLikeQueryRepository()
-    }
+    constructor(
+        protected likeCalculateService: LikeCalculateService,
+        protected postsRepository: PostsRepository,
+        protected postsLikesRepository: PostsLikesRepository,
+        protected postsQueryRepository: PostsQueryRepository,
+        protected postsLikeQueryRepository: PostsLikeQueryRepository
+    ) {}
     async create(payload:PostInputModel & BlogName): Promise<PostsViewModel>{
         const date = new Date();
         const newPost = {

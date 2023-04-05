@@ -13,16 +13,12 @@ import {
 import {BlogsInputModel, BlogsViewModel} from "../types/blogs";
 import {PostInputModel, PostsViewModel} from "../types/posts";
 
-class BlogsController {
-    private blogsService: BlogsService;
-    private blogsQueryRepository: BlogsQueryRepository;
-    private postsQueryRepository: PostsQueryRepository;
-    private postsService: PostsService;
-    constructor() {
-        this.blogsService = new BlogsService()
-        this.postsService = new PostsService()
-        this.blogsQueryRepository = new BlogsQueryRepository()
-        this.postsQueryRepository = new PostsQueryRepository()
+export class BlogsController {
+    constructor(
+        protected blogsService: BlogsService,
+        protected postsService: PostsService,
+        protected blogsQueryRepository: BlogsQueryRepository,
+        protected postsQueryRepository: PostsQueryRepository) {
     }
     async getBlogs(req: Request,res: Response<Paginator<BlogsViewModel>>){
         const blogs = await this.blogsQueryRepository.getAll(req.query as unknown as QueryBlogs);
@@ -82,5 +78,3 @@ class BlogsController {
         res.status(Statuses.CREATED).send(post)
     }
 }
-
-export const blogsController = new BlogsController()

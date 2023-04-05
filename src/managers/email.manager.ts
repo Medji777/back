@@ -1,11 +1,12 @@
 import {EmailConfirmUserDataModel, PasswordConfirmUserDataModel, UserModel} from "../types/users";
-import {emailAdapter} from "../adapters/email.adapter";
+import {EmailAdapter} from "../adapters/email.adapter";
 import {settings} from "../settings";
 
 export class EmailManager {
+    constructor(protected emailAdapter: EmailAdapter) {}
     async sendCodeConfirmationMessage(user: UserModel | EmailConfirmUserDataModel & {email: string}, action: string): Promise<void>{
         const code = user.emailConfirmation.confirmationCode
-        await emailAdapter.send({
+        await this.emailAdapter.send({
             email: user.email,
             subject: 'confirmation code',
             message: '<h1>Thank for your registration</h1>\n' +
@@ -16,7 +17,7 @@ export class EmailManager {
     }
     async sendRecoveryCodeConfirmationMessage(user: UserModel | PasswordConfirmUserDataModel & {email: string}, action: string): Promise<void>{
         const code = user.passwordConfirmation.confirmationCode
-        await emailAdapter.send({
+        await this.emailAdapter.send({
             email: user.email,
             subject: 'confirmation code',
             message: '<h1>Password recovery</h1>\n' +

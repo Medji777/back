@@ -1,9 +1,8 @@
 import {body, ValidationChain} from "express-validator";
 import {APIErrorResult, FieldError, LikeStatus, Resolutions} from "../types/types";
 import {equalSize} from "../utils";
-import {validateMiddleware} from "../middlewares";
-import {blogsQueryRepository} from "../repositories/query";
-import {usersQueryRepository} from "../repositories/query/usersQuery";
+import {validateMiddleware} from "../middlewares/validateMiddleware";
+import {blogsQueryRepository,usersQueryRepository} from '../composition-root'
 
 export const isNotValidString = (val:any,size:number=0):boolean => !val || typeof val !== 'string' || !val.trim() || (!size ? false : val.length > size);
 export const isNotValidResolution = (res:Array<Resolutions>) => !res.length || !equalSize(res) || !res.every((v:Resolutions)=>Resolutions[v]);
@@ -203,19 +202,23 @@ export const validateBodyLogin = validateMiddleware([
         .notEmpty().withMessage('input is required')
 ])
 
-export const validatorBodyContent = body('content')
-    .isString().withMessage('input is string')
-    .trim()
-    .notEmpty().withMessage('input is required')
-    .isLength({min: 20, max: 300}).withMessage('input is min 20 and max 300 symbol')
+export const validatorBodyContent = validateMiddleware([
+    body('content')
+        .isString().withMessage('input is string')
+        .trim()
+        .notEmpty().withMessage('input is required')
+        .isLength({min: 20, max: 300}).withMessage('input is min 20 and max 300 symbol')
+])
 
-export const validatorBodyLikes = body('likeStatus')
-    .isString().withMessage('input is string')
-    .trim()
-    .notEmpty().withMessage('input is required')
-    .custom((v: LikeStatus) => {
-        if(!LikeStatus[v]) {
-            throw new Error(`${v} not include in ${Object.values(LikeStatus).toString()}`)
-        }
-        return true
-    })
+export const validatorBodyLikes = validateMiddleware([
+    body('likeStatus')
+        .isString().withMessage('input is string')
+        .trim()
+        .notEmpty().withMessage('input is required')
+        .custom((v: LikeStatus) => {
+            if(!LikeStatus[v]) {
+                throw new Error(`${v} not include in ${Object.values(LikeStatus).toString()}`)
+            }
+            return true
+        })
+])

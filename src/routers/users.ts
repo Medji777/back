@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {usersController} from "../controllers";
+import {usersController} from "../composition-root";
 import {basicAuthMiddleware, sanitizationBody, validateMiddleware} from "../middlewares";
 import {createSearchTermQuery, validatePaginationQuery, validateSortQuery} from "../validations/query";
 import {SearchTermQuery} from "../types/types";

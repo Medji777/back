@@ -7,7 +7,7 @@ type EmailBody = {
     message: string
 }
 
-export const emailAdapter = {
+export class EmailAdapter {
     async send(payload: EmailBody){
         const transport = nodemailer.createTransport({
             service: "gmail",

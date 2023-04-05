@@ -1,17 +1,17 @@
-import {authController} from './auth.controller';
-import {videoController} from './base.controller';
-import {blogsController} from './blogs.controller';
-import {commentsController} from './comments.controller';
-import {postController} from './posts.controller';
-import {securityController} from './security.controller';
-import {usersController} from './users.controller';
+import {AuthController} from "./auth.controller";
+import {UsersController} from "./users.controller";
+import {VideoController} from "./base.controller";
+import {BlogsController} from "./blogs.controller";
+import {CommentsController} from "./comments.controller";
+import {SecurityController} from "./security.controller";
+import {PostsController} from "./posts.controller";
 
 export {
-    authController,
-    videoController,
-    blogsController,
-    commentsController,
-    postController,
-    securityController,
-    usersController
+    AuthController,
+    UsersController,
+    VideoController,
+    BlogsController,
+    CommentsController,
+    PostsController,
+    SecurityController,
 }

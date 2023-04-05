@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {securityController} from "../controllers";
+import {securityController} from "../composition-root";
 import {checkRefreshTokenMiddleware} from "../middlewares/auth";
 
 export const securityRouter = Router({});

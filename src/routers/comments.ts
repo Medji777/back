@@ -1,11 +1,11 @@
 import {Router} from "express";
-import {commentsController} from "../controllers";
-import {bearerAuthMiddleware, validateMiddleware, getUserMiddleware} from "../middlewares";
+import {commentsController} from "../composition-root";
+import {bearerAuthMiddleware, getUserMiddleware} from "../middlewares";
 import {validatorBodyContent, validatorBodyLikes} from "../validations";
 
 export const commentsRouter = Router({});
-const validateBody = validateMiddleware([validatorBodyContent])
-const validateBodyLike = validateMiddleware([validatorBodyLikes])
+const validateBody = validatorBodyContent
+const validateBodyLike = validatorBodyLikes
 
 commentsRouter.get('/:id',
     getUserMiddleware,

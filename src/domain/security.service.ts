@@ -7,14 +7,11 @@ import {SecurityQueryRepository} from "../repositories/query/securityQuery";
 import {SecurityRepository} from "../repositories";
 
 export class SecurityService {
-    private jwtService: JwtService;
-    private securityRepository: SecurityRepository;
-    private securityQueryRepository: SecurityQueryRepository;
-    constructor() {
-        this.jwtService = new JwtService()
-        this.securityRepository = new SecurityRepository()
-        this.securityQueryRepository = new SecurityQueryRepository()
-    }
+    constructor(
+        protected jwtService: JwtService,
+        protected securityRepository: SecurityRepository,
+        protected securityQueryRepository: SecurityQueryRepository
+    ) {}
     async createSession(refreshToken: string, title: string, ip: string): Promise<DeviceViewModel> {
         const meta = await this.jwtService.getJWTData<RefreshPayloadType>(refreshToken,settings.JWT_REFRESH_SECRET)
         return this.securityRepository.createSession({
@@ -50,5 +47,3 @@ export class SecurityService {
         return null
     }
 }
-
-export const securityService = new SecurityService()
