@@ -36,6 +36,9 @@ import {EmailManager} from "./managers/email.manager";
 import {EmailAdapter} from "./adapters/email.adapter";
 import {SecurityQueryRepository} from "./repositories/query/securityQuery";
 import {LikeCalculateService} from "./application/likeCalculate.service";
+import {TestsController} from "./controllers/tests.controller";
+import {TestsService} from "./domain/tests.service";
+import {TestsRepository} from "./repositories/tests-db";
 
 export const container = new Container();
 container.bind(EmailManager).to(EmailManager)
@@ -77,3 +80,21 @@ container.bind(PostsRepository).to(PostsRepository)
 container.bind(PostsQueryRepository).to(PostsQueryRepository)
 container.bind(PostsLikesRepository).to(PostsLikesRepository)
 container.bind(PostsLikeQueryRepository).to(PostsLikeQueryRepository)
+
+container.bind(TestsController).to(TestsController)
+container.bind(TestsService).to(TestsService)
+container.bind(TestsRepository).to(TestsRepository)
+
+export const securityService = container.get(SecurityService)
+export const jwtService = container.get(JwtService)
+export const usersQueryRepository = container.get(UsersQueryRepository)
+export const blogsQueryRepository = container.get(BlogsQueryRepository)
+
+export const securityController = container.resolve(SecurityController)
+export const commentsController = container.resolve(CommentsController)
+export const videoController = container.resolve(VideoController)
+export const blogsController = container.resolve(BlogsController)
+export const authController = container.resolve(AuthController)
+export const postController = container.resolve(PostsController)
+export const usersController = container.resolve(UsersController)
+export const testsController = container.resolve(TestsController)

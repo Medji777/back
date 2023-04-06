@@ -33,9 +33,4 @@ export class VideosRepository {
         const result = await VideoModel.deleteOne({id});
         return result.deletedCount === 1
     }
-    async deleteAll(): Promise<void>{
-        await VideoModel.deleteMany({})
-    }
 }
-
-export const videosRepository = new VideosRepository()

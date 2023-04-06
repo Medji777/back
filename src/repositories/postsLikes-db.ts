@@ -19,9 +19,4 @@ export class PostsLikesRepository {
         await doc.save()
         return true
     }
-    async deleteAll(): Promise<void>{
-        await PostsLikeModel.deleteMany({})
-    }
 }
-
-export const postsLikesRepository = new PostsLikesRepository()

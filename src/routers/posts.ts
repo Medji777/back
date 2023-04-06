@@ -6,8 +6,7 @@ import {
     sanitizationBody,
     validateMiddleware
 } from "../middlewares";
-import {container} from "../composition-root";
-import {PostsController} from "../controllers";
+import {postController} from "../composition-root";
 import {validateBodyPost, validatorBlogId, validatorBodyContent, validatorBodyLikes} from "../validations";
 import {validatePaginationQuery, validateSortQuery} from "../validations/query";
 
@@ -24,8 +23,6 @@ const validateBodyComment = validatorBodyContent
 const validateBodyLike = validatorBodyLikes
 
 export const postsRouter = Router({});
-
-const postController = container.resolve(PostsController)
 
 postsRouter.get('/',getUserMiddleware,validateQuery,postController.getPosts.bind(postController))
 postsRouter.get('/:id',getUserMiddleware,postController.getPostOnId.bind(postController))

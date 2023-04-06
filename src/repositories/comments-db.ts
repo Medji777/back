@@ -31,9 +31,6 @@ export class CommentsRepository {
         const result = await CommentsModel.deleteOne({id})
         return result.deletedCount === 1
     }
-    async deleteAll(): Promise<void>{
-        await CommentsModel.deleteMany({})
-    }
     async updateLikeInComment(id: string, likesInfo: LikeInfoModel): Promise<boolean>{
         const doc = await CommentsModel.findOne({id})
         if(!doc) return false;
@@ -46,5 +43,3 @@ export class CommentsRepository {
         await model.save()
     }
 }
-
-export const commentsRepository = new CommentsRepository()

@@ -49,9 +49,4 @@ export class UsersRepository {
         const result = await UsersModel.deleteOne({id});
         return result.deletedCount === 1
     }
-    async deleteAll(): Promise<void> {
-        await UsersModel.deleteMany({})
-    }
 }
-
-export const usersRepository = new UsersRepository()

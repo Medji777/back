@@ -30,9 +30,4 @@ export class CommentsLikesRepository {
     async save(model: HydratedDocument<LikesCommentModel>): Promise<void> {
         await model.save()
     }
-    async deleteAll(): Promise<void>{
-        await CommentsLikeModel.deleteMany({})
-    }
 }
-
-export const commentsLikesRepository = new CommentsLikesRepository()

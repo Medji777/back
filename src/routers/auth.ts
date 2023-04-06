@@ -1,6 +1,5 @@
 import {Router} from "express";
-import {container} from "../composition-root";
-import {AuthController} from "../controllers";
+import {authController} from "../composition-root";
 import {
     validateBodyLogin,
     validateExistUserOnEmailOrLogin,
@@ -18,8 +17,6 @@ export const authRouter = Router({});
 const sanitizationBodyLogin = sanitizationBody(['loginOrEmail','password'])
 const sanitizationBodyReg = sanitizationBody(['login','email','password'])
 const sanitizationBodyNewPass = sanitizationBody(['recoveryCode','newPassword'])
-
-const authController = container.resolve(AuthController)
 
 authRouter.post('/login',
     limitIp,

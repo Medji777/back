@@ -22,9 +22,6 @@ export class PostsRepository {
         const result = await PostsModel.deleteOne({id});
         return result.deletedCount === 1
     }
-    async deleteAll(): Promise<void> {
-        await PostsModel.deleteMany({})
-    }
     async updateLikeInPost(id: string, likesInfo: LikeInfoModel): Promise<boolean> {
         const doc = await PostsModel.findOne({id})
         if(!doc) return false;
@@ -45,5 +42,3 @@ export class PostsRepository {
         }
     }
 }
-
-export const postsRepository = new PostsRepository()

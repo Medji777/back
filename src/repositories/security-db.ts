@@ -25,9 +25,4 @@ export class SecurityRepository {
         const result = await SessionsModel.deleteOne({deviceId})
         return result.deletedCount === 1
     }
-    async deleteAll(): Promise<void>{
-        await SessionsModel.deleteMany({})
-    }
 }
-
-export const securityRepository = new SecurityRepository()

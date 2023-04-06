@@ -1,8 +1,8 @@
+import {injectable} from "inversify";
 import {HydratedDocument} from "mongoose";
 import {BlogsModel} from "./db";
 import {BlogsViewModel, BlogsViewModelDTO} from '../types/blogs'
 import {BlogsModelMethods} from "./schema/blogs";
-import {injectable} from "inversify";
 
 type BlogDocument = HydratedDocument<BlogsViewModel, BlogsModelMethods>
 
@@ -21,9 +21,4 @@ export class BlogsRepository {
         const result = await BlogsModel.deleteOne({id});
         return result.deletedCount === 1
     }
-    async deleteAll(): Promise<void>{
-        await BlogsModel.deleteMany({})
-    }
 }
-
-export const blogsRepository = new BlogsRepository()

@@ -4,8 +4,7 @@ import {basicAuthMiddleware, getUserMiddleware, sanitizationBody, validateMiddle
 import {validateBodyBlog, validateBodyPost} from "../validations";
 import {validatePaginationQuery, validateSortQuery, createSearchTermQuery} from "../validations/query";
 import {SearchTermQuery} from "../types/types";
-import {container} from "../composition-root";
-import {BlogsController} from "../controllers";
+import {blogsController} from "../composition-root";
 
 const sanitizationBodyBlogs = sanitizationBody(['name','description','websiteUrl'])
 const sanitizationBodyPostByBlog = sanitizationBody(['title','shortDescription','content'])
@@ -19,8 +18,6 @@ const validateQuery = (validate: Array<ValidationChain> = []) => validateMiddlew
 const validateSearchNameTermQuery = createSearchTermQuery(SearchTermQuery.searchNameTerm)
 
 export const blogsRouter = Router({});
-
-const blogsController = container.resolve(BlogsController)
 
 blogsRouter.get('/',
     validateQuery(validateSearchNameTermQuery),
