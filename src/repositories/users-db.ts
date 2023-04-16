@@ -1,5 +1,5 @@
 import {injectable} from "inversify";
-import {UsersModelInstance as UsersModel} from "./../domain";
+import {UsersModel} from "../domain";
 import {
     UserViewModel,
     UserModel,

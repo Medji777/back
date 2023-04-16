@@ -27,4 +27,4 @@ usersSchema.statics.makeInstance = function () {
 
 }
 
-export const UsersModelInstance = model<UserModel>('users', usersSchema);
+export const UsersModel = model<UserModel>('users', usersSchema);

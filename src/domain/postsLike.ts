@@ -17,4 +17,4 @@ const postsLikeSchema = new Schema<LikesPostsModel>({
     }
 })
 
-export const PostsLikeModelInstance = model<LikesPostsModelDTO>('postsLike', postsLikeSchema);
+export const PostsLikeModel = model<LikesPostsModelDTO>('postsLike', postsLikeSchema);

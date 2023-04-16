@@ -10,4 +10,4 @@ const sessionsSchema = new Schema({
     userId: {type: String, required: true},
 })
 
-export const SessionsModelInstance = model<DeviceModel>('sessions', sessionsSchema);
+export const SessionsModel = model<DeviceModel>('sessions', sessionsSchema);

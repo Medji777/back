@@ -1,6 +1,6 @@
 import {injectable} from "inversify";
 import {HydratedDocument} from "mongoose";
-import {PostsLikeModelInstance as PostsLikeModel} from "../../domain";
+import {PostsLikeModel} from "../../domain";
 import {LikesPostsExtendedViewModel, LikesPostsModel} from "../../types/likes";
 import {LikeStatus} from "../../types/types";
 

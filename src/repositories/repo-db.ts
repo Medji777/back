@@ -1,5 +1,5 @@
 import {injectable} from "inversify";
-import {VideoModelInstance as VideoModel} from "../domain";
+import {VideoModel} from "../domain";
 import {CreateVideoInputModel, IUpdateVideoInputModel, IVideo} from "../types/videos";
 
 @injectable()

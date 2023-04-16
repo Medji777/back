@@ -16,4 +16,4 @@ const commentsSchema = new Schema({
     }
 })
 
-export const CommentsModelInstance = model<CommentModel>('comments', commentsSchema);
+export const CommentsModel = model<CommentModel>('comments', commentsSchema);

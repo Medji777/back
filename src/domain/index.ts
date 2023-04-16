@@ -1,19 +1,19 @@
-import {UsersModelInstance} from './users';
+import {UsersModel} from './users';
 import {BlogsModel} from "./blogs";
-import {PostsModelInstance} from "./posts";
-import {CommentsModelInstance} from "./comments";
-import {VideoModelInstance} from "./video";
-import {SessionsModelInstance} from "./sessions";
-import {CommentsLikeModelInstance} from "./commentsLike";
-import {PostsLikeModelInstance} from "./postsLike";
+import {PostsModel} from "./posts";
+import {CommentsModel} from "./comments";
+import {VideoModel} from "./video";
+import {SessionsModel} from "./sessions";
+import {CommentsLikeModel} from "./commentsLike";
+import {PostsLikeModel} from "./postsLike";
 
 export {
-    UsersModelInstance,
+    UsersModel,
     BlogsModel,
-    PostsModelInstance,
-    CommentsModelInstance,
-    VideoModelInstance,
-    SessionsModelInstance,
-    CommentsLikeModelInstance,
-    PostsLikeModelInstance
+    PostsModel,
+    CommentsModel,
+    VideoModel,
+    SessionsModel,
+    CommentsLikeModel,
+    PostsLikeModel
 }

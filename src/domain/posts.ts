@@ -28,4 +28,4 @@ postsSchema.methods.update = function(payload: PostInputModel) {
     this.blogId = payload.blogId
 }
 
-export const PostsModelInstance = model<PostsDBModel,PostsModelType>('posts', postsSchema);
+export const PostsModel = model<PostsDBModel,PostsModelType>('posts', postsSchema);

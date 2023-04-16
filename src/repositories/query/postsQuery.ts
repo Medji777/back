@@ -1,6 +1,6 @@
 import {inject, injectable} from "inversify";
 import {HydratedDocument} from "mongoose";
-import {PostsModelInstance as PostsModel} from "../../domain";
+import {PostsModel} from "../../domain";
 import {PostsLikeQueryRepository} from "./postsLikeQuery";
 import {getSortNumber} from "../../utils/sort";
 import {transformPagination} from "../../utils/transform";

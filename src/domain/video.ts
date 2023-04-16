@@ -13,4 +13,4 @@ const videoSchema = new Schema({
     availableResolutions: {type: [{type: String, enum: Object.values(Resolutions)}]} || null
 })
 
-export const VideoModelInstance = model<IVideo>('videos', videoSchema);
+export const VideoModel = model<IVideo>('videos', videoSchema);

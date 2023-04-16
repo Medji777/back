@@ -12,4 +12,4 @@ const commentsLikeSchema = new Schema<LikesCommentModelDTO>({
     }
 })
 
-export const CommentsLikeModelInstance = model<LikesCommentModelDTO>('commentsLike', commentsLikeSchema)
+export const CommentsLikeModel = model<LikesCommentModelDTO>('commentsLike', commentsLikeSchema)
