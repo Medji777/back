@@ -3,7 +3,7 @@ import {Request, Response} from "express";
 import {Paginator, RequestWithBody, RequestWithParams, Statuses} from "../types/types";
 import {UserInputModel, UserViewModel} from "../types/users";
 import {QueryUsers, UsersQueryRepository} from "../repositories/query";
-import {UsersService} from "../domain";
+import {UsersService} from "../services";
 
 @injectable()
 export class UsersController {

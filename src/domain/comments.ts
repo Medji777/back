@@ -1,4 +1,5 @@
-import {Schema} from "mongoose";
+import {model, Schema} from "mongoose";
+import {CommentModel} from "../types/comments";
 
 const commentsSchema = new Schema({
     id: String,
@@ -15,4 +16,4 @@ const commentsSchema = new Schema({
     }
 })
 
-export default commentsSchema
+export const CommentsModelInstance = model<CommentModel>('comments', commentsSchema);

@@ -16,7 +16,7 @@ import {
     PostsService,
     SecurityService,
     UsersService
-} from "./domain";
+} from "./services";
 import {
     BlogsQueryRepository, CommentsLikeQueryRepository,
     CommentsQueryRepository, PostsLikeQueryRepository,
@@ -37,7 +37,7 @@ import {EmailAdapter} from "./adapters/email.adapter";
 import {SecurityQueryRepository} from "./repositories/query/securityQuery";
 import {LikeCalculateService} from "./application/likeCalculate.service";
 import {TestsController} from "./controllers/tests.controller";
-import {TestsService} from "./domain/tests.service";
+import {TestsService} from "./services/tests.service";
 import {TestsRepository} from "./repositories/tests-db";
 
 export const container = new Container();

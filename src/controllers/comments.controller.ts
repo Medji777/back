@@ -4,7 +4,7 @@ import {RequestWithParams, RequestWithParamsAndBody, Statuses} from "../types/ty
 import {CommentInputModel, CommentViewModel} from "../types/comments";
 import {LikeInputModel} from "../types/likes";
 import {CommentsQueryRepository} from "../repositories/query";
-import {CommentsService} from "../domain";
+import {CommentsService} from "../services";
 
 @injectable()
 export class CommentsController {

@@ -1,33 +1,5 @@
-import {connect, disconnect, model} from "mongoose";
+import {connect, disconnect} from "mongoose";
 import {settings} from "../settings";
-import {BlogsViewModel} from '../types/blogs'
-import {PostsDBModel} from '../types/posts'
-import {IVideo} from "../types/videos";
-import {UserModel} from "../types/users";
-import {CommentModel} from "../types/comments";
-import {DeviceModel} from "../types/security";
-import {LikesCommentModelDTO, LikesPostsModelDTO} from "../types/likes";
-import {
-    usersSchema,
-    blogsSchema,
-    postsSchema,
-    commentsSchema,
-    videoSchema,
-    sessionsSchema,
-    commentsLikeSchema,
-    postsLikeSchema
-} from "./schema";
-import {BlogsModelType} from "./schema/blogs";
-import {PostsModelType} from "./schema/posts";
-
-export const UsersModel = model<UserModel>('users', usersSchema);
-export const BlogsModel = model<BlogsViewModel,BlogsModelType>('blogs', blogsSchema);
-export const PostsModel = model<PostsDBModel,PostsModelType>('posts', postsSchema);
-export const CommentsModel = model<CommentModel>('comments', commentsSchema);
-export const VideoModel = model<IVideo>('videos', videoSchema);
-export const SessionsModel = model<DeviceModel>('sessions', sessionsSchema);
-export const PostsLikeModel = model<LikesPostsModelDTO>('postsLike', postsLikeSchema);
-export const CommentsLikeModel = model<LikesCommentModelDTO>('commentsLike', commentsLikeSchema)
 
 export async function runDb () {
     try {

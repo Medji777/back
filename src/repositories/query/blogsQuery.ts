@@ -1,6 +1,6 @@
 import {injectable} from "inversify";
 import {BlogsViewModel} from "../../types/blogs";
-import {BlogsModel} from "../db";
+import {BlogsModel} from "../../domain";
 import {Paginator, SortDirections} from "../../types/types";
 import {transformPagination} from '../../utils/transform';
 import {getSortNumber} from '../../utils/sort';

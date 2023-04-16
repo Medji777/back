@@ -1,4 +1,5 @@
-import {Schema} from "mongoose";
+import {model, Schema} from "mongoose";
+import {DeviceModel} from "../types/security";
 
 const sessionsSchema = new Schema({
     ip: {type: String, required: true},
@@ -9,4 +10,4 @@ const sessionsSchema = new Schema({
     userId: {type: String, required: true},
 })
 
-export default sessionsSchema;
+export const SessionsModelInstance = model<DeviceModel>('sessions', sessionsSchema);

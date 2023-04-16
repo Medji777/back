@@ -1,5 +1,5 @@
 import {injectable} from "inversify";
-import {UsersModel} from "../db";
+import {UsersModelInstance as UsersModel} from "./../../domain";
 import {Paginator, SortDirections} from "../../types/types";
 import {getSortNumber} from "../../utils/sort";
 import {transformPagination} from "../../utils/transform";

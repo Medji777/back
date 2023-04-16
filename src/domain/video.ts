@@ -1,5 +1,6 @@
-import {Schema} from "mongoose";
-import {Resolutions} from "../../types/types";
+import {model, Schema} from "mongoose";
+import {Resolutions} from "../types/types";
+import {IVideo} from "../types/videos";
 
 const videoSchema = new Schema({
     id: Number,
@@ -12,4 +13,4 @@ const videoSchema = new Schema({
     availableResolutions: {type: [{type: String, enum: Object.values(Resolutions)}]} || null
 })
 
-export default videoSchema;
+export const VideoModelInstance = model<IVideo>('videos', videoSchema);

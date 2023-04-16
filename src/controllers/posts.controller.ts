@@ -17,7 +17,7 @@ import {
 import {PostInputModel, PostsViewModel} from "../types/posts";
 import {CommentInputModel, CommentViewModel} from "../types/comments";
 import {LikeInputModel} from "../types/likes";
-import {PostsService, CommentsService} from "../domain";
+import {PostsService, CommentsService} from "../services";
 
 @injectable()
 export class PostsController {

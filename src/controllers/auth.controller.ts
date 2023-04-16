@@ -14,7 +14,7 @@ import {
 } from "../types/auth";
 import {UserInputModel} from "../types/users";
 import {UsersQueryRepository} from "../repositories/query";
-import {AuthService, SecurityService, UsersService} from "../domain";
+import {AuthService, SecurityService, UsersService} from "../services";
 
 @injectable()
 export class AuthController {

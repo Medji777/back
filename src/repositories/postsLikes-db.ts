@@ -1,5 +1,5 @@
 import {injectable} from "inversify";
-import {PostsLikeModel} from "./db";
+import {PostsLikeModelInstance as PostsLikeModel} from "../domain";
 import {LikeStatus} from "../types/types";
 import {LikesPostsModelDTO, MyStatus} from "../types/likes";
 

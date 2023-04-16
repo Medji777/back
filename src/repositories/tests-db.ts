@@ -1,28 +1,28 @@
 import {injectable} from "inversify";
 import {
+    UsersModelInstance,
     BlogsModel,
-    CommentsLikeModel,
-    CommentsModel,
-    PostsLikeModel,
-    PostsModel,
-    SessionsModel,
-    UsersModel,
-    VideoModel
-} from "./db";
+    CommentsLikeModelInstance,
+    CommentsModelInstance,
+    PostsLikeModelInstance,
+    PostsModelInstance,
+    SessionsModelInstance,
+    VideoModelInstance
+} from '../domain';
 
 @injectable()
 export class TestsRepository {
     async resetAllData(): Promise<void> {
-        await UsersModel.deleteMany({})
-        await PostsModel.deleteMany({})
+        await UsersModelInstance.deleteMany({})
+        await PostsModelInstance.deleteMany({})
         await BlogsModel.deleteMany({})
-        await CommentsModel.deleteMany({})
-        await VideoModel.deleteMany({})
-        await SessionsModel.deleteMany({})
-        await CommentsLikeModel.deleteMany({})
-        await PostsLikeModel.deleteMany({})
+        await CommentsModelInstance.deleteMany({})
+        await VideoModelInstance.deleteMany({})
+        await SessionsModelInstance.deleteMany({})
+        await CommentsLikeModelInstance.deleteMany({})
+        await PostsLikeModelInstance.deleteMany({})
     }
     async resetAllSessions(): Promise<void> {
-        await SessionsModel.deleteMany({})
+        await SessionsModelInstance.deleteMany({})
     }
 }

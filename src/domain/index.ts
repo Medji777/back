@@ -1,15 +1,19 @@
-import {BlogsService} from "./blogs.service";
-import {PostsService} from "./posts.service";
-import {AuthService} from './auth.service';
-import {CommentsService} from './comments.service';
-import {SecurityService} from './security.service';
-import {UsersService} from './users.service';
+import {UsersModelInstance} from './users';
+import {BlogsModel} from "./blogs";
+import {PostsModelInstance} from "./posts";
+import {CommentsModelInstance} from "./comments";
+import {VideoModelInstance} from "./video";
+import {SessionsModelInstance} from "./sessions";
+import {CommentsLikeModelInstance} from "./commentsLike";
+import {PostsLikeModelInstance} from "./postsLike";
 
 export {
-    BlogsService,
-    PostsService,
-    AuthService,
-    CommentsService,
-    SecurityService,
-    UsersService
+    UsersModelInstance,
+    BlogsModel,
+    PostsModelInstance,
+    CommentsModelInstance,
+    VideoModelInstance,
+    SessionsModelInstance,
+    CommentsLikeModelInstance,
+    PostsLikeModelInstance
 }

@@ -1,5 +1,5 @@
 import {injectable} from "inversify";
-import {SessionsModel} from "./db";
+import {SessionsModelInstance as SessionsModel} from "../domain";
 import {DeviceModel, DeviceViewModel} from "../types/security";
 
 @injectable()

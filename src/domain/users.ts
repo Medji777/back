@@ -1,4 +1,5 @@
-import {Schema} from "mongoose";
+import {model, Schema} from "mongoose";
+import {UserModel} from "../types/users";
 
 const emailConfirmationSchema = {
     confirmationCode: String || null,
@@ -22,4 +23,8 @@ const usersSchema = new Schema({
     passwordConfirmation: passwordConfirmationSchema
 })
 
-export default usersSchema
+usersSchema.statics.makeInstance = function () {
+
+}
+
+export const UsersModelInstance = model<UserModel>('users', usersSchema);

@@ -1,5 +1,5 @@
-import {Model, Schema} from "mongoose";
-import {PostInputModel, PostsDBModel} from "../../types/posts";
+import {model, Model, Schema} from "mongoose";
+import {PostInputModel, PostsDBModel} from "../types/posts";
 
 export type PostsMethodsModel = {
     update(payload: PostInputModel): void
@@ -28,4 +28,4 @@ postsSchema.methods.update = function(payload: PostInputModel) {
     this.blogId = payload.blogId
 }
 
-export default postsSchema
+export const PostsModelInstance = model<PostsDBModel,PostsModelType>('posts', postsSchema);

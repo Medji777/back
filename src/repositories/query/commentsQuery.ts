@@ -1,6 +1,6 @@
 import {inject, injectable} from "inversify";
 import {HydratedDocument} from "mongoose";
-import {CommentsModel} from "../db";
+import {CommentsModelInstance as CommentsModel} from "../../domain";
 import {CommentsLikeQueryRepository} from "./commentsLikeQuery";
 import {QueryPosts} from "./postsQuery";
 import {getSortNumber} from "../../utils/sort";

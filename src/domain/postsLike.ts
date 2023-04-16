@@ -1,6 +1,6 @@
-import {Schema} from "mongoose";
-import {LikeStatus} from "../../types/types";
-import {LikesPostsModel} from "../../types/likes";
+import {model, Schema} from "mongoose";
+import {LikeStatus} from "../types/types";
+import {LikesPostsModel, LikesPostsModelDTO} from "../types/likes";
 
 const postsLikeSchema = new Schema<LikesPostsModel>({
     userId: {type: String, required: true},
@@ -17,4 +17,4 @@ const postsLikeSchema = new Schema<LikesPostsModel>({
     }
 })
 
-export default postsLikeSchema
+export const PostsLikeModelInstance = model<LikesPostsModelDTO>('postsLike', postsLikeSchema);

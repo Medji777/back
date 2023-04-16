@@ -2,7 +2,7 @@ import {Request,Response} from "express"
 import {inject, injectable} from "inversify";
 import {SecurityQueryRepository} from "../repositories/query/securityQuery";
 import {RequestWithParams, Statuses} from "../types/types";
-import {SecurityService} from "../domain";
+import {SecurityService} from "../services";
 
 @injectable()
 export class SecurityController {

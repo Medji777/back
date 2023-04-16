@@ -1,5 +1,5 @@
-import {Model, Schema} from "mongoose";
-import {BlogsInputModel, BlogsViewModel} from "../../types/blogs";
+import {model, Model, Schema} from "mongoose";
+import {BlogsInputModel, BlogsViewModel} from "../types/blogs";
 
 export type BlogsModelMethods = {
     update(payload: BlogsInputModel): void
@@ -22,4 +22,4 @@ blogsSchema.methods.update = function (payload: BlogsInputModel) {
     this.websiteUrl = payload.websiteUrl;
 }
 
-export default blogsSchema
+export const BlogsModel = model<BlogsViewModel,BlogsModelType>('blogs', blogsSchema);

@@ -1,6 +1,6 @@
 import {Request,Response} from "express"
 import {inject, injectable} from "inversify";
-import {TestsService} from "../domain/tests.service";
+import {TestsService} from "../services/tests.service";
 import {Statuses} from "../types/types";
 
 @injectable()

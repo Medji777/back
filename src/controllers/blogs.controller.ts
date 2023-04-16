@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import {inject, injectable} from "inversify";
 import {QueryBlogs} from "../repositories/query";
-import {BlogsService, PostsService} from "../domain";
+import {BlogsService, PostsService} from "../services";
 import {BlogsQueryRepository, PostsQueryRepository} from "../repositories/query";
 import {
     Paginator,

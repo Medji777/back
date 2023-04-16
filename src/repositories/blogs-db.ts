@@ -1,8 +1,8 @@
 import {injectable} from "inversify";
 import {HydratedDocument} from "mongoose";
-import {BlogsModel} from "./db";
+import {BlogsModel} from "../domain";
+import {BlogsModelMethods} from "../domain/blogs";
 import {BlogsViewModel, BlogsViewModelDTO} from '../types/blogs'
-import {BlogsModelMethods} from "./schema/blogs";
 
 type BlogDocument = HydratedDocument<BlogsViewModel, BlogsModelMethods>
 
